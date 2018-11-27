@@ -6,7 +6,7 @@
  *__**TODO:**__ Add downloads to the known gg_ maps here.
  
 ## Credits
-**Frosty Scales** (koopa516) - Programmer    
+**Screwdriver (FKA Frosty Scales)** (koopa516) - Programmer    
 **Benoist3012** - French Translation & Lots of programming help, overall mentoring me in SourcePawn coding    
 **Alex Turtle** - French Translation    
 **Heroin Hero** - Finnish Translation    
