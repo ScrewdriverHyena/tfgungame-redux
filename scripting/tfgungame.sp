@@ -1,5 +1,5 @@
 #define TFGG_MAIN
-#define PLUGIN_VERSION "1.3b"
+#define PLUGIN_VERSION "1.4"
 
 #include <sourcemod>
 #include <sdkhooks>
