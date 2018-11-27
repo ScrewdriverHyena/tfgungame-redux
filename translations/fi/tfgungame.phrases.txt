@@ -1,0 +1,22 @@
+﻿"Phrases"
+{
+    "HelpString"
+    {
+        "fi"        "GunGame objektiivina on tappaa muita pelaajia,joka vaihtaa aseesi toisenlaiseen. Tavoitteena on päästä jokaisen aseen läpi kunnes voitat! Mutta, jos sinut tapetaan melee aseella tai tapat itsesi, sinun tasoasi lasketaan yhdellä."
+    }
+
+    "Humiliation"
+    {
+        "fi"        "Tasoasi on laskettu yhdellä."
+    }
+
+    "WonMatch"
+    {
+        "fi"        "Voitti erän!"
+    }
+
+    "GoldenWrench"
+    {
+        "fi"        "On saavuittanut Kultaisen Jakoavaimen tason!"
+    }
+}

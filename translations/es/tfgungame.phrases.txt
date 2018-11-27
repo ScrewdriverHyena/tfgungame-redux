@@ -1,0 +1,22 @@
+"Phrases"
+{
+    "HelpString"
+    {
+        "es"        "En GunGame el objetivo es matar a otros jugadores, hacer esto cambia tu arma a otra. El objetivo es pasar por cada arma hasta que ganes! Sin embargo, si te matan con un arma cuerpo a cuerpo o te suicidas, regresaras al arma anterior. "
+    }
+
+    "Humiliation"
+    {
+        "es"        "Has retrocedido un rango."
+    }
+
+    "WonMatch"
+    {
+        "es"        "Has ganado la partida!"
+    }
+
+    "GoldenWrench"
+    {
+        "es"        "Has alcanzado el rango de la Llave Inglesa Dorada!"
+    }
+}

@@ -1,0 +1,22 @@
+"Phrases"
+{
+    "HelpString"
+    {
+        "en"        "In GunGame the objective is to kill other players, which changes your weapon to another one. The goal is to get through every weapon until you win! However, if you get killed by a melee weapon or kill yourself, you will be set back one rank."
+    }
+
+    "Humiliation"
+    {
+        "en"        "You have been set back one rank."
+    }
+
+    "WonMatch"
+    {
+        "en"        "has won the match!"
+    }
+
+    "GoldenWrench"
+    {
+        "en"        "has reached Golden Wrench level!"
+    }
+}

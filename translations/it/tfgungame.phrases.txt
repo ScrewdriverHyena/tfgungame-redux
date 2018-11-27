@@ -1,0 +1,22 @@
+"Phrases"
+{
+    "HelpString"
+    {
+        "it"        "In GunGame l' obiettivo è quello di uccidere gli altri giocatori,cambiando tua arma con un'altra. Per vincere devi passare tutte le armi finchè non vinci! Tuttavia, se vieni ucciso da un'arma da mischia o ti suicidi, perderai un grado."
+    }
+
+    "Humiliation"
+    {
+        "it"        "Sei stato arretrato di un grado."
+    }
+
+    "WonMatch"
+    {
+        "it"        "Ha vinto il match!"
+    }
+
+    "GoldenWrench"
+    {
+        "it"        "ha raggiunto il livello della Chiave Inglese d'oro!"
+    }
+}

@@ -1,0 +1,587 @@
+// This is a random assortment of weapons, feel free to add or remove them as you see fit.
+// Add "select_override" "1" to a weapon to prevent it from being randomly chosen
+
+"WeaponData"
+{
+	"Shotgun"
+	{
+		"index" "9"
+		"tfclass" "9"
+		"slot" "0"
+		"classname" "tf_weapon_shotgun_primary"
+	}
+	
+	"The Backburner"
+	{
+		"index" "40"
+		"tfclass" "7"
+		"slot" "0"
+		"classname" "tf_weapon_flamethrower"
+	}
+	
+	"The Phlogistinator"
+	{
+		"index" "594"
+		"tfclass" "7"
+		"slot" "0"
+		"classname" "tf_weapon_flamethrower"
+	}
+	
+	"Dragon's Fury"
+	{
+		"index" "1178"
+		"tfclass" "7"
+		"slot" "0"
+		"classname" "tf_weapon_rocketlauncher_fireball"
+		"select_override" "1"
+	}
+	
+	"Flame Thrower"
+	{
+		"index" "21"
+		"tfclass" "7"
+		"slot" "0"
+		"classname" "tf_weapon_flamethrower"
+	}
+	
+	"The Degreaser"
+	{
+		"index" "251"
+		"tfclass" "7"
+		"slot" "0"
+		"select_override" "1"
+		"classname" "tf_weapon_flamethrower"
+	}
+	
+	"The Rainblower"
+	{
+		"index" "741"
+		"tfclass" "7"
+		"slot" "0"
+		"select_override" "1"
+		"classname" "tf_weapon_flamethrower"
+	}
+	
+	"Nostromo Napalmer"
+	{
+		"index" "30474"
+		"tfclass" "7"
+		"slot" "0"
+		"classname" "tf_weapon_flamethrower"
+	}
+	
+	"The Reserve Shooter"
+	{
+		"index" "415"
+		"tfclass" "7"
+		"slot" "1"
+		"classname" "tf_weapon_shotgun"
+	}
+	
+	"The Flare Gun"
+	{
+		"index" "39"
+		"tfclass" "7"
+		"slot" "1"
+		"classname" "tf_weapon_flaregun"
+	}
+	
+	"The Scorch Shot"
+	{
+		"index" "740"
+		"tfclass" "7"
+		"slot" "1"
+		"classname" "tf_weapon_flaregun"
+	}
+	
+	"The Detonator"
+	{
+		"index" "351"
+		"tfclass" "7"
+		"slot" "1"
+		"select_override" "1"
+		"classname" "tf_weapon_flaregun"
+	}
+	
+	"The Manmelter"
+	{
+		"index" "595"
+		"tfclass" "7"
+		"slot" "1"
+		"select_override" "1"
+		"classname" "tf_weapon_flaregun_revenge"
+	}
+	
+	"Panic Attack"
+	{
+		"index" "1153"
+		"tfclass" "7"
+		"slot" "1"
+		"classname" "tf_weapon_shotgun"
+	}
+	
+	
+	"Iron Curtain"
+	{
+		"index" "298"
+		"tfclass" "6"
+		"slot" "0"
+		"classname" "tf_weapon_minigun"
+	}
+	
+	"Minigun"
+	{
+		"index" "15"
+		"tfclass" "6"
+		"slot" "0"
+		"classname" "tf_weapon_minigun"
+	}
+	
+	"Natascha"
+	{
+		"index" "41"
+		"tfclass" "6"
+		"slot" "0"
+		"classname" "tf_weapon_minigun"
+	}
+	
+	"The Brass Beast"
+	{
+		"index" "312"
+		"tfclass" "6"
+		"slot" "0"
+		"classname" "tf_weapon_minigun"
+	}
+	
+	"Tomislav"
+	{
+		"index" "424"
+		"tfclass" "6"
+		"slot" "0"
+		"classname" "tf_weapon_minigun"
+	}
+	
+	"The Huo-Long Heater"
+	{
+		"index" "811"
+		"tfclass" "6"
+		"slot" "0"
+		"classname" "tf_weapon_minigun"
+	}
+	
+	"Deflector"
+	{
+		"index" "850"
+		"tfclass" "6"
+		"slot" "0"
+		"classname" "tf_weapon_minigun"
+	}
+	
+	"The Family Business"
+	{
+		"index" "425"
+		"tfclass" "6"
+		"slot" "1"
+		"classname" "tf_weapon_shotgun_hwg"
+	}
+	
+	"Stickybomb Launcher"
+	{
+		"index" "207"
+		"tfclass" "4"
+		"slot" "1"
+		"classname" "tf_weapon_pipebomblauncher"
+	}
+	
+	"The Scottish Resistance"
+	{
+		"index" "130"
+		"tfclass" "4"
+		"slot" "1"
+		"select_override" "1"
+		"classname" "tf_weapon_pipebomblauncher"
+	}
+	
+	"Quickiebomb Launcher"
+	{
+		"index" "1150"
+		"tfclass" "4"
+		"slot" "1"
+		"classname" "tf_weapon_pipebomblauncher"
+	}
+	
+	"Grenade Launcher"
+	{
+		"index" "19"
+		"tfclass" "4"
+		"slot" "0"
+		"classname" "tf_weapon_grenadelauncher"
+	}
+	
+	"The Loch-n-Load"
+	{
+		"index" "1150"
+		"tfclass" "4"
+		"slot" "1"
+		"select_override" "1"
+		"classname" "tf_weapon_pipebomblauncher"
+	}
+	
+	"The Loose Cannon"
+	{
+		"index" "996"
+		"tfclass" "4"
+		"slot" "0"
+		"classname" "tf_weapon_cannon"
+	}
+	
+	"The Iron Bomber"
+	{
+		"index" "1151"
+		"tfclass" "4"
+		"slot" "0"
+		"classname" "tf_weapon_grenadelauncher"
+	}
+	
+	"The Liberty Launcher"
+	{
+		"index" "414"
+		"tfclass" "3"
+		"slot" "0"
+		"classname" "tf_weapon_rocketlauncher"
+	}
+	
+	"The Direct Hit"
+	{
+		"index" "127"
+		"tfclass" "3"
+		"slot" "0"
+		"classname" "tf_weapon_rocketlauncher_directhit"
+	}
+	
+	"The Beggar's Bazooka"
+	{
+		"index" "730"
+		"tfclass" "3"
+		"slot" "0"
+		"classname" "tf_weapon_rocketlauncher"
+	}
+	
+	"Rocket Launcher"
+	{
+		"index" "18"
+		"tfclass" "3"
+		"slot" "0"
+		"select_override" "1"
+		"classname" "tf_weapon_rocketlauncher"
+	}
+	
+	"The Black Box"
+	{
+		"index" "228"
+		"tfclass" "3"
+		"slot" "0"
+		"classname" "tf_weapon_rocketlauncher"
+	}
+	
+	"The Cow Mangler 5000"
+	{
+		"index" "441"
+		"tfclass" "3"
+		"slot" "0"
+		"classname" "tf_weapon_particle_cannon"
+	}
+	
+	"The Original"
+	{
+		"index" "513"
+		"tfclass" "3"
+		"slot" "0"
+		"classname" "tf_weapon_rocketlauncher"
+	}
+	
+	"The Army of One"
+	{
+		"index" "228"
+		"tfclass" "3"
+		"slot" "0"
+		"classname" "tf_weapon_rocketlauncher"
+		"select_override" "1"
+		"att_override" "2 ; 5.0 ; 99 ; 3.0 ; 521 ; 1.0 ; 3 ; 0.25 ; 104 ; 0.3 ; 77 ; 0.0 ; 16 ; 0.0"
+		"flags_override" "31"
+		"clip_override" "1"
+	}
+	
+	"Lugermorph"
+	{
+		"index" "294"
+		"tfclass" "1"
+		"slot" "1"
+		"classname" "tf_weapon_pistol"
+	}
+	
+	"The C.A.P.P.E.R."
+	{
+		"index" "30666"
+		"tfclass" "1"
+		"slot" "1"
+		"classname" "tf_weapon_pistol"
+	}
+	
+	"Pretty Boy's Pocket Pistol"
+	{
+		"index" "773"
+		"tfclass" "1"
+		"slot" "1"
+		"classname" "tf_weapon_handgun_scout_secondary"
+	}
+	
+	"The Winger"
+	{
+		"index" "449"
+		"tfclass" "1"
+		"slot" "1"
+		"classname" "tf_weapon_handgun_scout_secondary"
+	}
+	
+	"Pistol"
+	{
+		"index" "23"
+		"tfclass" "1"
+		"slot" "1"
+		"classname" "tf_weapon_pistol"
+	}
+	
+	"Scattergun"
+	{
+		"index" "200"
+		"tfclass" "1"
+		"slot" "0"
+		"classname" "tf_weapon_scattergun"
+	}
+	
+	"Baby Face's Blaster"
+	{
+		"index" "772"
+		"tfclass" "1"
+		"slot" "0"
+		"classname" "tf_weapon_pep_brawler_blaster"
+	}
+	
+	"Force-A-Nature"
+	{
+		"index" "45"
+		"tfclass" "1"
+		"slot" "0"
+		"classname" "tf_weapon_scattergun"
+	}
+	
+	"The Shortstop"
+	{
+		"index" "220"
+		"tfclass" "1"
+		"slot" "0"
+		"classname" "tf_weapon_handgun_scout_primary"
+	}
+	
+	"The Soda Popper"
+	{
+		"index" "448"
+		"tfclass" "1"
+		"slot" "0"
+		"classname" "tf_weapon_soda_popper"
+	}
+	
+	"SMG"
+	{
+		"index" "16"
+		"tfclass" "2"
+		"slot" "1"
+		"classname" "tf_weapon_smg"
+	}
+	
+	"The Cleaner's Carbine"
+	{
+		"index" "751"
+		"tfclass" "2"
+		"slot" "1"
+		"classname" "tf_weapon_smg"
+	}
+	
+	"The Huntsman"
+	{
+		"index" "56"
+		"tfclass" "2"
+		"slot" "0"
+		"classname" "tf_weapon_compound_bow"
+	}
+	
+	"The Bazaar Bargain"
+	{
+		"index" "402"
+		"tfclass" "2"
+		"slot" "0"
+		"classname" "tf_weapon_sniperrifle_decap"
+	}
+	
+	"The Sydney Sleeper"
+	{
+		"index" "230"
+		"tfclass" "2"
+		"slot" "0"
+		"classname" "tf_weapon_sniperrifle"
+	}
+	
+	"The Ambassador"
+	{
+		"index" "61"
+		"tfclass" "8"
+		"slot" "0"
+		"classname" "tf_weapon_revolver"
+	}
+	
+	"Big Kill"
+	{
+		"index" "161"
+		"tfclass" "8"
+		"slot" "0"
+		"classname" "tf_weapon_revolver"
+	}
+	
+	"L'Etranger"
+	{
+		"index" "224"
+		"tfclass" "8"
+		"slot" "0"
+		"classname" "tf_weapon_revolver"
+	}
+	
+	"The Enforcer"
+	{
+		"index" "460"
+		"tfclass" "8"
+		"slot" "0"
+		"classname" "tf_weapon_revolver"
+	}
+	
+	"The Diamondback"
+	{
+		"index" "525"
+		"tfclass" "8"
+		"slot" "0"
+		"classname" "tf_weapon_revolver"
+	}
+	
+	"Revolver"
+	{
+		"index" "24"
+		"tfclass" "8"
+		"slot" "0"
+		"classname" "tf_weapon_revolver"
+	}
+	
+	"The Crusader's Crossbow"
+	{
+		"index" "305"
+		"tfclass" "5"
+		"slot" "0"
+		"classname" "tf_weapon_crossbow"
+	}
+	
+	"The Blutsauger"
+	{
+		"index" "36"
+		"tfclass" "5"
+		"slot" "0"
+		"classname" "tf_weapon_syringegun_medic"
+	}
+	
+	"The Overdose"
+	{
+		"index" "412"
+		"tfclass" "5"
+		"slot" "0"
+		"classname" "tf_weapon_syringegun_medic"
+	}
+	
+	"Syringe Gun"
+	{
+		"index" "17"
+		"tfclass" "5"
+		"slot" "0"
+		"classname" "tf_weapon_syringegun_medic"
+	}
+	
+	"The Short Circuit"
+	{
+		"index" "528"
+		"tfclass" "9"
+		"slot" "1"
+		"classname" "tf_weapon_mechanical_arm"
+	}
+	
+	"Rescue Ranger"
+	{
+		"index" "997"
+		"tfclass" "9"
+		"slot" "0"
+		"classname" "tf_weapon_shotgun_building_rescue"
+	}
+	
+	"Golden Wrench"
+	{
+		"index" "169"
+		"tfclass" "9"
+		"slot" "2"
+		"classname" "tf_weapon_wrench"
+	}
+	
+	"The Fortified Compound"
+	{
+		"index" "1092"
+		"tfclass" "2"
+		"slot" "0"
+		"classname" "tf_weapon_compound_bow"
+		"select_override" "1"
+	}
+	
+	"The Machina"
+	{
+		"index" "526"
+		"tfclass" "2"
+		"slot" "0"
+		"classname" "tf_weapon_sniperrifle"
+	}
+	
+	"The AWPer Hand"
+	{
+		"index" "851"
+		"tfclass" "2"
+		"slot" "0"
+		"classname" "tf_weapon_sniperrifle"
+	}
+	
+	"The Classic"
+	{
+		"index" "1098"
+		"tfclass" "2"
+		"slot" "0"
+		"classname" "tf_weapon_sniperrifle_classic"
+	}
+	
+	"The Hitman's Heatmaker"
+	{
+		"index" "752"
+		"tfclass" "2"
+		"slot" "0"
+		"classname" "tf_weapon_sniperrifle"
+	}
+	
+	"Shooting Star"
+	{
+		"index" "30665"
+		"tfclass" "2"
+		"slot" "0"
+		"classname" "tf_weapon_sniperrifle"
+	}
+}

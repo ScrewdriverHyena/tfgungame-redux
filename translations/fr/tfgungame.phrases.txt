@@ -1,0 +1,22 @@
+"Phrases"
+{
+    "HelpString"
+    {
+        "fr"        "Dans GunGame, l'objectif est de tuer les autres joueurs, te donnant une nouvelle arme. Le but est d'obtenir toutes les armes pour gagner ! Cependant, si tu te fais tuer par une arme de mêlée ou que tu te suicides, tu seras rétrogradé d'un rang."
+    }
+
+    "Humiliation"
+    {
+        "fr"        "Tu viens d'être rétrogradé d'un rang."
+    }
+
+    "WonMatch"
+    {
+        "fr"        "a gagné la partie !"
+    }
+
+    "GoldenWrench"
+    {
+        "fr"        "a atteint le niveau de la Clé Dorée !"
+    }
+}
