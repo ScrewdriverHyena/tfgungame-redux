@@ -26,7 +26,7 @@
 ## Configs
 ### Weapon Data
   This plugin does **not** depend on TF2II or TF2IDB, rather, it gets its weapon information and weapon pool from a data file I've included with the plugin. Here's an example:
-```yaml
+```
 	"The Cow Mangler 5000"
 	{
 		"index" "441"
@@ -38,7 +38,7 @@
 
   It's fairly self-explanatory, and most, if not all, the information needed can be found on the AlliedModders wiki.
 Another example, this time of a weapon that can't be selected unless it's forced by the series config:
-```yaml
+```
 	"Rocket Launcher"
 	{
 		"index" "18"
@@ -50,7 +50,7 @@ Another example, this time of a weapon that can't be selected unless it's forced
 ```
 
   It also supports "custom" weapons, as in weapons with custom attributes. Here's a replication of The Army of One, a rocket launcher that fires a single, slow speed nuke:
-```yaml
+```
 	"The Army of One"
 	{
 		"index" "228"
@@ -69,14 +69,14 @@ It uses `att_override` as an attributes string, with attributes to be applied fo
 
 ### Weapon Series
   There are a few settings to be played with here. Let's take a look at the file:
-```yaml
+```
 	"1"
 	{
 		"index_override" "18"
 	}
 ```
   This is the first weapon in the config. The `"1"` label however, is purely descriptive, and will still work regardless of what it's set to. The `index_override` forces the first weapon in the series to index 18 (Rocket Launcher). Another example:
-```yaml
+```
 	"2"
 	{
 		"class" "4"
