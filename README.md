@@ -14,6 +14,7 @@
 **unitgon** - Dutch Translation    
 **NotPaddy** - German Translation    
 **RatX** - Spanish Translation    
+**42** - gg_burgstadt
 
  
 ## ConVars
