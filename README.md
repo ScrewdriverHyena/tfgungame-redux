@@ -1,7 +1,9 @@
 # TFGunGame: Redux
 ## Description
   A new multiplayer sourcemod plugin for Team Fortress 2: Play in a deathmatch against other players in which your
- weapon progresses through a series of weapons, and the first to get to the end of the series wins the round!
+ weapon progresses through a series of weapons, and the first to get to the end of the series wins the round! This mod is mainly made for `gg_` maps, however, it should work on other maps as well, just not as well.
+ 
+ *__**TODO:**__ Add downloads to the known gg_ maps here.
  
 ## Credits
 **Frosty Scales** (koopa516) - Programmer    
