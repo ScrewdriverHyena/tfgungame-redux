@@ -51,7 +51,7 @@ stock const char strCleanTheseEntities[][256] =
 	"trigger_rd_vault_trigger"
 };
 
-stock const int g_iClassMaxHP[TFClassType] =
+stock const int g_iClassMaxHP[view_as<int>(TFClassType)] =
 {
 	0,
 	125,
