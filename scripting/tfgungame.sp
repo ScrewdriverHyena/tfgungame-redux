@@ -70,8 +70,6 @@ const float HINT_REFRESH_INTERVAL = 5.0;
 int g_iRank[MAXPLAYERS+1];
 int g_iRankBuffer[MAXPLAYERS+1];
 int g_iAssists[MAXPLAYERS+1];
-bool g_bCooldownWeps[MAXPLAYERS+1];
-bool g_bResetOnSpawn[MAXPLAYERS+1];
 bool g_bLate;
 bool g_bRoundActive;
 
@@ -139,8 +137,7 @@ public void OnPluginStart()
 	
 	GGWeapon.Init();
 	HookEvent("teamplay_round_start", 			OnTFRoundStart);
-	HookEvent("teamplay_round_start", 			OnTFRoundStartPre,		EventHookMode_Pre);
-	HookEvent("player_spawn", 					OnReloadPlayerWeapons, 	EventHookMode_Pre);
+	HookEvent("player_spawn", 					OnPlayerSpawn);
 	HookEvent("post_inventory_application", 	OnReloadPlayerWeapons);
 	HookEvent("player_death", 					OnPlayerDeath);
 	HookEvent("player_death", 					OnPlayerDeathPre, 		EventHookMode_Pre);
@@ -293,20 +290,9 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 	if (!IsValidClient(client)) return Plugin_Continue;
 	
 	if (buttons & IN_ATTACK || buttons & IN_FORWARD || buttons & IN_BACK || buttons & IN_MOVELEFT || buttons & IN_MOVERIGHT || TF2_IsPlayerInCondition(client, TFCond_Taunting))
-		if (GetEntProp(client, Prop_Send, "m_nPlayerCond") == 32)
+		if (TF2_IsPlayerInCondition(client, TFCond_Ubercharged))
 			TF2_RemoveCondition(client, TFCond_Ubercharged);
 	
-	return Plugin_Continue;
-}
-
-public void OnEntityCreated(int entity, const char[] classname)
-{
-	if (IsValidEntity(entity) && StrEqual(classname, "tf_wearable_demoshield"))
-		AcceptEntityInput(entity, "Kill");
-}
-
-public Action OnTFRoundStartPre(Event event, const char[] name, bool dontBroadcast)
-{
 	return Plugin_Continue;
 }
 
@@ -318,6 +304,7 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 	{
 		if (!IsValidClient(i)) continue;
 		g_iRank[i] = 0;
+		SetPlayerWeapon(i, g_iRank[i]);
 	}
 	
 	g_bRoundActive = true;
@@ -411,7 +398,7 @@ void PrintKeyHintText(int client, char[] buffer)
 	return;
 }
 
-public Action OnReloadPlayerWeapons(Event event, const char[] name, bool dontBroadcast)
+public Action OnPlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 {
 	// Get Client and check validity
 	int iClient = GetClientOfUserId(event.GetInt("userid"));
@@ -424,22 +411,19 @@ public Action OnReloadPlayerWeapons(Event event, const char[] name, bool dontBro
 		else if (g_hCvarSpawnProtect.FloatValue > 0.0)
 			TF2_AddCondition(iClient, TFCond_Ubercharged, g_hCvarSpawnProtect.FloatValue);
 	}
-
-	if (!g_bCooldownWeps[iClient])
-		RequestFrame(ReloadWeaponsFrame, iClient);
 	
-	if (g_bResetOnSpawn[iClient])
-	{
-		g_bResetOnSpawn[iClient] = false;
-		RequestFrame(ReloadWeaponsFrame, iClient);
-	}
-
 	return Plugin_Continue;
 }
 
-public void ReloadWeaponsFrame(any data)
+public Action OnReloadPlayerWeapons(Event event, const char[] name, bool dontBroadcast)
 {
-	SetPlayerWeapon(data, g_iRank[data], true);
+	// Get Client and check validity
+	int iClient = GetClientOfUserId(event.GetInt("userid"));
+	if (!IsValidClient(iClient)) return Plugin_Handled;
+	
+	SetPlayerWeapon(iClient, g_iRank[iClient]);
+	
+	return Plugin_Continue;
 }
 
 public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
@@ -526,7 +510,6 @@ public void OnPlayerDeathPre(Event event, const char[] name, bool dontBroadcast)
 	int iVictim = GetClientOfUserId(event.GetInt("userid"));
 	RequestFrame(Respawn, GetClientSerial(iVictim));
 }
-	
 
 public void Respawn(any serial)
 {
@@ -550,10 +533,7 @@ public void RankUpBuffered(int iAttacker)
 
 	if (RankUp(iAttacker, iAmt) <= iTotal - 1)
 	{
-		
 		SetPlayerWeapon(iAttacker, g_iRank[iAttacker]);
-		if (!IsPlayerAlive(iAttacker))
-			g_bResetOnSpawn[iAttacker] = true;
 		
 		if (g_iRank[iAttacker] == iTotal - 1)
 		{
@@ -571,12 +551,6 @@ public void RankUpBuffered(int iAttacker)
 public void RankDownBuffered(int iVictim)
 {
 	if (g_iRank[iVictim] > 0) RankUp(iVictim, -1);
-
-	SetPlayerWeapon(iVictim, g_iRank[iVictim]);
-	if (!IsPlayerAlive(iVictim))
-	{
-		g_bResetOnSpawn[iVictim] = true;
-	}
 }
 
 int RankUp(int iClient, int iAmount = 1)
@@ -625,21 +599,20 @@ stock bool IsValidClient(int iClient)
 			|| IsClientReplay(iClient));
 }
 
-void SetPlayerWeapon(int iClient, int iRank, bool refresh = false)
+void SetPlayerWeapon(int iClient, int iRank)
 {
 	if (!IsValidClient(iClient)) return;
-
 	if (iRank >= GGWeapon.SeriesTotal()) return;
 	
 	GGWeapon hWeapon = GGWeapon.GetFromSeries(iRank);
-
 	TFClassType eClass = hWeapon.Class;
-	TF2_SetPlayerClass(iClient, eClass, _, true);
-
-	g_bCooldownWeps[iClient] = true;
-
+	
+	if (TF2_GetPlayerClass(iClient) != eClass)
+		TF2_SetPlayerClass(iClient, eClass, _, true);
+	
 	SetEntityHealth(iClient, g_iClassMaxHP[view_as<int>(eClass)]);
 	
+	// Remove all weapons
 	TF2_RemoveAllWeapons(iClient);
 	
 	char strClassname[128], strAttributes[128];
@@ -656,12 +629,12 @@ void SetPlayerWeapon(int iClient, int iRank, bool refresh = false)
 	
 	SetMaxAmmo(iClient, iWeapon);
 	EquipPlayerWeapon(iClient, iWeapon);
-	if (!IsFakeClient(iClient))
+	
+	// Create and equip homewrecker if melee not given, and not a bot
+	if (hWeapon.Slot != 2 && !IsFakeClient(iClient))
 		EquipPlayerWeapon(iClient, CreateWeapon(iClient, "tf_weapon_fireaxe", 153, 50, 6, ""));
-
-	if (refresh) RefreshScores();
-
-	CreateTimer(0.1, RemoveWepCooldown, iClient);
+	
+	RefreshScores();
 }
 
 void GenerateRoundWeps()
@@ -721,11 +694,6 @@ void GenerateRoundWeps()
 	while (hKvConfig.GotoNextKey());
 }
 
-public Action RemoveWepCooldown(Handle hTimer, int iClient)
-{
-	g_bCooldownWeps[iClient] = false;
-}
-
 stock int CreateWeapon(int client, char[] sName, int index, int level = 1, int qual = 1, char[] att, int flags = OVERRIDE_ALL | PRESERVE_ATTRIBUTES)
 {
 	Handle hWeapon = TF2Items_CreateItem(flags);
@@ -774,6 +742,12 @@ void SetMaxAmmo(int iClient, int iWeapon, int iForceAmmo = -1)
 	
 	if (iAmmoType != -1 && iMaxAmmo != -1)
 		SetEntProp(iClient, Prop_Data, "m_iAmmo", (iForceAmmo == -1) ? iMaxAmmo : iForceAmmo, _, iAmmoType);
+}
+
+public Action TF2Items_OnGiveNamedItem(int iClient, char[] sClassname, int iIndex, Handle &hItem)
+{
+	// Dont generate weapons and cosmetics from client's loadout
+	return Plugin_Handled;
 }
 
 public any Native_GetRank(Handle plugin, int numParams)

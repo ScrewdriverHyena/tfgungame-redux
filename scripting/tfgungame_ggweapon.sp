@@ -147,10 +147,7 @@ public any Native_GGWeaponGetFromSeries(Handle plugin, int numParams)
 	if (idx < GGWeapon.SeriesTotal())
 		return view_as<GGWeapon>(g_hWeaponSeries.Get(idx));
 	else
-	{
-		GenerateRoundWeps();
-		return view_as<GGWeapon>(g_hWeaponSeries.Get(idx));
-	}
+		return view_as<GGWeapon>(null);
 }
 
 public any Native_GGWeaponGetFromAll(Handle plugin, int numParams)
