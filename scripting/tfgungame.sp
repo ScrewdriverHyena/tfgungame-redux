@@ -65,6 +65,24 @@ stock const int g_iClassMaxHP[view_as<int>(TFClassType)] =
 	125
 };
 
+enum TFGGSpecialRoundType
+{
+	SpecialRound_None = 0,
+	SpecialRound_Melee = 1,
+	SpecialRound_Double = 2,
+	SpecialRound_AllCrits = 3,
+	
+	TFGGSRT_COUNT
+};
+
+stock const char g_strSpecialRoundName[TFGGSRT_COUNT][32] =
+{
+	"None",
+	"Melee Weapons Only",
+	"Double Kills",
+	"100% Critical Hits",
+};
+
 const float HINT_REFRESH_INTERVAL = 5.0;
 
 int g_iRank[MAXPLAYERS+1];
@@ -85,6 +103,11 @@ ConVar g_hCvarAllowSuicide;
 ConVar g_hCvarLastRankSound;
 ConVar g_hCvarWinSound;
 ConVar g_hCvarHumiliationSound;
+ConVar g_hCvarSpecialRounds;
+ConVar g_hCvarSpecialRoundChance;
+
+TFGGSpecialRoundType g_eForceNextSpecial = SpecialRound_None;
+TFGGSpecialRoundType g_eCurrentSpecial = SpecialRound_None;
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
@@ -130,10 +153,14 @@ public void OnPluginStart()
 	g_hCvarLastRankSound = 		CreateConVar("tfgg_last_rank_sound", LASTRANK_SOUND, "Sound played when someone has hit the last rank");
 	g_hCvarWinSound = 			CreateConVar("tfgg_win_sound", WIN_SOUND, "Sound played when someone wins the game");
 	g_hCvarHumiliationSound = 	CreateConVar("tfgg_humiliation_sound", HUMILIATION_SOUND, "Sound played on humiliation");
+	g_hCvarSpecialRounds = 		CreateConVar("tfgg_enable_special_rounds", "0", "Enable Special Rounds", _, true, 0.0, true, 1.0);
+	g_hCvarSpecialRoundChance = CreateConVar("tfgg_special_round_chance", "0", "Special round chance; Should be a percent value out of 100", _, true, 0.0, true, 1.0);
 	
 	g_hCvarLastRankSound.AddChangeHook(OnChangeSound);
 	g_hCvarWinSound.AddChangeHook(OnChangeSound);
 	g_hCvarHumiliationSound.AddChangeHook(OnChangeSound);
+	
+	RegAdminCmd("sm_forcenextspecial", Command_ForceNextSpecial, ADMFLAG_ROOT, "Force the next special round. 0 - None, 1 - Melee, 2 - Double, 3 - Crits");
 	
 	GGWeapon.Init();
 	HookEvent("teamplay_round_start", 			OnTFRoundStart);
@@ -188,6 +215,23 @@ void CleanLogicEntities()
 				AcceptEntityInput(i, "Kill");
 			}
 		}
+	}
+}
+
+TFGGSpecialRoundType CheckSpecialRound()
+{
+	if (!g_hCvarSpecialRounds.BoolValue)
+		return SpecialRound_None;
+	else if (g_eForceNextSpecial != SpecialRound_None)
+		return g_eForceNextSpecial;
+	else
+	{
+		int iPercent = g_hCvarSpecialRoundChance.IntValue;
+		
+		if (GetRandomInt(1,100) > iPercent)
+			return SpecialRound_None;
+		else
+			return view_as<TFGGSpecialRoundType>(GetRandomInt(1, view_as<int>(TFGGSRT_COUNT) - 1));
 	}
 }
 
@@ -298,6 +342,12 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 
 public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 {
+	g_eCurrentSpecial = CheckSpecialRound();
+	if (g_eCurrentSpecial && g_eCurrentSpecial < TFGGSRT_COUNT)
+		PrintToChatAll("\x07FFA500[GunGame]\x07FFFFFF SPECIAL ROUND ACTIVATED: %s", g_strSpecialRoundName[view_as<int>(g_eCurrentSpecial)]);
+	
+	g_eForceNextSpecial = SpecialRound_None;
+	
 	GenerateRoundWeps();
 	
 	for (int i = 1; i < MaxClients; i++)
@@ -810,4 +860,22 @@ public Action Command_Help(int iClient, int iArgs)
 	// weapon until you win! However, if you get hit by a melee weapon or kill yourself,
 	// you get set back one rank.
 	ReplyToCommand(iClient, "\x07FFA500[GunGame]\x07FFFFFF %t", "HelpString");
+}
+
+public Action Command_ForceNextSpecial(int iClient, int iArgs)
+{
+	TFGGSpecialRoundType eType;
+	char strArg[4];
+	GetCmdArg(0, strArg, sizeof(strArg));
+	
+	eType = view_as<TFGGSpecialRoundType>(StringToInt(strArg));
+	
+	if (eType >= TFGGSRT_COUNT || eType <= SpecialRound_None)
+	{
+		ReplyToCommand(iClient, "\x07FF0000Invalid special round specified!");
+		return Plugin_Handled;
+	}
+	
+	g_eForceNextSpecial = eType;
+	return Plugin_Handled;
 }
