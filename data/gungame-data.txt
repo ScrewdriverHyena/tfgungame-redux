@@ -584,4 +584,612 @@
 		"slot" "0"
 		"classname" "tf_weapon_sniperrifle"
 	}
+
+	"The Half-Zatoichi"
+	{
+		"index" "357"
+		"tfclass" "3"
+		"slot" "2"
+		"classname" "tf_weapon_katana"
+	}
+
+	"The Equalizer"
+	{
+		"index" "128"
+		"tfclass" "3"
+		"slot" "2"
+		"classname" "tf_weapon_shovel"
+	}
+
+	"The Escape Plan"
+	{
+		"index" "775"
+		"tfclass" "3"
+		"slot" "2"
+		"classname" "tf_weapon_shovel"
+	}
+
+	"The Pain Train"
+	{
+		"index" "154"
+		"tfclass" "3"
+		"slot" "2"
+		"classname" "tf_weapon_shovel"
+	}
+
+	"Shovel"
+	{
+		"index" "196"
+		"tfclass" "3"
+		"slot" "2"
+		"classname" "tf_weapon_shovel"
+	}
+
+	"The Market Gardener"
+	{
+		"index" "416"
+		"tfclass" "3"
+		"slot" "2"
+		"classname" "tf_weapon_shovel"
+	}
+
+	"The Disciplinary Action"
+	{
+		"index" "128"
+		"tfclass" "3"
+		"slot" "2"
+		"classname" "tf_weapon_shovel"
+	}
+
+	"Bat"
+	{
+		"index" "190"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat"
+	}
+
+	"The Sandman"
+	{
+		"index" "44"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat_wood"
+	}
+
+	"The Holy Mackerel"
+	{
+		"index" "221"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat_fish"
+	}
+
+	"Frying Pan"
+	{
+		"index" "264"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat"
+	}
+
+	"The Candy Cane"
+	{
+		"index" "317"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat"
+	}
+
+	"The Boston Basher"
+	{
+		"index" "325"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat"
+	}
+
+	"Sun-on-a-Stick"
+	{
+		"index" "349"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat"
+	}
+
+	"Three-Rune Blade"
+	{
+		"index" "452"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat"
+	}
+
+	"Unarmed Combat"
+	{
+		"index" "572"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat_fish"
+	}
+
+	"The Wrap Assassin"
+	{
+		"index" "648"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat_giftwrap"
+	}
+
+	"The Bat Outta Hell"
+	{
+		"index" "939"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat"
+	}
+
+	"Batsaber"
+	{
+		"index" "30667"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat"
+	}
+
+	"The Fan O'War"
+	{
+		"index" "355"
+		"tfclass" "1"
+		"slot" "2"
+		"classname" "tf_weapon_bat"
+	}
+
+	"Bottle"
+	{
+		"index" "191"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_bottle"
+	}
+
+	"The Scottish Handshake"
+	{
+		"index" "609"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_bottle"
+	}
+
+	"The Eyelander"
+	{
+		"index" "132"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_sword"
+	}
+
+	"The Scotsman's Skullcutter"
+	{
+		"index" "172"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_sword"
+	}
+
+	"Horseless Headless Horsemann's Headtaker"
+	{
+		"index" "266"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_sword"
+	}
+
+	"The Claidheamh Mor"
+	{
+		"index" "327"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_sword"
+	}
+
+	"The Persian Persuader"
+	{
+		"index" "404"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_sword"
+	}
+
+	"Nessie's Nine Iron"
+	{
+		"index" "482"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_sword"
+	}
+
+	"Ullapool Caber"
+	{
+		"index" "307"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_stickbomb"
+	}
+
+	"The Ham Shank"
+	{
+		"index" "1013"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_bottle"
+	}
+
+	"Frying Pan"
+	{
+		"index" "264"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_bottle"
+	}
+
+	"The Conscientious Objector"
+	{
+		"index" "474"
+		"tfclass" "4"
+		"slot" "2"
+		"classname" "tf_weapon_bottle"
+	}
+
+	"Fire Axe"
+	{
+		"index" "192"
+		"tfclass" "7"
+		"slot" "2"
+		"classname" "tf_weapon_fireaxe"
+	}
+
+	"The Powerjack"
+	{
+		"index" "214"
+		"tfclass" "7"
+		"slot" "2"
+		"classname" "tf_weapon_fireaxe"
+	}
+
+	"The Back Scratcher"
+	{
+		"index" "326"
+		"tfclass" "7"
+		"slot" "2"
+		"classname" "tf_weapon_fireaxe"
+	}
+
+	"Sharpened Volcano Fragment"
+	{
+		"index" "348"
+		"tfclass" "7"
+		"slot" "2"
+		"classname" "tf_weapon_fireaxe"
+	}
+
+	"The Postal Pummeler"
+	{
+		"index" "457"
+		"tfclass" "7"
+		"slot" "2"
+		"classname" "tf_weapon_fireaxe"
+	}
+
+	"The Maul"
+	{
+		"index" "466"
+		"tfclass" "7"
+		"slot" "2"
+		"classname" "tf_weapon_fireaxe"
+	}
+
+	"The Third Degree"
+	{
+		"index" "593"
+		"tfclass" "7"
+		"slot" "2"
+		"classname" "tf_weapon_fireaxe"
+	}
+
+	"The Lollichop"
+	{
+		"index" "739"
+		"tfclass" "7"
+		"slot" "2"
+		"classname" "tf_weapon_fireaxe"
+	}
+
+	"Neon Annhilator"
+	{
+		"index" "813"
+		"tfclass" "7"
+		"slot" "2"
+		"classname" "tf_weapon_breakable_sign"
+	}
+
+	"The Freedom Staff"
+	{
+		"index" "880"
+		"tfclass" "7"
+		"slot" "2"
+		"classname" "tf_weapon_fireaxe"
+	}
+	
+	"Hot Hand"
+	{
+		"index" "1181"
+		"tfclass" "7"
+		"slot" "2"
+		"classname" "tf_weapon_slap"
+	}
+
+	"Wrench"
+	{
+		"index" "197"
+		"tfclass" "9"
+		"slot" "2"
+		"classname" "tf_weapon_wrench"
+	}
+
+	"The Gunslinger"
+	{
+		"index" "142"
+		"tfclass" "9"
+		"slot" "2"
+		"classname" "tf_weapon_robot_arm"
+	}
+
+	"The Southern Hospitality"
+	{
+		"index" "155"
+		"tfclass" "9"
+		"slot" "2"
+		"classname" "tf_weapon_wrench"
+	}
+
+	"The Jag"
+	{
+		"index" "329"
+		"tfclass" "9"
+		"slot" "2"
+		"classname" "tf_weapon_wrench"
+	}
+
+	"Fists"
+	{
+		"index" "195"
+		"tfclass" "6"
+		"slot" "2"
+		"classname" "tf_weapon_fists"
+	}
+
+	"The Killing Gloves of Boxing"
+	{
+		"index" "43"
+		"tfclass" "6"
+		"slot" "2"
+		"classname" "tf_weapon_fists"
+	}
+
+	"Gloves of Running Urgently"
+	{
+		"index" "239"
+		"tfclass" "6"
+		"slot" "2"
+		"classname" "tf_weapon_fists"
+	}
+
+	"Warrior's Spirit"
+	{
+		"index" "310"
+		"tfclass" "6"
+		"slot" "2"
+		"classname" "tf_weapon_fists"
+	}
+
+	"Fists of Steel"
+	{
+		"index" "331"
+		"tfclass" "6"
+		"slot" "2"
+		"classname" "tf_weapon_fists"
+	}
+
+	"The Eviction Notice"
+	{
+		"index" "426"
+		"tfclass" "6"
+		"slot" "2"
+		"classname" "tf_weapon_fists"
+	}
+
+	"Apoco-Fists"
+	{
+		"index" "587"
+		"tfclass" "6"
+		"slot" "2"
+		"classname" "tf_weapon_fists"
+	}
+
+	"The Holiday Punch"
+	{
+		"index" "656"
+		"tfclass" "6"
+		"slot" "2"
+		"classname" "tf_weapon_fists"
+	}
+
+	"The Bread Bite"
+	{
+		"index" "1100"
+		"tfclass" "6"
+		"slot" "2"
+		"classname" "tf_weapon_fists"
+	}
+
+	"Prinny Machete"
+	{
+		"index" "30758"
+		"tfclass" "6"
+		"slot" "2"
+		"classname" "tf_weapon_fists"
+	}
+
+	"Kukri"
+	{
+		"index" "193"
+		"tfclass" "2"
+		"slot" "2"
+		"classname" "tf_weapon_club"
+	}
+
+	"The Tribalman's Shiv"
+	{
+		"index" "171"
+		"tfclass" "2"
+		"slot" "2"
+		"classname" "tf_weapon_club"
+	}
+
+	"The Bushwacka"
+	{
+		"index" "232"
+		"tfclass" "2"
+		"slot" "2"
+		"classname" "tf_weapon_club"
+	}
+
+	"The Shahanshah"
+	{
+		"index" "401"
+		"tfclass" "2"
+		"slot" "2"
+		"classname" "tf_weapon_club"
+	}
+
+	"The Crossing Guard"
+	{
+		"index" "1127"
+		"tfclass" "2"
+		"slot" "2"
+		"classname" "tf_weapon_club"
+	}
+
+	"Bonesaw"
+	{
+		"index" "198"
+		"tfclass" "5"
+		"slot" "2"
+		"classname" "tf_weapon_bonesaw"
+	}
+
+	"Amputator"
+	{
+		"index" "304"
+		"tfclass" "5"
+		"slot" "2"
+		"classname" "tf_weapon_bonesaw"
+	}
+
+	"The Solemn Vow"
+	{
+		"index" "413"
+		"tfclass" "5"
+		"slot" "2"
+		"classname" "tf_weapon_bonesaw"
+	}
+
+	"The Vita-Saw"
+	{
+		"index" "173"
+		"tfclass" "5"
+		"slot" "2"
+		"classname" "tf_weapon_bonesaw"
+	}
+
+	"The Memory Maker"
+	{
+		"index" "954"
+		"tfclass" "5"
+		"slot" "2"
+		"classname" "tf_weapon_bonesaw"
+	}
+
+	"The Necro Smasher"
+	{
+		"index" "1123"
+		"tfclass" "5"
+		"slot" "2"
+		"classname" "tf_weapon_bonesaw"
+	}
+
+	"Knife"
+	{
+		"index" "194"
+		"tfclass" "8"
+		"slot" "2"
+		"classname" "tf_weapon_knife"
+	}
+
+	"Conniver's Kunai"
+	{
+		"index" "356"
+		"tfclass" "8"
+		"slot" "2"
+		"classname" "tf_weapon_knife"
+	}
+
+	"The Big Earner"
+	{
+		"index" "461"
+		"tfclass" "8"
+		"slot" "2"
+		"classname" "tf_weapon_knife"
+	}
+
+	"The Wanga Prick"
+	{
+		"index" "574"
+		"tfclass" "8"
+		"slot" "2"
+		"classname" "tf_weapon_knife"
+	}
+
+	"The Sharp Dresser"
+	{
+		"index" "638"
+		"tfclass" "8"
+		"slot" "2"
+		"classname" "tf_weapon_knife"
+	}
+
+	"The Spy-cicle"
+	{
+		"index" "649"
+		"tfclass" "8"
+		"slot" "2"
+		"classname" "tf_weapon_knife"
+	}
+
+	"The Black Rose"
+	{
+		"index" "727"
+		"tfclass" "8"
+		"slot" "2"
+		"classname" "tf_weapon_knife"
+	}
+
+	"Saxxy"
+	{
+		"index" "423"
+		"tfclass" "8"
+		"slot" "2"
+		"classname" "tf_weapon_knife"
+	}
 }
