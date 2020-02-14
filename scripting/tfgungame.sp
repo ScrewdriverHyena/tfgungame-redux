@@ -702,7 +702,7 @@ void SetPlayerWeapon(int iClient, int iRank)
 	
 	if (hWeapon.ClipOverride)
 		SetEntData(iWeapon, FindSendPropInfo("CTFWeaponBase", "m_iClip1"), hWeapon.ClipOverride, _, true);
-	else if (hWeapon.Index == 741) // Rainblower fix, thanks to Benoist3012
+	else if (hWeapon.Index == 741 || hWeapon.Index == 739) // Rainblower fix, thanks to Benoist3012
 		SetEntProp(iWeapon, Prop_Send, "m_nModelIndexOverrides", GetEntProp(iWeapon, Prop_Send, "m_nModelIndexOverrides", _, 3), _, 0);
 	
 	SetMaxAmmo(iClient, iWeapon);
