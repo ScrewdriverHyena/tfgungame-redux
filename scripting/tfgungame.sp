@@ -302,7 +302,7 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 	
 	for (int i = 1; i < MaxClients; i++)
 	{
-		if (!IsValidClient(i) && TF2_GetClientTeam(i) == TFTeam_Unassigned && TF2_GetClientTeam(i) == TFTeam_Spectator)
+		if (!IsValidClient(i) || TF2_GetClientTeam(i) == TFTeam_Unassigned || TF2_GetClientTeam(i) == TFTeam_Spectator)
 			continue;
 
 		g_iRank[i] = 0;
@@ -489,11 +489,11 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 		else
 			PrintToChat(iVictim, "\x07FFA500[GunGame] HUMILIATION!");
 		
+		RequestFrame(RankDownBuffered, iVictim);
+		
 		char strSound[255];
 		g_hCvarHumiliationSound.GetString(strSound, sizeof(strSound));
 		EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
-		
-		RequestFrame(RankDownBuffered, iVictim);
 		
 		Call_StartForward(hFwdRankDown);
 		Call_PushCell(iAttacker);
@@ -552,7 +552,7 @@ public void RankUpBuffered(int iAttacker)
 
 public void RankDownBuffered(int iVictim)
 {
-	if ((g_iRank[iVictim] - 1) > 0)
+	if ((g_iRank[iVictim] - 1) >= 0)
 	{
 		RankUp(iVictim, -1);
 		SetPlayerWeapon(iVictim, g_iRank[iVictim]);
