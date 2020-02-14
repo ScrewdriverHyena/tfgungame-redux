@@ -552,7 +552,11 @@ public void RankUpBuffered(int iAttacker)
 
 public void RankDownBuffered(int iVictim)
 {
-	if (g_iRank[iVictim] > 0) RankUp(iVictim, -1);
+	if ((g_iRank[iVictim] - 1) > 0)
+	{
+		RankUp(iVictim, -1);
+		SetPlayerWeapon(iVictim, g_iRank[iVictim]);
+	}
 }
 
 int RankUp(int iClient, int iAmount = 1)
