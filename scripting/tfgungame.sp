@@ -302,7 +302,7 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 	
 	for (int i = 1; i < MaxClients; i++)
 	{
-		if (!IsValidClient(i) && TF2_GetClientTeam(i) != TFTeam_Unassigned && TF2_GetClientTeam(i) != TFTeam_Spectator)
+		if (!IsValidClient(i) && TF2_GetClientTeam(i) == TFTeam_Unassigned && TF2_GetClientTeam(i) == TFTeam_Spectator)
 			continue;
 
 		g_iRank[i] = 0;
