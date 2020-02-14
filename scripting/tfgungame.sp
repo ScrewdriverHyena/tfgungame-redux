@@ -70,8 +70,7 @@ enum TFGGSpecialRoundType
 	SpecialRound_None = 0,
 	SpecialRound_Melee = 1,
 	SpecialRound_MeleeToo = 2,
-	SpecialRound_Double = 3,
-	SpecialRound_AllCrits = 4,
+	SpecialRound_AllCrits = 3,
 	
 	TFGGSRT_COUNT
 };
@@ -81,7 +80,6 @@ stock const char g_strSpecialRoundSeries[TFGGSRT_COUNT][PLATFORM_MAX_PATH] =
 	"configs/gungame-series.cfg",
 	"configs/gungame-series-melee-only.cfg",
 	"configs/gungame-series-melee.cfg",
-	"configs/gungame-series.cfg",
 	"configs/gungame-series.cfg"
 };
 
@@ -90,7 +88,6 @@ stock const char g_strSpecialRoundName[TFGGSRT_COUNT][32] =
 	"None",
 	"Melee Weapons Only",
 	"Melee Weapons Enabled",
-	"Double Kills",
 	"100% Critical Hits"
 };
 
@@ -164,8 +161,8 @@ public void OnPluginStart()
 	g_hCvarLastRankSound = 		CreateConVar("tfgg_last_rank_sound", LASTRANK_SOUND, "Sound played when someone has hit the last rank");
 	g_hCvarWinSound = 			CreateConVar("tfgg_win_sound", WIN_SOUND, "Sound played when someone wins the game");
 	g_hCvarHumiliationSound = 	CreateConVar("tfgg_humiliation_sound", HUMILIATION_SOUND, "Sound played on humiliation");
-	g_hCvarSpecialRounds = 		CreateConVar("tfgg_enable_special_rounds", "0", "Enable Special Rounds", _, true, 0.0, true, 1.0);
-	g_hCvarSpecialRoundChance = CreateConVar("tfgg_special_round_chance", "0", "Special round chance; Should be a percent value out of 100", _, true, 0.0, true, 1.0);
+	g_hCvarSpecialRounds = 		CreateConVar("tfgg_enable_special_rounds", "1", "Enable Special Rounds", _, true, 0.0, true, 1.0);
+	g_hCvarSpecialRoundChance = CreateConVar("tfgg_special_round_chance", "25", "Special round chance; Should be a percent value out of 100", _, true, 0.0, true, 1.0);
 	
 	g_hCvarLastRankSound.AddChangeHook(OnChangeSound);
 	g_hCvarWinSound.AddChangeHook(OnChangeSound);
@@ -231,10 +228,10 @@ void CleanLogicEntities()
 
 TFGGSpecialRoundType CheckSpecialRound()
 {
-	if (!g_hCvarSpecialRounds.BoolValue)
-		return SpecialRound_None;
-	else if (g_eForceNextSpecial != SpecialRound_None)
+	if (g_eForceNextSpecial != SpecialRound_None)
 		return g_eForceNextSpecial;
+	else if (!g_hCvarSpecialRounds.BoolValue)
+		return SpecialRound_None;
 	else
 	{
 		int iPercent = g_hCvarSpecialRoundChance.IntValue;
@@ -380,6 +377,20 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 	
 	CreateTimer(5.0, CleanEnts);
 	return Plugin_Continue;
+}
+
+public Action TF2_CalcIsAttackCritical(int iClient, int iWeapon, char[] strWeaponName, bool &result)
+{
+	if (g_eCurrentSpecial != SpecialRound_AllCrits)
+	{
+		result = false;
+		return Plugin_Continue;
+	}
+	else
+	{
+		result = true; 
+		return Plugin_Handled;
+	}
 }
 
 public Action CleanEnts(Handle hTimer)
@@ -879,7 +890,7 @@ public Action Command_ForceNextSpecial(int iClient, int iArgs)
 {
 	TFGGSpecialRoundType eType;
 	char strArg[4];
-	GetCmdArg(0, strArg, sizeof(strArg));
+	GetCmdArg(1, strArg, sizeof(strArg));
 	
 	eType = view_as<TFGGSpecialRoundType>(StringToInt(strArg));
 	
@@ -888,6 +899,8 @@ public Action Command_ForceNextSpecial(int iClient, int iArgs)
 		ReplyToCommand(iClient, "\x07FF0000Invalid special round specified!");
 		return Plugin_Handled;
 	}
+	
+	PrintToChat(iClient, "\x07FFA500[GunGame] An Admin has triggered a Special Round! The next round will be: %s", g_strSpecialRoundName[view_as<int>(eType)]);
 	
 	g_eForceNextSpecial = eType;
 	return Plugin_Handled;
