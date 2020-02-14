@@ -69,18 +69,29 @@ enum TFGGSpecialRoundType
 {
 	SpecialRound_None = 0,
 	SpecialRound_Melee = 1,
-	SpecialRound_Double = 2,
-	SpecialRound_AllCrits = 3,
+	SpecialRound_MeleeToo = 2,
+	SpecialRound_Double = 3,
+	SpecialRound_AllCrits = 4,
 	
 	TFGGSRT_COUNT
+};
+
+stock const char g_strSpecialRoundSeries[TFGGSRT_COUNT][PLATFORM_MAX_PATH] =
+{
+	"configs/gungame-series.cfg",
+	"configs/gungame-series-melee-only.cfg",
+	"configs/gungame-series-melee.cfg",
+	"configs/gungame-series.cfg",
+	"configs/gungame-series.cfg"
 };
 
 stock const char g_strSpecialRoundName[TFGGSRT_COUNT][32] =
 {
 	"None",
 	"Melee Weapons Only",
+	"Melee Weapons Enabled",
 	"Double Kills",
-	"100% Critical Hits",
+	"100% Critical Hits"
 };
 
 const float HINT_REFRESH_INTERVAL = 5.0;
@@ -699,7 +710,9 @@ void GenerateRoundWeps()
 
 	KeyValues hKvConfig = new KeyValues("WeaponSeries");
 	char strPath[PLATFORM_MAX_PATH];
-	BuildPath(Path_SM, strPath, PLATFORM_MAX_PATH, "configs/gungame-series.cfg");
+	
+	BuildPath(Path_SM, strPath, PLATFORM_MAX_PATH, g_strSpecialRoundSeries[view_as<int>(g_eCurrentSpecial)]);
+	
 	hKvConfig.ImportFromFile(strPath);
 	
 	if (hKvConfig == null)
