@@ -311,6 +311,19 @@
 		"flags_override" "31"
 		"clip_override" "1"
 	}
+
+	"Rebel's Curse"
+	{
+		"index" "228"
+		"tfclass" "9"
+		"slot" "2"
+		"classname" "tf_weapon_wrench"
+		"select_override" "1"
+		"att_override" "2 ; 5.0 ; 99 ; 3.0 ; 521 ; 1.0 ; 3 ; 0.25 ; 104 ; 0.3 ; 77 ; 0.0 ; 16 ; 0.0"
+		"flags_override" "31"
+		"model_override" "models/custom/weapons/rebelscurse/c_wrench_v2.mdl"
+		"viewmodel_override" "models/custom/weapons/rebelscurse/c_wrench_v2.mdl"
+	}
 	
 	"Lugermorph"
 	{
