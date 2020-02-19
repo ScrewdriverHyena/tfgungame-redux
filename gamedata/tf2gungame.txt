@@ -18,6 +18,12 @@
 				"linux"		"323"
 				"windows"	"317"
 			}
+
+			"CTFPlayer::EquipWearable"
+			{
+				"linux"	"431"
+				"windows"	"430"
+			}
 		}
 	}
 }

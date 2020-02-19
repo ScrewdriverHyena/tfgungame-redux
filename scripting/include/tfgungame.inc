@@ -17,6 +17,8 @@ methodmap GGWeapon < ArrayList
 	public native int GetName(char[] strName, int maxlength);
 	public native int GetClassname(char[] strName, int maxlength);
 	public native bool GetAttributeOverride(char[] strName, int maxlength, int &bytes = 0);
+	public native int GetViewmodelOverride(char[] strViewmodel, int maxlength);
+	public native int GetModelOverride(char[] strWorldmodel, int maxlength);
 	
 	property int Index
 	{

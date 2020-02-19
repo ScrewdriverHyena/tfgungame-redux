@@ -18,6 +18,8 @@ enum eWeaponProperties
 	WEAPON_ATT,
 	WEAPON_FLAGS,
 	WEAPON_CLIP,
+	WEAPON_MODEL,
+	WEAPON_VIEWMODEL,
 	
 	WEAPONPROP_COUNT
 };
@@ -57,6 +59,20 @@ public any Native_GGWeapon(Handle plugin, int numParams)
 	
 	int iClipOverride = hKvWeapons.GetNum("clip_override", 0);
 	
+	char strModelOverride[128];
+	hKvWeapons.GetString("model_override", strModelOverride, sizeof(strModelOverride));
+	if (!FileExists(strModelOverride, true))
+		SetFailState("");
+	else
+		SuperPrecacheModel(strModelOverride);
+	
+	char strViewmodelOverride[128];
+	hKvWeapons.GetString("viewmodel_override", strViewmodelOverride, sizeof(strViewmodelOverride));
+	if (!FileExists(strViewmodelOverride, true))
+		SetFailState("");
+	else
+		SuperPrecacheModel(strViewmodelOverride, true);
+	
 	ArrayList hWeapon = new ArrayList(128, WEAPONPROP_COUNT);
 	hWeapon.SetString(WEAPON_NAME, strSectionName);
 	hWeapon.Set(WEAPON_INDEX, iIndex);
@@ -67,6 +83,8 @@ public any Native_GGWeapon(Handle plugin, int numParams)
 	hWeapon.SetString(WEAPON_ATT, strAttOverride);
 	hWeapon.Set(WEAPON_FLAGS, iFlagsOverride);
 	hWeapon.Set(WEAPON_CLIP, iClipOverride);
+	hWeapon.SetString(WEAPON_MODEL, strModelOverride);
+	hWeapon.SetString(WEAPON_VIEWMODEL, strViewmodelOverride);
 	
 	char strKey[8];
 	IntToString(iIndex, strKey, sizeof(strKey));
@@ -198,6 +216,36 @@ public any Native_GGWeaponGetAttributeOverride(Handle plugin, int numParams)
 	int maxlength = GetNativeCell(3);
 	char[] strBuf = new char[maxlength];
 	hThis.GetString(WEAPON_ATT, strBuf, maxlength);
+	
+	if (!strBuf[0]) return false;
+	
+	int bytes;
+	SetNativeString(2, strBuf, maxlength, _, bytes);
+	SetNativeCellRef(4, bytes);
+	return true;
+}
+
+public any Native_GGWeaponGetModelOverride(Handle plugin, int numParams)
+{
+	ArrayList hThis = view_as<ArrayList>(GetNativeCell(1));
+	int maxlength = GetNativeCell(3);
+	char[] strBuf = new char[maxlength];
+	hThis.GetString(WEAPON_MODEL, strBuf, maxlength);
+	
+	if (!strBuf[0]) return false;
+	
+	int bytes;
+	SetNativeString(2, strBuf, maxlength, _, bytes);
+	SetNativeCellRef(4, bytes);
+	return true;
+}
+
+public any Native_GGWeaponGetViewmodelOverride(Handle plugin, int numParams)
+{
+	ArrayList hThis = view_as<ArrayList>(GetNativeCell(1));
+	int maxlength = GetNativeCell(3);
+	char[] strBuf = new char[maxlength];
+	hThis.GetString(WEAPON_VIEWMODEL, strBuf, maxlength);
 	
 	if (!strBuf[0]) return false;
 	

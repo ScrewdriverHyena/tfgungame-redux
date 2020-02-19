@@ -91,16 +91,37 @@ stock const char g_strSpecialRoundName[TFGGSRT_COUNT][32] =
 	"100% Critical Hits"
 };
 
+stock const char g_strArmModels[10][128] =
+{
+	"",
+	"models/weapons/c_models/c_scout_arms.mdl",
+	"models/weapons/c_models/c_sniper_arms.mdl",
+	"models/weapons/c_models/c_soldier_arms.mdl",
+	"models/weapons/c_models/c_demoman_arms.mdl",
+	"models/weapons/c_models/c_medic_arms.mdl",
+	"models/weapons/c_models/c_heavy_arms.mdl",
+	"models/weapons/c_models/c_pyro_arms.mdl",
+	"models/weapons/c_models/c_spy_arms.mdl",
+	"models/weapons/c_models/c_engineer_arms.mdl"
+};
+
 const float HINT_REFRESH_INTERVAL = 5.0;
 
 int g_iRank[MAXPLAYERS+1];
 int g_iRankBuffer[MAXPLAYERS+1];
 int g_iAssists[MAXPLAYERS+1];
+int g_iViewmodelEnt[2049];
+int g_iWorldmodelEnt[2049];
+int g_iWearableOwner[2049];
+int g_iTiedEnt[2049];
+bool g_bOnlyVisIfActive[2049];
+bool g_bHasWearableTied[2049];
 bool g_bLate;
 bool g_bRoundActive;
 
 Handle g_hGetMaxAmmo;
 Handle g_hGetMaxClip1;
+Handle g_hEquipWearable;
 
 Handle hFwdOnWin;
 Handle hFwdRankUp;
@@ -139,6 +160,8 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateNative("GGWeapon.Disabled.get", Native_GGWeaponDisabled);
 	CreateNative("GGWeapon.FlagsOverride.get", Native_GGWeaponFlagsOverride);
 	CreateNative("GGWeapon.ClipOverride.get", Native_GGWeaponClipOverride);
+	CreateNative("GGWeapon.GetModelOverride", Native_GGWeaponGetModelOverride);
+	CreateNative("GGWeapon.GetViewmodelOverride", Native_GGWeaponGetViewmodelOverride);
 	
 	CreateNative("GetGunGameRank", Native_GetRank);
 	CreateNative("ForceGunGameWin", Native_ForceWin);
@@ -205,6 +228,32 @@ public void OnMapStart()
 	LoadTranslations("tfgungame.phrases");
 	
 	CleanLogicEntities();
+}
+
+public void OnEntityDestroyed(int iEntity)
+{
+	g_iViewmodelEnt[iEntity] = 0;
+	g_iWorldmodelEnt[iEntity] = 0;
+	
+	if (iEntity <= 0 || iEntity > 2048) return;
+	if (g_bHasWearableTied[iEntity])
+	{
+		int i = -1;
+		while ((i = FindEntityByClassname(i, "tf_wearable*")) != -1)
+		{
+			if (iEntity != g_iTiedEnt[i]) continue;
+			if (IsValidClient(g_iWearableOwner[iEntity]))
+			{
+				TF2_RemoveWearable(g_iWearableOwner[iEntity], i);
+			}
+			else
+			{
+				AcceptEntityInput(i, "Kill"); // This can cause graphical glitches
+			}
+		}
+		
+		g_bHasWearableTied[iEntity] = false;
+	}
 }
 
 void CleanLogicEntities()
@@ -280,9 +329,33 @@ void PrepSDK()
 	g_hGetMaxClip1 = EndPrepSDKCall();
 	if (g_hGetMaxClip1 == null)
 		SetFailState("[GunGame] Couldn't load SDK Call CTFWeaponBase::GetMaxClip1");
+	
+	StartPrepSDKCall(SDKCall_Player);
+	PrepSDKCall_SetFromConf(hGameData, SDKConf_Virtual, "CTFPlayer::EquipWearable");
+	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
+	g_hEquipWearable = EndPrepSDKCall();
+	if (g_hEquipWearable == null)
+		SetFailState("[GunGame] Couldn't load SDK Call CTFPlayer::EquipWearable");
 
 	delete hGameData;
 }
+
+void EquipWearable(int iClient, int iEnt)
+{
+	if (g_hEquipWearable == INVALID_HANDLE)
+	{
+		PrepSDK();
+		LogError("[GunGame] SDK Call for EquipWearable is invalid!");
+	}
+	else
+	{
+		// TODO: SEE IF I REALLY NEED THIS SHIT
+		SetEntProp(iEnt, Prop_Send, "m_bValidatedAttachedEntity", true);
+		SDKCall(g_hEquipWearable, iClient, iEnt);
+		SetEntProp(iEnt, Prop_Send, "m_bValidatedAttachedEntity", true);
+	}
+}
+
 
 int GetMaxAmmo(int iClient, int iAmmoType, TFClassType iClass)
 { 
@@ -699,6 +772,7 @@ void SetPlayerWeapon(int iClient, int iRank)
 	
 	int iWeapon = CreateWeapon(iClient, strClassname, hWeapon.Index, 1, 1, strAttributes, hWeapon.FlagsOverride);
 	FlagWeaponDontDrop(iWeapon);
+	HandleWeaponModel(hWeapon, iClient, iWeapon);
 	
 	if (hWeapon.ClipOverride)
 		SetEntData(iWeapon, FindSendPropInfo("CTFWeaponBase", "m_iClip1"), hWeapon.ClipOverride, _, true);
@@ -774,7 +848,7 @@ void GenerateRoundWeps()
 	while (hKvConfig.GotoNextKey());
 }
 
-stock int CreateWeapon(int client, char[] sName, int index, int level = 1, int qual = 1, char[] att, int flags = OVERRIDE_ALL | PRESERVE_ATTRIBUTES)
+int CreateWeapon(int client, char[] sName, int index, int level = 1, int qual = 1, char[] att, int flags = OVERRIDE_ALL | PRESERVE_ATTRIBUTES)
 {
 	Handle hWeapon = TF2Items_CreateItem(flags);
 	if (hWeapon == INVALID_HANDLE)
@@ -798,6 +872,7 @@ stock int CreateWeapon(int client, char[] sName, int index, int level = 1, int q
 		TF2Items_SetNumAttributes(hWeapon, 0);
 
 	int entity = TF2Items_GiveNamedItem(client, hWeapon);
+	
 	delete hWeapon;
 	return entity;
 }
@@ -813,6 +888,87 @@ void FlagWeaponDontDrop(int iWeapon)
 
 	StoreToAddress(view_as<Address>((view_as<int>(pWeapon)) + iItemOffset + 36), 0x23E173A2, NumberType_Int32);
 	SetEntProp(iWeapon, Prop_Send, "m_bValidatedAttachedEntity", 1);
+}
+
+void HandleWeaponModel(GGWeapon hWeapon, int iClient, int iWeapon)
+{
+	if (hWeapon == INVALID_HANDLE || !IsValidClient(iClient))
+		return;
+	
+	char strViewmodel[PLATFORM_MAX_PATH], strWorldmodel[PLATFORM_MAX_PATH];
+	hWeapon.GetViewmodelOverride(strViewmodel, sizeof(strViewmodel));
+	hWeapon.GetModelOverride(strWorldmodel, sizeof(strWorldmodel));
+	
+	if (!strlen(strWorldmodel) && !strlen(strViewmodel))
+		return;
+	
+	if (strlen(strWorldmodel) && !FileExists(strWorldmodel, true))
+		SetFailState("[GunGame] MISSING WORLDMODEL FOR WEAPON: %s", strWorldmodel);
+	else if (FileExists(strWorldmodel, true))
+	{
+		int iModel = PrecacheModel(strWorldmodel, true);
+		SetEntProp(iWeapon, Prop_Send, "m_iWorldModelIndex", iModel);
+		SetEntProp(iWeapon, Prop_Send, "m_iModelIndexOverrides", iModel, _, 0);
+	}
+	
+	if (strlen(strViewmodel) && !FileExists(strViewmodel, true))
+		SetFailState("[GunGame] MISSING VIEWMODEL FOR WEAPON: %s", strViewmodel);
+	else if (FileExists(strViewmodel, true))
+	{
+		int iViewmodel = CreateAndEquipWearable(iClient, strViewmodel, true);
+		if (iViewmodel > 0)
+			g_iViewmodelEnt[iViewmodel] = iWeapon;
+		
+		int iClass = view_as<int>(TF2_GetPlayerClass(iClient));
+		if (FileExists(g_strArmModels[iClass], true))
+		{
+			PrecacheModel(g_strArmModels[iClass], true);
+			int iArms = CreateAndEquipWearable(iClient, g_strArmModels[iClass], true);
+			if (iArms > 0)
+				g_iViewmodelEnt[iArms] = iWeapon;
+		
+		}
+	}
+	
+}
+
+int CreateWearable(int iClient, char[] strModel, bool bViewmodel)
+{
+	int iEnt = CreateEntityByName(bViewmodel ? "tf_wearable_vm" : "tf_wearable");
+	if (!IsValidEntity(iEnt)) return -1;
+	SetEntProp(iEnt, Prop_Send, "m_nModelIndex", PrecacheModel(strModel));
+	SetEntProp(iEnt, Prop_Send, "m_fEffects", 129);
+	SetEntProp(iEnt, Prop_Send, "m_iTeamNum", GetClientTeam(iClient));
+	SetEntProp(iEnt, Prop_Send, "m_usSolidFlags", 4);
+	SetEntProp(iEnt, Prop_Send, "m_CollisionGroup", 11);
+	DispatchSpawn(iEnt);
+	SetVariantString("!activator");
+	ActivateEntity(iEnt);
+	EquipWearable(iClient, iEnt);
+	return iEnt;
+}
+
+int CreateAndEquipWearable(int iClient, char[] strModel, bool bViewmodel, int iWeapon = 0, bool bVisActive = true)
+{
+	int iWearable = CreateWearable(iClient, strModel, bViewmodel);
+	if (iWearable == -1)
+		return -1;
+	
+	g_iWearableOwner[iWearable] = iClient;
+	
+	if (iWeapon > MaxClients)
+	{
+		g_iTiedEnt[iWearable] = iWeapon;
+		g_bOnlyVisIfActive[iWearable] = bVisActive;
+		
+		g_bHasWearableTied[iWeapon] = true;
+		
+		int iEffects = GetEntProp(iWearable, Prop_Send, "m_fEffects");
+		if (iWeapon == GetEntPropEnt(iClient, Prop_Send, "m_hActiveWeapon")) SetEntProp(iWearable, Prop_Send, "m_fEffects", iEffects & ~32);
+		else SetEntProp(iWearable, Prop_Send, "m_fEffects", iEffects |= 32);
+	}
+	
+	return iWearable;
 }
 
 void SetMaxAmmo(int iClient, int iWeapon, int iForceAmmo = -1)
