@@ -223,6 +223,61 @@ public void OnPluginStart()
 	//PrecacheSound(HUMILIATION_SOUND, true);
 }
 
+stock int SuperPrecacheModel(char[] strModel, bool bPreload = false)
+{
+	char strDepFile[PLATFORM_MAX_PATH], strLine[PLATFORM_MAX_PATH];
+	int iModel;
+	Format(strDepFile, sizeof(strDepFile), "%s.dep", strModel);
+	if (!FileExists(strDepFile, true))
+		iModel = PrecacheModel(strModel);
+	else
+	{
+		File hDepFile = OpenFile(strDepFile, "r", true);
+		if (hDepFile == null)
+			SetFailState("[GunGame] Dependency file %s is not readable! Check file permissions.", strDepFile);
+		
+		while (!hDepFile.EndOfFile())
+		{
+			hDepFile.ReadLine(strLine, sizeof(strLine));
+			
+			CleanString(strLine);
+			
+			if (!FileExists(strLine, true))
+				SetFailState("[GunGame] Missing file %s listed as dependency!", strLine);
+			
+			if (StrContains(strLine, ".vmt", false) != -1)
+				PrecacheDecal(strLine, true);
+			else if (StrContains(strLine, ".mdl", false) != -1)
+				iModel = PrecacheModel(strLine, true);
+			
+			AddFileToDownloadsTable(strLine);
+		}
+		
+		delete hDepFile;
+	}
+	
+	return iModel;
+}
+
+// Thanks TF2Items_GiveWeapon for the code
+void CleanString(char[] strBuffer)
+{
+	// Cleanup any illegal characters
+	int iLength = strlen(strBuffer);
+	for (int iPos = 0; iPos < iLength; iPos++)
+	{
+		switch(strBuffer[iPos])
+		{
+			case '\r': strBuffer[iPos] = ' ';
+			case '\n': strBuffer[iPos] = ' ';
+			case '\t': strBuffer[iPos] = ' ';
+		}
+	}
+
+	// Trim string
+	TrimString(strBuffer);
+}
+
 public void OnMapStart()
 {
 	LoadTranslations("tfgungame.phrases");
