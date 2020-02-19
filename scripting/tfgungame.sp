@@ -162,6 +162,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateNative("GGWeapon.ClipOverride.get", Native_GGWeaponClipOverride);
 	CreateNative("GGWeapon.GetModelOverride", Native_GGWeaponGetModelOverride);
 	CreateNative("GGWeapon.GetViewmodelOverride", Native_GGWeaponGetViewmodelOverride);
+	CreateNative("GGWeapon.ModelIndex.get", Native_GGWeaponClipOverride);
 	
 	CreateNative("GetGunGameRank", Native_GetRank);
 	CreateNative("ForceGunGameWin", Native_ForceWin);
@@ -199,6 +200,8 @@ public void OnPluginStart()
 	HookEvent("post_inventory_application", 	OnReloadPlayerWeapons);
 	HookEvent("player_death", 					OnPlayerDeath);
 	HookEvent("player_death", 					OnPlayerDeathPre, 		EventHookMode_Pre);
+	
+	
 	
 	if (g_bLate)
 	{
@@ -465,15 +468,33 @@ stock int GetMaxClip(int iWeapon)
 	return SDKCall(g_hGetMaxClip1, iWeapon);
 }
 
-public void OnClientPostAdminCheck(int client)
+public void OnClientPostAdminCheck(int iClient)
 {
 #if defined DEBUG
-	if (IsFakeClient(client))
+	if (IsFakeClient(iClient))
 	{
 		// Give joining bots a random rank for testing
-		g_iRank[client] = GetRandomInt(0, GGWeapon.Total() - 1);
+		g_iRank[iClient] = GetRandomInt(0, GGWeapon.Total() - 1);
+		
+		
 	}
 #endif
+
+	SDKHook(iClient, SDKHook_WeaponSwitchPost, OnWeaponSwitch);
+}
+
+public void OnWeaponSwitch(int iClient, int iWeapon)
+{
+	if (!IsValidEntity(iWeapon)) return;
+	int i = -1;
+	while ((i = FindEntityByClassname(i, "tf_wearable*")) != -1)
+	{
+		if (!g_bOnlyVisIfActive[i]) continue;
+		if (iClient != g_iWearableOwner[i]) continue;
+		int iEffects = GetEntProp(i, Prop_Send, "m_fEffects");
+		if (iWeapon == g_iTiedEnt[i]) SetEntProp(i, Prop_Send, "m_fEffects", iEffects & ~32);
+		else SetEntProp(i, Prop_Send, "m_fEffects", iEffects |= 32);
+	}
 }
 
 public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3], float angles[3], int &weapon, int &subtype, int &cmdnum, int &tickcount, int &seed, int mouse[2])
@@ -830,6 +851,7 @@ void SetPlayerWeapon(int iClient, int iRank)
 	SetEntityHealth(iClient, g_iClassMaxHP[view_as<int>(eClass)]);
 	
 	// Remove all weapons
+	OnWeaponSwitch(iClient, GetEntPropEnt(iClient, Prop_Send, "m_hActiveWeapon"));
 	TF2_RemoveAllWeapons(iClient);
 	
 	char strClassname[128], strAttributes[128];
@@ -838,7 +860,7 @@ void SetPlayerWeapon(int iClient, int iRank)
 	
 	int iWeapon = CreateWeapon(iClient, strClassname, hWeapon.Index, 1, 1, strAttributes, hWeapon.FlagsOverride);
 	FlagWeaponDontDrop(iWeapon);
-	HandleWeaponModel(hWeapon, iClient, iWeapon);
+	bool bUsesCustomModel = HandleWeaponModel(hWeapon, iClient, iWeapon);
 	
 	if (hWeapon.ClipOverride)
 		SetEntData(iWeapon, FindSendPropInfo("CTFWeaponBase", "m_iClip1"), hWeapon.ClipOverride, _, true);
@@ -847,6 +869,8 @@ void SetPlayerWeapon(int iClient, int iRank)
 	
 	SetMaxAmmo(iClient, iWeapon);
 	EquipPlayerWeapon(iClient, iWeapon);
+	if (bUsesCustomModel)
+		SetEntProp(GetEntPropEnt(iClient, Prop_Send, "m_hViewModel"), Prop_Send, "m_fEffects", 32);
 	
 	// Create and equip homewrecker if melee not given, and not a bot
 	if (hWeapon.Slot != 2 && !IsFakeClient(iClient))
@@ -956,25 +980,26 @@ void FlagWeaponDontDrop(int iWeapon)
 	SetEntProp(iWeapon, Prop_Send, "m_bValidatedAttachedEntity", 1);
 }
 
-void HandleWeaponModel(GGWeapon hWeapon, int iClient, int iWeapon)
+bool HandleWeaponModel(GGWeapon hWeapon, int iClient, int iWeapon)
 {
 	if (hWeapon == INVALID_HANDLE || !IsValidClient(iClient))
-		return;
+		return false;
 	
 	char strViewmodel[PLATFORM_MAX_PATH], strWorldmodel[PLATFORM_MAX_PATH];
 	hWeapon.GetViewmodelOverride(strViewmodel, sizeof(strViewmodel));
 	hWeapon.GetModelOverride(strWorldmodel, sizeof(strWorldmodel));
 	
 	if (!strlen(strWorldmodel) && !strlen(strViewmodel))
-		return;
+		return false;
 	
 	if (strlen(strWorldmodel) && !FileExists(strWorldmodel, true))
 		SetFailState("[GunGame] MISSING WORLDMODEL FOR WEAPON: %s", strWorldmodel);
 	else if (FileExists(strWorldmodel, true))
 	{
-		int iModel = PrecacheModel(strWorldmodel, true);
+		int iModel = hWeapon.ModelIndex;
 		SetEntProp(iWeapon, Prop_Send, "m_iWorldModelIndex", iModel);
 		SetEntProp(iWeapon, Prop_Send, "m_nModelIndexOverrides", iModel, _, 0);
+		CreateWearable(iClient, strWorldmodel, false);
 	}
 	
 	if (strlen(strViewmodel) && !FileExists(strViewmodel, true))
@@ -992,10 +1017,15 @@ void HandleWeaponModel(GGWeapon hWeapon, int iClient, int iWeapon)
 			int iArms = CreateAndEquipWearable(iClient, g_strArmModels[iClass], true);
 			if (iArms > 0)
 				g_iViewmodelEnt[iArms] = iWeapon;
-		
 		}
+		
+		int iEffects = GetEntProp(iWeapon, Prop_Send, "m_fEffects");
+		SetEntProp(iWeapon, Prop_Send, "m_fEffects", iEffects |= 32);
 	}
 	
+	SetEntProp(iWeapon, Prop_Send, "m_bValidatedAttachedEntity", true);
+	
+	return true;
 }
 
 int CreateWearable(int iClient, char[] strModel, bool bViewmodel)
@@ -1030,7 +1060,12 @@ int CreateAndEquipWearable(int iClient, char[] strModel, bool bViewmodel, int iW
 		g_bHasWearableTied[iWeapon] = true;
 		
 		int iEffects = GetEntProp(iWearable, Prop_Send, "m_fEffects");
-		if (iWeapon == GetEntPropEnt(iClient, Prop_Send, "m_hActiveWeapon")) SetEntProp(iWearable, Prop_Send, "m_fEffects", iEffects & ~32);
+		if (iWeapon == GetEntPropEnt(iClient, Prop_Send, "m_hActiveWeapon"))
+		{
+			SetEntProp(iWearable, Prop_Send, "m_fEffects", iEffects & ~32);
+			iEffects = GetEntProp(iWeapon, Prop_Send, "m_fEffects");
+			SetEntProp(iWeapon, Prop_Send, "m_fEffects", iEffects |= 32);
+		}
 		else SetEntProp(iWearable, Prop_Send, "m_fEffects", iEffects |= 32);
 	}
 	

@@ -20,6 +20,7 @@ enum eWeaponProperties
 	WEAPON_CLIP,
 	WEAPON_MODEL,
 	WEAPON_VIEWMODEL,
+	WEAPON_MODEL_INDEX,
 	
 	WEAPONPROP_COUNT
 };
@@ -60,13 +61,15 @@ public any Native_GGWeapon(Handle plugin, int numParams)
 	int iClipOverride = hKvWeapons.GetNum("clip_override", 0);
 	
 	char strModelOverride[128];
+	int iWorldmodel;
 	hKvWeapons.GetString("model_override", strModelOverride, sizeof(strModelOverride));
 	if (strlen(strModelOverride) && !FileExists(strModelOverride, true))
 		SetFailState("[GunGame] WORLDMODEL NOT FOUND: %s", strModelOverride);
 	else if (strlen(strModelOverride))
 	{
 		PrintToServer("[GunGame] Loading Custom Model: %s", strModelOverride);
-		SuperPrecacheModel(strModelOverride);
+		iWorldmodel = SuperPrecacheModel(strModelOverride);
+		
 	}
 	
 	char strViewmodelOverride[128];
@@ -88,6 +91,7 @@ public any Native_GGWeapon(Handle plugin, int numParams)
 	hWeapon.Set(WEAPON_CLIP, iClipOverride);
 	hWeapon.SetString(WEAPON_MODEL, strModelOverride);
 	hWeapon.SetString(WEAPON_VIEWMODEL, strViewmodelOverride);
+	hWeapon.Set(WEAPON_MODEL_INDEX, iWorldmodel);
 	
 	char strKey[8];
 	IntToString(iIndex, strKey, sizeof(strKey));
@@ -262,3 +266,4 @@ public any Native_GGWeaponSlot(Handle plugin, int numParams)  { return (view_as<
 public any Native_GGWeaponDisabled(Handle plugin, int numParams) { return (view_as<ArrayList>(GetNativeCell(1))).Get(WEAPON_DISABLED); }
 public any Native_GGWeaponFlagsOverride(Handle plugin, int numParams) { return (view_as<ArrayList>(GetNativeCell(1))).Get(WEAPON_FLAGS); }
 public any Native_GGWeaponClipOverride(Handle plugin, int numParams) { return (view_as<ArrayList>(GetNativeCell(1))).Get(WEAPON_CLIP); }
+public any Native_GGWeaponModelIndex(Handle plugin, int numParams)  { return (view_as<ArrayList>(GetNativeCell(1))).Get(WEAPON_MODEL_INDEX); }
