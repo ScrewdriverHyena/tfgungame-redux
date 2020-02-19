@@ -324,6 +324,19 @@
 		"model_override" "models/custom/weapons/rebelscurse/c_wrench_v2.mdl"
 		"viewmodel_override" "models/custom/weapons/rebelscurse/c_wrench_v2.mdl"
 	}
+
+	"Khopesh Climber"
+	{
+		"index" "193"
+		"tfclass" "2"
+		"slot" "2"
+		"classname" "tf_weapon_club"
+		"select_override" "1"
+		"att_override" "1 ; 0.9 ; 5 ; 1.95"
+		"flags_override" "31"
+		"model_override" "models/advancedweaponiser/w_sickle_sniper.mdl"
+		"viewmodel_override" "models/advancedweaponiser/w_sickle_sniper.mdl"
+	}
 	
 	"Lugermorph"
 	{
@@ -1054,9 +1067,11 @@
 		"classname" "tf_weapon_fists"
 	}
 
+
+
 	"Kukri"
 	{
-		"index" "193"
+		"index" "3"
 		"tfclass" "2"
 		"slot" "2"
 		"classname" "tf_weapon_club"
