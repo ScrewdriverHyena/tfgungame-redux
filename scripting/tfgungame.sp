@@ -225,11 +225,17 @@ public void OnPluginStart()
 
 stock int SuperPrecacheModel(char[] strModel, bool bPreload = false)
 {
+	if (!FileExists(strModel, true) || strlen(strModel) <= 1)
+		return 0;
+	
 	char strDepFile[PLATFORM_MAX_PATH], strLine[PLATFORM_MAX_PATH];
 	int iModel;
 	Format(strDepFile, sizeof(strDepFile), "%s.dep", strModel);
 	if (!FileExists(strDepFile, true))
+	{
+		PrintToServer("[GunGame] Precaching file: %s", strModel);
 		iModel = PrecacheModel(strModel);
+	}
 	else
 	{
 		File hDepFile = OpenFile(strDepFile, "r", true);
@@ -242,8 +248,10 @@ stock int SuperPrecacheModel(char[] strModel, bool bPreload = false)
 			
 			CleanString(strLine);
 			
-			if (!FileExists(strLine, true))
+			if (!FileExists(strLine, true) || strlen(strModel) <= 1)
 				SetFailState("[GunGame] Missing file %s listed as dependency!", strLine);
+			
+			PrintToServer("[GunGame] Precaching file: %s", strLine);
 			
 			if (StrContains(strLine, ".vmt", false) != -1)
 				PrecacheDecal(strLine, true);
@@ -280,6 +288,8 @@ void CleanString(char[] strBuffer)
 
 public void OnMapStart()
 {
+	GGWeapon.Init();
+	
 	LoadTranslations("tfgungame.phrases");
 	
 	CleanLogicEntities();
@@ -287,10 +297,11 @@ public void OnMapStart()
 
 public void OnEntityDestroyed(int iEntity)
 {
+	if (iEntity <= 0 || iEntity > 2048) return;
+	
 	g_iViewmodelEnt[iEntity] = 0;
 	g_iWorldmodelEnt[iEntity] = 0;
 	
-	if (iEntity <= 0 || iEntity > 2048) return;
 	if (g_bHasWearableTied[iEntity])
 	{
 		int i = -1;
@@ -963,7 +974,7 @@ void HandleWeaponModel(GGWeapon hWeapon, int iClient, int iWeapon)
 	{
 		int iModel = PrecacheModel(strWorldmodel, true);
 		SetEntProp(iWeapon, Prop_Send, "m_iWorldModelIndex", iModel);
-		SetEntProp(iWeapon, Prop_Send, "m_iModelIndexOverrides", iModel, _, 0);
+		SetEntProp(iWeapon, Prop_Send, "m_nModelIndexOverrides", iModel, _, 0);
 	}
 	
 	if (strlen(strViewmodel) && !FileExists(strViewmodel, true))

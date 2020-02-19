@@ -61,16 +61,19 @@ public any Native_GGWeapon(Handle plugin, int numParams)
 	
 	char strModelOverride[128];
 	hKvWeapons.GetString("model_override", strModelOverride, sizeof(strModelOverride));
-	if (!FileExists(strModelOverride, true))
-		SetFailState("");
-	else
+	if (strlen(strModelOverride) && !FileExists(strModelOverride, true))
+		SetFailState("[GunGame] WORLDMODEL NOT FOUND: %s", strModelOverride);
+	else if (strlen(strModelOverride))
+	{
+		PrintToServer("[GunGame] Loading Custom Model: %s", strModelOverride);
 		SuperPrecacheModel(strModelOverride);
+	}
 	
 	char strViewmodelOverride[128];
 	hKvWeapons.GetString("viewmodel_override", strViewmodelOverride, sizeof(strViewmodelOverride));
-	if (!FileExists(strViewmodelOverride, true))
-		SetFailState("");
-	else
+	if (strlen(strModelOverride) && !FileExists(strViewmodelOverride, true))
+		SetFailState("[GunGame] VIEWMODEL NOT FOUND: %s", strViewmodelOverride);
+	else if (strlen(strModelOverride))
 		SuperPrecacheModel(strViewmodelOverride, true);
 	
 	ArrayList hWeapon = new ArrayList(128, WEAPONPROP_COUNT);
@@ -232,12 +235,11 @@ public any Native_GGWeaponGetModelOverride(Handle plugin, int numParams)
 	char[] strBuf = new char[maxlength];
 	hThis.GetString(WEAPON_MODEL, strBuf, maxlength);
 	
-	if (!strBuf[0]) return false;
+	if (!strBuf[0]) return 0;
 	
 	int bytes;
 	SetNativeString(2, strBuf, maxlength, _, bytes);
-	SetNativeCellRef(4, bytes);
-	return true;
+	return bytes;
 }
 
 public any Native_GGWeaponGetViewmodelOverride(Handle plugin, int numParams)
@@ -247,12 +249,11 @@ public any Native_GGWeaponGetViewmodelOverride(Handle plugin, int numParams)
 	char[] strBuf = new char[maxlength];
 	hThis.GetString(WEAPON_VIEWMODEL, strBuf, maxlength);
 	
-	if (!strBuf[0]) return false;
+	if (!strBuf[0]) return 0;
 	
 	int bytes;
 	SetNativeString(2, strBuf, maxlength, _, bytes);
-	SetNativeCellRef(4, bytes);
-	return true;
+	return bytes;
 }
 
 public any Native_GGWeaponIndex(Handle plugin, int numParams) { return (view_as<ArrayList>(GetNativeCell(1))).Get(WEAPON_INDEX); }

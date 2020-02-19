@@ -314,7 +314,7 @@
 
 	"Rebel's Curse"
 	{
-		"index" "228"
+		"index" "197"
 		"tfclass" "9"
 		"slot" "2"
 		"classname" "tf_weapon_wrench"
@@ -944,7 +944,7 @@
 
 	"Wrench"
 	{
-		"index" "197"
+		"index" "7"
 		"tfclass" "9"
 		"slot" "2"
 		"classname" "tf_weapon_wrench"
