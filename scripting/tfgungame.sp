@@ -24,7 +24,8 @@ public Plugin myinfo =
 	url = "https://github.com/koopa516"
 };
 
-#define MAX_WEAPONS 64
+#define MAX_WEAPONS		64
+#define TF_MAXPLAYERS	33
 
 stock const char LASTRANK_SOUND[] = ""; // TODO
 stock const char WIN_SOUND[] = ""; // TODO
@@ -93,9 +94,15 @@ stock const char g_strSpecialRoundName[TFGGSRT_COUNT][32] =
 
 const float HINT_REFRESH_INTERVAL = 5.0;
 
-int g_iRank[MAXPLAYERS+1];
-int g_iRankBuffer[MAXPLAYERS+1];
-int g_iAssists[MAXPLAYERS+1];
+enum struct TFGGPlayer
+{
+	int Rank;
+	int RankBuffer;
+	int Assists;
+}
+
+TFGGPlayer g_PlayerData[TF_MAXPLAYERS];
+
 bool g_bLate;
 bool g_bRoundActive;
 
@@ -332,7 +339,7 @@ public void OnClientPostAdminCheck(int client)
 	if (IsFakeClient(client))
 	{
 		// Give joining bots a random rank for testing
-		g_iRank[client] = GetRandomInt(0, GGWeapon.Total() - 1);
+		g_PlayerData[client].Rank = GetRandomInt(0, GGWeapon.Total() - 1);
 	}
 #endif
 }
@@ -360,11 +367,12 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 	
 	for (int i = 1; i < MaxClients; i++)
 	{
+		g_PlayerData[i].Rank = 0;
+		
 		if (!IsValidClient(i) || TF2_GetClientTeam(i) == TFTeam_Unassigned || TF2_GetClientTeam(i) == TFTeam_Spectator)
 			continue;
-
-		g_iRank[i] = 0;
-		SetPlayerWeapon(i, g_iRank[i]);
+		
+		SetPlayerWeapon(i, 0);
 	}
 	
 	g_bRoundActive = true;
@@ -419,30 +427,30 @@ void RefreshScores()
 		
 		int iTotal = GGWeapon.SeriesTotal();
 		
-		if (g_iRank[i] >= iTotal)
+		if (g_PlayerData[i].Rank >= iTotal)
 			break;
 		
-		if (g_iRank[i] < iTotal - 3)
+		if (g_PlayerData[i].Rank < iTotal - 3)
 		{
 			for (int j = 0; j < 3; j++)
 			{
-				hWeapon = GGWeapon.GetFromSeries(g_iRank[i] + (j + 1));
+				hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + (j + 1));
 				hWeapon.GetName(strWeps[j], sizeof(strWeps[]));
 			}
 			
 			Format(strNextWeps, sizeof(strNextWeps), "\n\nNext Weapons:\n%s\n%s\n%s", strWeps[0], strWeps[1], strWeps[2]);
 		}
-		else if (g_iRank[i] == iTotal - 3)
+		else if (g_PlayerData[i].Rank == iTotal - 3)
 		{
-			hWeapon = GGWeapon.GetFromSeries(g_iRank[i] + 1);
+			hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + 1);
 			hWeapon.GetName(strWeps[0], sizeof(strWeps[]));
-			hWeapon = GGWeapon.GetFromSeries(g_iRank[i] + 2);
+			hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + 2);
 			hWeapon.GetName(strWeps[1], sizeof(strWeps[]));
 			Format(strNextWeps, sizeof(strNextWeps), "\n\nNext Weapons:\n%s\n%s", strWeps[0], strWeps[1]);
 		}
-		else if (g_iRank[i] == iTotal - 2)
+		else if (g_PlayerData[i].Rank == iTotal - 2)
 		{
-			hWeapon = GGWeapon.GetFromSeries(g_iRank[i] + 1);
+			hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + 1);
 			hWeapon.GetName(strWeps[0], sizeof(strWeps[]));
 			Format(strNextWeps, sizeof(strNextWeps), "\n\nNext Weapon:\n%s", strWeps[0]);
 		}
@@ -450,9 +458,9 @@ void RefreshScores()
 			Format(strNextWeps, sizeof(strNextWeps), "");
 		
 		char strWep[128];
-		hWeapon = GGWeapon.GetFromSeries(g_iRank[i]);
+		hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank);
 		hWeapon.GetName(strWep, sizeof(strWep));
-		Format(strAssist, sizeof(strAssist), "%s", (g_iAssists[i] == 1) ? "\n\nYou're one assist away from ranking up!" : "");
+		Format(strAssist, sizeof(strAssist), "%s", (g_PlayerData[i].Assists == 1) ? "\n\nYou're one assist away from ranking up!" : "");
 		Format(strText, sizeof(strText), "Current Weapon:\n%s%s%s", strWep, strNextWeps, strAssist);
 		
 		//for (int j = 1; j < MaxClients; j++)
@@ -495,7 +503,7 @@ public Action OnReloadPlayerWeapons(Event event, const char[] name, bool dontBro
 	int iClient = GetClientOfUserId(event.GetInt("userid"));
 	if (!IsValidClient(iClient)) return Plugin_Handled;
 	
-	SetPlayerWeapon(iClient, g_iRank[iClient]);
+	SetPlayerWeapon(iClient, g_PlayerData[iClient].Rank);
 	
 	return Plugin_Continue;
 }
@@ -522,41 +530,41 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 	
 	if (!(iCustomKill == TF_CUSTOM_SUICIDE || iAttacker == iVictim))
 	{
-		g_iRankBuffer[iAttacker]++;
+		g_PlayerData[iAttacker].RankBuffer++;
 		RequestFrame(RankUpBuffered, iAttacker);
 		
 		Call_StartForward(hFwdRankUp);
 		Call_PushCell(iAttacker);
 		Call_PushCell(iVictim);
-		Call_PushCell(g_iRank[iAttacker]);
-		Call_PushCell(GGWeapon.GetFromSeries(g_iRank[iAttacker]));
-		Call_PushCell(GGWeapon.GetFromSeries(g_iRank[iAttacker] + 1));
+		Call_PushCell(g_PlayerData[iAttacker].Rank);
+		Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iAttacker].Rank));
+		Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iAttacker].Rank + 1));
 		Call_Finish();
 	}
 	
 	if (iAssister && IsValidClient(iAssister) && iAssister != iAttacker && iAssister != iVictim && !(iCustomKill == TF_CUSTOM_SUICIDE || iAttacker == iVictim))
 	{
-		if (g_iAssists[iAssister] == 1)
+		if (g_PlayerData[iAssister].Assists == 1)
 		{
-			g_iAssists[iAssister] = 0;
-			g_iRankBuffer[iAssister]++;
+			g_PlayerData[iAssister].Assists = 0;
+			g_PlayerData[iAssister].RankBuffer++;
 			RequestFrame(RankUpBuffered, iAssister);
 			
 			Call_StartForward(hFwdRankUp);
 			Call_PushCell(iAssister);
 			Call_PushCell(iVictim);
-			Call_PushCell(g_iRank[iAssister]);
-			Call_PushCell(GGWeapon.GetFromSeries(g_iRank[iAssister]));
-			Call_PushCell(GGWeapon.GetFromSeries(g_iRank[iAssister] + 1));
+			Call_PushCell(g_PlayerData[iAssister].Rank);
+			Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iAssister].Rank));
+			Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iAssister].Rank + 1));
 			Call_Finish();
 		}
 		else
-			g_iAssists[iAssister]++;
+			g_PlayerData[iAssister].Assists++;
 	}
 	
 	if (StrEqual(strWeapon, "sledgehammer") || (iCustomKill == TF_CUSTOM_SUICIDE || iAttacker == iVictim) && !g_hCvarAllowSuicide.IntValue)
 	{
-		if (g_iRank[iVictim] > 0)
+		if (g_PlayerData[iVictim].Rank > 0)
 			PrintToChat(iVictim, "\x07FFA500[GunGame] HUMILIATION! %t", "Humiliation");
 		else
 			PrintToChat(iVictim, "\x07FFA500[GunGame] HUMILIATION!");
@@ -570,9 +578,9 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 		Call_StartForward(hFwdRankDown);
 		Call_PushCell(iAttacker);
 		Call_PushCell(iVictim);
-		Call_PushCell(g_iRank[iVictim]);
-		Call_PushCell(GGWeapon.GetFromSeries(g_iRank[iVictim]));
-		Call_PushCell(GGWeapon.GetFromSeries(g_iRank[iVictim] + 1));
+		Call_PushCell(g_PlayerData[iVictim].Rank);
+		Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iVictim].Rank));
+		Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iVictim].Rank + 1));
 		Call_Finish();
 	}
 
@@ -602,14 +610,14 @@ public void Respawn(any serial)
 public void RankUpBuffered(int iAttacker)
 {
 	int iTotal = GGWeapon.SeriesTotal();
-	int iAmt = g_iRankBuffer[iAttacker];
-	g_iRankBuffer[iAttacker] = 0;
+	int iAmt = g_PlayerData[iAttacker].RankBuffer;
+	g_PlayerData[iAttacker].RankBuffer = 0;
 
 	if (RankUp(iAttacker, iAmt) <= iTotal - 1)
 	{
-		SetPlayerWeapon(iAttacker, g_iRank[iAttacker]);
+		SetPlayerWeapon(iAttacker, g_PlayerData[iAttacker].Rank);
 		
-		if (g_iRank[iAttacker] == iTotal - 1)
+		if (g_PlayerData[iAttacker].Rank == iTotal - 1)
 		{
 			PrintToChatAll("\x07FFA500[GunGame] %N %t", iAttacker, "GoldenWrench");
 			
@@ -624,17 +632,17 @@ public void RankUpBuffered(int iAttacker)
 
 public void RankDownBuffered(int iVictim)
 {
-	if ((g_iRank[iVictim] - 1) >= 0)
+	if ((g_PlayerData[iVictim].Rank - 1) >= 0)
 	{
 		RankUp(iVictim, -1);
-		SetPlayerWeapon(iVictim, g_iRank[iVictim]);
+		SetPlayerWeapon(iVictim, g_PlayerData[iVictim].Rank);
 	}
 }
 
 int RankUp(int iClient, int iAmount = 1)
 {
-	g_iRank[iClient] += iAmount;
-	return g_iRank[iClient];
+	g_PlayerData[iClient].Rank += iAmount;
+	return g_PlayerData[iClient].Rank;
 }
 
 void WinPlayer(int iClient)
@@ -832,7 +840,7 @@ public Action TF2Items_OnGiveNamedItem(int iClient, char[] sClassname, int iInde
 
 public any Native_GetRank(Handle plugin, int numParams)
 {
-	return g_iRank[GetNativeCell(1)];
+	return g_PlayerData[GetNativeCell(1)].Rank;
 }
 
 public any Native_ForceRank(Handle plugin, int numParams)
@@ -843,7 +851,7 @@ public any Native_ForceRank(Handle plugin, int numParams)
 	if (iRank >= 0 && iRank < GGWeapon.SeriesTotal())
 		return false;
 	
-	g_iRank[iClient] = iRank;
+	g_PlayerData[iClient].Rank = iRank;
 	return true;
 }
 
@@ -857,11 +865,11 @@ public any Native_ForceRankUp(Handle plugin, int numParams)
 {
 	int iClient = GetNativeCell(1);
 	
-	if (g_iRank[iClient]+1 >= GGWeapon.SeriesTotal())
+	if (g_PlayerData[iClient].Rank+1 >= GGWeapon.SeriesTotal())
 		return false;
 	
 	RankUp(iClient);
-	SetPlayerWeapon(iClient, g_iRank[iClient]);
+	SetPlayerWeapon(iClient, g_PlayerData[iClient].Rank);
 	return true;
 }
 
@@ -869,11 +877,11 @@ public any Native_ForceRankDown(Handle plugin, int numParams)
 {
 	int iClient = GetNativeCell(1);
 	
-	if (!g_iRank[iClient])
+	if (!(g_PlayerData[iClient].Rank))
 		return false;
 	
 	RankUp(iClient, -1);
-	SetPlayerWeapon(iClient, g_iRank[iClient]);
+	SetPlayerWeapon(iClient, g_PlayerData[iClient].Rank);
 	return true;
 }
 
