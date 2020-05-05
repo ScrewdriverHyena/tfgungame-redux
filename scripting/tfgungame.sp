@@ -365,7 +365,7 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 	
 	GenerateRoundWeps();
 	
-	for (int i = 1; i < MaxClients; i++)
+	for (int i = 1; i <= MaxClients; i++)
 	{
 		g_PlayerData[i].Rank = 0;
 		
@@ -414,7 +414,7 @@ public Action RefreshCheapHintText(Handle hTimer)
 void RefreshScores()
 {
 	char strText[1024];
-	for (int i = 1; i < MaxClients; i++)
+	for (int i = 1; i <= MaxClients; i++)
 	{
 		if (!IsValidClient(i)) continue;
 		
@@ -463,7 +463,7 @@ void RefreshScores()
 		Format(strAssist, sizeof(strAssist), "%s", (g_PlayerData[i].Assists == 1) ? "\n\nYou're one assist away from ranking up!" : "");
 		Format(strText, sizeof(strText), "Current Weapon:\n%s%s%s", strWep, strNextWeps, strAssist);
 		
-		//for (int j = 1; j < MaxClients; j++)
+		//for (int j = 1; j <= MaxClients; j++)
 		//	if (j != i && TF2_GetClientTeam(j) == TFTeam_Spectator && GetEntPropEnt(j, Prop_Send, "m_hObserverTarget") == i)
 		//		PrintKeyHintText(j, strText);
 		
