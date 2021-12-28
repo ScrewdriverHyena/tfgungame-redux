@@ -6,7 +6,7 @@
  *__**TODO:**__ Add downloads to the known gg_ maps here.
  
 ## Credits
-**Screwdriver (FKA Frosty Scales)** (koopa516) - Programmer    
+**Screwdriver (FKA Frosty Scales)** - Programmer    
 **Benoist3012** - French Translation & Lots of programming help, overall mentoring me in SourcePawn coding    
 **42** - gg_burgstadt and major fixes for lag-related issues    
 **Alex Turtle** - French Translation    
