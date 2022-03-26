@@ -22,6 +22,7 @@
 |---|---|---|
 | tfgg_spawnprotect_length | -1.0 | Length of the spawn protection for players, set to 0.0 to disable and -1.0 for infinite length |
 | tfgg_allow_suicide | 0 | Set to 1 to not humiliate players when they suicide |
+| tfgg_max_kills_per_rankup | 3 | Maximum amount of kills registered toward the next rank. -1 for no limit. |
 | tfgg_last_rank_sound |  | Sound played when someone has hit the last rank |
 | tfgg_win_sound |  | Sound played when someone wins the game |
 | tfgg_humiliation_sound |  | Sound played to a player when they've been humiliated |
