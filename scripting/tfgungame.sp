@@ -1,5 +1,5 @@
 #define TFGG_MAIN
-#define PLUGIN_VERSION "1.4"
+#define PLUGIN_VERSION "1.5"
 
 #include <sourcemod>
 #include <sdkhooks>
@@ -18,7 +18,7 @@
 public Plugin myinfo =
 {
 	name = "TFGunGame: Redux",
-	author = "Frosty Scales",
+	author = "Screwdriver (Jon S.)",
 	description = "GunGame - Run through a series of weapons, first person to get a kill with the final weapon wins.",
 	version = PLUGIN_VERSION,
 	url = "https://github.com/koopa516"
