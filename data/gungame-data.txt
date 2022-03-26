@@ -1,4 +1,5 @@
 // This is a random assortment of weapons, feel free to add or remove them as you see fit.
+// Don't remove a weapon from this file if it's being forced into a weapon sequence; this WILL crash the plugin and possibly the server.
 // Add "select_override" "1" to a weapon to prevent it from being randomly chosen
 
 "WeaponData"

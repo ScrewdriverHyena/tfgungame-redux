@@ -1,5 +1,5 @@
 #define TFGG_MAIN
-#define PLUGIN_VERSION "1.4"
+#define PLUGIN_VERSION "1.5"
 
 #include <sourcemod>
 #include <sdkhooks>
@@ -18,7 +18,7 @@
 public Plugin myinfo =
 {
 	name = "TFGunGame: Redux",
-	author = "Frosty Scales",
+	author = "Screwdriver (Jon S.)",
 	description = "GunGame - Run through a series of weapons, first person to get a kill with the final weapon wins.",
 	version = PLUGIN_VERSION,
 	url = "https://github.com/koopa516"
@@ -115,6 +115,7 @@ Handle hFwdRankDown;
 
 ConVar g_hCvarSpawnProtect;
 ConVar g_hCvarAllowSuicide;
+ConVar g_hCvarMaxKillsPerRankUp;
 ConVar g_hCvarLastRankSound;
 ConVar g_hCvarWinSound;
 ConVar g_hCvarHumiliationSound;
@@ -165,6 +166,7 @@ public void OnPluginStart()
 	CreateConVar("tfggr_version", PLUGIN_VERSION, "Plugin Version", FCVAR_ARCHIVE);
 	g_hCvarSpawnProtect = 		CreateConVar("tfgg_spawnprotect_length", "-1.0", "Length of the spawn protection for players, set to 0.0 to disable and -1.0 for infinite length", true);
 	g_hCvarAllowSuicide = 		CreateConVar("tfgg_allow_suicide", "0", "Set to 1 to not humiliate players when they suicide", _, true, 0.0, true, 1.0);
+	g_hCvarMaxKillsPerRankUp = 	CreateConVar("tfgg_max_kills_per_rankup", "3", "Maximum amount of kills registered toward the next rank. -1 for no limit.");
 	g_hCvarLastRankSound = 		CreateConVar("tfgg_last_rank_sound", LASTRANK_SOUND, "Sound played when someone has hit the last rank");
 	g_hCvarWinSound = 			CreateConVar("tfgg_win_sound", WIN_SOUND, "Sound played when someone wins the game");
 	g_hCvarHumiliationSound = 	CreateConVar("tfgg_humiliation_sound", HUMILIATION_SOUND, "Sound played on humiliation");
@@ -610,7 +612,7 @@ public void Respawn(any serial)
 public void RankUpBuffered(int iAttacker)
 {
 	int iTotal = GGWeapon.SeriesTotal();
-	int iAmt = g_PlayerData[iAttacker].RankBuffer;
+	int iAmt = (iAmt <= g_hCvarMaxKillsPerRankUp.IntValue || g_hCvarMaxKillsPerRankUp.IntValue == -1) ? g_PlayerData[iAttacker].RankBuffer : g_hCvarMaxKillsPerRankUp.IntValue;
 	g_PlayerData[iAttacker].RankBuffer = 0;
 
 	if (RankUp(iAttacker, iAmt) <= iTotal - 1)
