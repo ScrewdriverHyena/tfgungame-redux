@@ -5,7 +5,7 @@
 
 methodmap GGWeapon < ArrayList
 {
-	public native GGWeapon(KeyValues hKvWeapons)
+	public native GGWeapon(KeyValues hKvWeapons);
 	public static native void Init();
 	public static native void InitSeries();
 	public static native int Total();
@@ -47,7 +47,7 @@ methodmap GGWeapon < ArrayList
 	{
 		public native get();
 	}
-}
+};
 
 forward void OnGunGameWin(int client);
 forward void OnGunGameRankUp(int attacker, int victim, int rank, GGWeapon weapon, GGWeapon oldweapon);
