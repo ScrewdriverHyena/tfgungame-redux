@@ -52,7 +52,7 @@ stock const char strCleanTheseEntities[][256] =
 	"trigger_rd_vault_trigger"
 };
 
-stock const int g_iClassMaxHP[view_as<int>(TFClassType)] =
+stock const int g_iClassMaxHP[view_as<int>(TFClass_Engineer) + 1] =
 {
 	0,
 	125,
@@ -406,11 +406,13 @@ public Action TF2_CalcIsAttackCritical(int iClient, int iWeapon, char[] strWeapo
 public Action CleanEnts(Handle hTimer)
 {
 	CleanLogicEntities();
+	return Plugin_Continue;
 }
 
 public Action RefreshCheapHintText(Handle hTimer)
 {
 	RefreshScores();
+	return Plugin_Continue;
 }
 
 void RefreshScores()
@@ -612,7 +614,7 @@ public void Respawn(any serial)
 public void RankUpBuffered(int iAttacker)
 {
 	int iTotal = GGWeapon.SeriesTotal();
-	int iAmt = (iAmt <= g_hCvarMaxKillsPerRankUp.IntValue || g_hCvarMaxKillsPerRankUp.IntValue == -1) ? g_PlayerData[iAttacker].RankBuffer : g_hCvarMaxKillsPerRankUp.IntValue;
+	int iAmt = (g_PlayerData[iAttacker].RankBuffer <= g_hCvarMaxKillsPerRankUp.IntValue || g_hCvarMaxKillsPerRankUp.IntValue == -1) ? g_PlayerData[iAttacker].RankBuffer : g_hCvarMaxKillsPerRankUp.IntValue;
 	g_PlayerData[iAttacker].RankBuffer = 0;
 
 	if (RankUp(iAttacker, iAmt) <= iTotal - 1)
@@ -655,7 +657,7 @@ void WinPlayer(int iClient)
 	g_hCvarWinSound.GetString(strSound, sizeof(strSound));
 	EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
 	
-	int iEnt = FindEntityByClassname(iEnt, "game_round_win");
+	int iEnt = FindEntityByClassname(-1, "game_round_win");
 	
 	if (iEnt < 1)
 	{
@@ -860,7 +862,7 @@ public any Native_ForceRank(Handle plugin, int numParams)
 public any Native_ForceWin(Handle plugin, int numParams)
 {
 	WinPlayer(GetNativeCell(1));
-	return;
+	return 0;
 }
 
 public any Native_ForceRankUp(Handle plugin, int numParams)
@@ -894,6 +896,7 @@ public Action Command_Help(int iClient, int iArgs)
 	// weapon until you win! However, if you get hit by a melee weapon or kill yourself,
 	// you get set back one rank.
 	ReplyToCommand(iClient, "\x07FFA500[GunGame]\x07FFFFFF %t", "HelpString");
+	return Plugin_Handled;
 }
 
 public Action Command_ForceNextSpecial(int iClient, int iArgs)

@@ -109,7 +109,7 @@ public any Native_GGWeaponInit(Handle plugin, int numParams)
 		g_hWeapons.Push(hWeapon);
 	}
 	while (hKvWeapons.GotoNextKey());
-	return;
+	return 0;
 }
 
 public any Native_GGWeaponInitSeries(Handle plugin, int numParams)
@@ -118,7 +118,7 @@ public any Native_GGWeaponInitSeries(Handle plugin, int numParams)
 	delete g_hWeaponSeries;
 	g_hWeaponSeries = new ArrayList();
 	g_iSeriesLength = 0;
-	return;
+	return 0;
 }
 
 public any Native_GGWeaponTotal(Handle plugin, int numParams) { return g_hWeapons.Length; }
@@ -138,7 +138,7 @@ public any Native_GGWeaponPushToSeries(Handle plugin, int numParams)
 	if (g_hWeaponSeries == null) g_hWeaponSeries = new ArrayList();
 	g_hWeaponSeries.Push(GetNativeCell(1));
 	g_iSeriesLength++;
-	return;
+	return 0;
 }
 
 public any Native_GGWeaponGetFromSeries(Handle plugin, int numParams)
