@@ -579,13 +579,16 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 		g_hCvarHumiliationSound.GetString(strSound, sizeof(strSound));
 		EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
 		
-		Call_StartForward(hFwdRankDown);
-		Call_PushCell(iAttacker);
-		Call_PushCell(iVictim);
-		Call_PushCell(g_PlayerData[iVictim].Rank);
-		Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iVictim].Rank));
-		Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iVictim].Rank + 1));
-		Call_Finish();
+		if (g_PlayerData[iVictim].Rank > 0)
+		{
+			Call_StartForward(hFwdRankDown);
+			Call_PushCell(iAttacker);
+			Call_PushCell(iVictim);
+			Call_PushCell(g_PlayerData[iVictim].Rank);
+			Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iVictim].Rank));
+			Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iVictim].Rank - 1));
+			Call_Finish();
+		}
 	}
 
 	return Plugin_Continue;
