@@ -69,3 +69,34 @@ public SharedPlugin __pl_tfgungame =
 	required = 0,
 #endif
 };
+
+#if !defined REQUIRE_PLUGIN
+public __pl_tfgungame_SetNTVOptional()
+{
+	MarkNativeAsOptional("GGWeapon.GGWeapon");
+	MarkNativeAsOptional("GGWeapon.Init");
+	MarkNativeAsOptional("GGWeapon.InitSeries");
+	MarkNativeAsOptional("GGWeapon.Total");
+	MarkNativeAsOptional("GGWeapon.SeriesTotal");
+	MarkNativeAsOptional("GGWeapon.GetFromIndex");
+	MarkNativeAsOptional("GGWeapon.PushToSeries");
+	MarkNativeAsOptional("GGWeapon.GetFromSeries");
+	MarkNativeAsOptional("GGWeapon.GetFromAll");
+	MarkNativeAsOptional("GGWeapon.GetName");
+	MarkNativeAsOptional("GGWeapon.GetClassname");
+	MarkNativeAsOptional("GGWeapon.GetAttributeOverride");
+	
+	MarkNativeAsOptional("GGWeapon.Index.get");
+	MarkNativeAsOptional("GGWeapon.Class.get");
+	MarkNativeAsOptional("GGWeapon.Slot.get");
+	MarkNativeAsOptional("GGWeapon.Disabled.get");
+	MarkNativeAsOptional("GGWeapon.FlagsOverride.get");
+	MarkNativeAsOptional("GGWeapon.ClipOverride.get");
+	
+	MarkNativeAsOptional("GetGunGameRank");
+	MarkNativeAsOptional("ForceGunGameWin");
+	MarkNativeAsOptional("ForceGunGameRank");
+	MarkNativeAsOptional("ForceGunGameRankUp");
+	MarkNativeAsOptional("ForceGunGameRankDown");
+}
+#endif
