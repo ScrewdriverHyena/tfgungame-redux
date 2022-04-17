@@ -50,8 +50,8 @@ methodmap GGWeapon < ArrayList
 };
 
 forward void OnGunGameWin(int client);
-forward void OnGunGameRankUp(int attacker, int victim, int rank, GGWeapon weapon, GGWeapon oldweapon);
-forward void OnGunGameRankDown(int attacker, int victim, int rank, GGWeapon weapon, GGWeapon oldweapon);
+forward void OnGunGameRankUp(int attacker, int victim, int rank, GGWeapon oldweapon, GGWeapon weapon);
+forward void OnGunGameRankDown(int attacker, int victim, int rank, GGWeapon oldweapon, GGWeapon weapon);
 
 native int GetGunGameRank(int client);
 native void ForceGunGameWin(int client);
