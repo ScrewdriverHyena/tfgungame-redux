@@ -158,6 +158,8 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	hFwdRankUp = CreateGlobalForward("OnGunGameRankUp", ET_Ignore, Param_Cell, Param_Cell, Param_Cell, Param_Cell, Param_Cell);
 	hFwdRankDown = CreateGlobalForward("OnGunGameRankDown", ET_Ignore, Param_Cell, Param_Cell, Param_Cell, Param_Cell, Param_Cell);
 	
+	RegPluginLibrary("tfgungame");
+	
 	return APLRes_Success;
 }
 
