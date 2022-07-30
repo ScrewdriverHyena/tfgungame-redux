@@ -101,7 +101,7 @@ enum struct TFGGPlayer
 	int Assists;
 }
 
-TFGGPlayer g_PlayerData[TF_MAXPLAYERS];
+TFGGPlayer g_PlayerData[TF_MAXPLAYERS + 1];
 
 bool g_bLate;
 bool g_bRoundActive;
