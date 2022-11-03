@@ -32,12 +32,10 @@ stock const char WIN_SOUND[] = ""; // TODO
 stock const char HUMILIATION_SOUND[] = ""; // TODO
 stock const char strCleanTheseEntities[][256] = 
 {
-	"info_populator",
 	"info_passtime_ball_spawn",
 	"tf_logic_arena",
 	"tf_logic_hybrid_ctf_cp",
 	"tf_logic_koth",
-	"tf_logic_mann_vs_machine",
 	"tf_logic_medieval",
 	"tf_logic_multiple_escort",
 	"tf_logic_player_destruction",
