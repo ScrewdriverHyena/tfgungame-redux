@@ -25,7 +25,6 @@ public Plugin myinfo =
 };
 
 #define MAX_WEAPONS		64
-#define TF_MAXPLAYERS	33
 
 stock const char LASTRANK_SOUND[] = ""; // TODO
 stock const char WIN_SOUND[] = ""; // TODO
@@ -99,7 +98,7 @@ enum struct TFGGPlayer
 	int Assists;
 }
 
-TFGGPlayer g_PlayerData[TF_MAXPLAYERS + 1];
+TFGGPlayer g_PlayerData[MAXPLAYERS + 1];
 
 bool g_bLate;
 bool g_bRoundActive;
