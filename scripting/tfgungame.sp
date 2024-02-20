@@ -3,7 +3,6 @@
 
 #include <sourcemod>
 #include <sdkhooks>
-#include <tf2>
 #include <tf2_stocks>
 #include <tf2items>
 #include <tfgungame>
@@ -73,14 +72,6 @@ enum TFGGSpecialRoundType
 	TFGGSRT_COUNT
 };
 
-stock const char g_strSpecialRoundSeries[TFGGSRT_COUNT][PLATFORM_MAX_PATH] =
-{
-	"configs/gungame-series.cfg",
-	"configs/gungame-series-melee-only.cfg",
-	"configs/gungame-series-melee.cfg",
-	"configs/gungame-series.cfg"
-};
-
 stock const char g_strSpecialRoundName[TFGGSRT_COUNT][32] =
 {
 	"None",
@@ -102,7 +93,6 @@ TFGGPlayer g_PlayerData[MAXPLAYERS + 1];
 
 bool g_bLate;
 bool g_bRoundActive;
-bool g_bRefreshGGLoadout[MAXPLAYERS + 1];
 
 Handle g_hGetMaxAmmo;
 Handle g_hGetMaxClip1;
@@ -171,7 +161,7 @@ public void OnPluginStart()
 	g_hCvarWinSound = 			CreateConVar("tfgg_win_sound", WIN_SOUND, "Sound played when someone wins the game");
 	g_hCvarHumiliationSound = 	CreateConVar("tfgg_humiliation_sound", HUMILIATION_SOUND, "Sound played on humiliation");
 	g_hCvarSpecialRounds = 		CreateConVar("tfgg_enable_special_rounds", "1", "Enable Special Rounds", _, true, 0.0, true, 1.0);
-	g_hCvarSpecialRoundChance = CreateConVar("tfgg_special_round_chance", "25", "Special round chance; Should be a percent value out of 100", _, true, 0.0, true, 1.0);
+	g_hCvarSpecialRoundChance = CreateConVar("tfgg_special_round_chance", "25", "Special round chance; Should be a percent value out of 100", _, true, 0.0, true, 100.0);
 	
 	g_hCvarLastRankSound.AddChangeHook(OnChangeSound);
 	g_hCvarWinSound.AddChangeHook(OnChangeSound);
@@ -245,8 +235,8 @@ TFGGSpecialRoundType CheckSpecialRound()
 		return SpecialRound_None;
 	else
 	{
-		int iPercent = g_hCvarSpecialRoundChance.IntValue;
 		
+		int iPercent = g_hCvarSpecialRoundChance.IntValue;
 		if (GetRandomInt(1,100) > iPercent)
 			return SpecialRound_None;
 		else
@@ -511,11 +501,7 @@ public Action OnReloadPlayerWeapons(Event event, const char[] name, bool dontBro
 	int iClient = GetClientOfUserId(event.GetInt("userid"));
 	if (!IsValidClient(iClient)) return Plugin_Handled;
 	
-	if (g_bRefreshGGLoadout[iClient])
-	{
-		SetPlayerWeapon(iClient, g_PlayerData[iClient].Rank);
-		g_bRefreshGGLoadout[iClient] = false;
-	}
+	SetPlayerWeapon(iClient, g_PlayerData[iClient].Rank);
 	
 	return Plugin_Continue;
 }
@@ -708,7 +694,6 @@ void SetPlayerLoadout(int iClient, int iRank)
 	if (TF2_GetPlayerClass(iClient) != eClass)
 		TF2_SetPlayerClass(iClient, eClass, _, true);
 
-	g_bRefreshGGLoadout[iClient] = true;
 	TF2_RegeneratePlayer(iClient);
 }
 
@@ -721,8 +706,8 @@ void SetPlayerWeapon(int iClient, int iRank)
 
 	SetEntityHealth(iClient, g_iClassMaxHP[view_as<int>(eClass)]);
 	
-	// Remove all weapons
-	TF2_RemoveAllWeapons(iClient);
+	// Remove all items
+	TF2_RemoveAllItems(iClient);
 	
 	char strClassname[128], strAttributes[128];
 	hWeapon.GetClassname(strClassname, sizeof(strClassname));
@@ -753,7 +738,7 @@ void GenerateRoundWeps()
 	KeyValues hKvConfig = new KeyValues("WeaponSeries");
 	char strPath[PLATFORM_MAX_PATH];
 	
-	BuildPath(Path_SM, strPath, PLATFORM_MAX_PATH, g_strSpecialRoundSeries[view_as<int>(g_eCurrentSpecial)]);
+	BuildPath(Path_SM, strPath, PLATFORM_MAX_PATH, "configs/gungame-series.cfg");
 	
 	hKvConfig.ImportFromFile(strPath);
 	
@@ -765,37 +750,63 @@ void GenerateRoundWeps()
 	if (!StrEqual("WeaponSeries", strSectionName))
 		SetFailState("[GunGame] Config file is invalid!");
 	
-	if (!hKvConfig.GotoFirstSubKey())
-		SetFailState("[GunGame] Config file has no series!");
+	if (!hKvConfig.JumpToKey("RoundModifiers"))
+		SetFailState("[GunGame] Config file has no RoundModifiers node!");
+
+	if (!hKvConfig.JumpToKey(g_strSpecialRoundName[view_as<int>(g_eCurrentSpecial)]))
+		SetFailState("[GunGame] Config file is missing the \"%s\" RoundModifiers node!", g_strSpecialRoundName[view_as<int>(g_eCurrentSpecial)]);
+	
+	if (!hKvConfig.GotoFirstSubKey(false))
+		SetFailState("[GunGame] Config file is missing sequences inside the \"%s\" RoundModifiers node!", g_strSpecialRoundName[view_as<int>(g_eCurrentSpecial)]);
 
 	ArrayList hSeriesNames = new ArrayList(128);
 
 	do
 	{
-		char strName[64];
+		// Grab all sequences from the current round modifier
+		char strName[128];
 		hKvConfig.GetSectionName(strName, sizeof(strName));
-		if (!hKvConfig.GotoFirstSubKey())
-			continue;
-
-		hKvConfig.GoBack();
 		hSeriesNames.PushString(strName);
 	}
-	while (hKvConfig.GotoNextKey());
+	while (hKvConfig.GotoNextKey(false));
 	
+	hKvConfig.Rewind();
+	if (!hKvConfig.JumpToKey("WeaponSequences"))
+		SetFailState("[GunGame] Config file is missing the WeaponSequences node!");
+	
+	// Keep picking a random sequence until a valid one is found
+	while (hSeriesNames.Length)
+	{
+		char strName[128];
+		int iElement = GetRandomInt(0, hSeriesNames.Length - 1);
+		hSeriesNames.GetString(iElement, strName, sizeof(strName));
+		if (!hKvConfig.JumpToKey(strName))
+		{
+			hSeriesNames.Erase(iElement);
+			PrintToServer("[GunGame] Warning! Config file is missing the WeaponSequence \"%s\" found in the RoundModifier \"%s\".", strName, g_strSpecialRoundName[view_as<int>(g_eCurrentSpecial)]);
+			continue;
+		}
+
+		if (!hKvConfig.GotoFirstSubKey())
+		{
+			hKvConfig.GoBack();
+			hSeriesNames.Erase(iElement);
+			PrintToServer("[GunGame] Warning! Config file WeaponSequence \"%s\" is missing loadouts.", strName, g_strSpecialRoundName[view_as<int>(g_eCurrentSpecial)]);
+			continue;
+		}
+
+		break;
+	}
+
 	if (!hSeriesNames.Length)
-		SetFailState("[GunGame] Failed to find a valid series!");
-	
-	hKvConfig.GoBack();
+		SetFailState("[GunGame] Failed to find a valid sequence from the RoundModifiers node \"%s\"", g_strSpecialRoundName[view_as<int>(g_eCurrentSpecial)]);
 
-	char strSeries[64];
-	hSeriesNames.GetString(GetRandomInt(0, hSeriesNames.Length - 1), strSeries, sizeof(strSeries));
-	hKvConfig.JumpToKey(strSeries);
-	hKvConfig.GotoFirstSubKey();
 	delete hSeriesNames;
-
+	
 	int j;
 	do
 	{
+		// Iterate through the randomly selected sequence and store each loadout
 		GGWeapon hWeapon;
 		int iIndex = hKvConfig.GetNum("index_override", 0);
 		if (iIndex)
@@ -861,6 +872,26 @@ stock int CreateWeapon(int client, char[] sName, int index, int level = 1, int q
 	return entity;
 }
 
+stock void TF2_RemoveAllItems(int iClient)
+{
+	TF2_RemoveAllWeapons(iClient);
+
+	int iNextMovePeer = -1;
+	int iMoveChild = GetEntPropEnt(iClient, Prop_Data, "m_hMoveChild");
+    if (iMoveChild != -1)
+    {
+        do
+        {
+            char strChildName[12];
+            GetEdictClassname(iMoveChild, strChildName, sizeof(strChildName));
+			iNextMovePeer = GetEntPropEnt(iMoveChild, Prop_Data, "m_hMovePeer");
+			if (!strncmp(strChildName, "tf_wearable", 11))
+				AcceptEntityInput(iMoveChild, "Kill");
+        }
+        while((iMoveChild = iNextMovePeer) != -1);
+    }
+}
+
 void FlagWeaponDontDrop(int iWeapon)
 {
 	// Big thanks to Benoist3012 for this func
@@ -881,12 +912,6 @@ void SetMaxAmmo(int iClient, int iWeapon, int iForceAmmo = -1)
 	
 	if (iAmmoType != -1 && iMaxAmmo != -1)
 		SetEntProp(iClient, Prop_Data, "m_iAmmo", (iForceAmmo == -1) ? iMaxAmmo : iForceAmmo, _, iAmmoType);
-}
-
-public Action TF2Items_OnGiveNamedItem(int iClient, char[] sClassname, int iIndex, Handle &hItem)
-{
-	// Dont generate weapons and cosmetics from client's loadout
-	return Plugin_Handled;
 }
 
 public any Native_GetRank(Handle plugin, int numParams)
