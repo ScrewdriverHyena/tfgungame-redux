@@ -102,6 +102,7 @@ TFGGPlayer g_PlayerData[MAXPLAYERS + 1];
 
 bool g_bLate;
 bool g_bRoundActive;
+bool g_bRefreshGGLoadout[MAXPLAYERS + 1];
 
 Handle g_hGetMaxAmmo;
 Handle g_hGetMaxClip1;
@@ -375,7 +376,7 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 		if (!IsValidClient(i) || TF2_GetClientTeam(i) == TFTeam_Unassigned || TF2_GetClientTeam(i) == TFTeam_Spectator)
 			continue;
 		
-		SetPlayerWeapon(i, 0);
+		SetPlayerLoadout(i, 0);
 	}
 	
 	g_bRoundActive = true;
@@ -491,6 +492,8 @@ public Action OnPlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 	int iClient = GetClientOfUserId(event.GetInt("userid"));
 	if (!IsValidClient(iClient)) return Plugin_Handled;
 	
+	SetPlayerLoadout(iClient, g_PlayerData[iClient].Rank);
+
 	if (!IsFakeClient(iClient))
 	{
 		if (g_hCvarSpawnProtect.FloatValue == -1.0)
@@ -508,7 +511,11 @@ public Action OnReloadPlayerWeapons(Event event, const char[] name, bool dontBro
 	int iClient = GetClientOfUserId(event.GetInt("userid"));
 	if (!IsValidClient(iClient)) return Plugin_Handled;
 	
-	SetPlayerWeapon(iClient, g_PlayerData[iClient].Rank);
+	if (g_bRefreshGGLoadout[iClient])
+	{
+		SetPlayerWeapon(iClient, g_PlayerData[iClient].Rank);
+		g_bRefreshGGLoadout[iClient] = false;
+	}
 	
 	return Plugin_Continue;
 }
@@ -623,7 +630,7 @@ public void RankUpBuffered(int iAttacker)
 
 	if (RankUp(iAttacker, iAmt) <= iTotal - 1)
 	{
-		SetPlayerWeapon(iAttacker, g_PlayerData[iAttacker].Rank);
+		SetPlayerLoadout(iAttacker, g_PlayerData[iAttacker].Rank);
 		
 		if (g_PlayerData[iAttacker].Rank == iTotal - 1)
 		{
@@ -643,7 +650,7 @@ public void RankDownBuffered(int iVictim)
 	if ((g_PlayerData[iVictim].Rank - 1) >= 0)
 	{
 		RankUp(iVictim, -1);
-		SetPlayerWeapon(iVictim, g_PlayerData[iVictim].Rank);
+		SetPlayerLoadout(iVictim, g_PlayerData[iVictim].Rank);
 	}
 }
 
@@ -692,17 +699,26 @@ stock bool IsValidClient(int iClient)
 			|| IsClientReplay(iClient));
 }
 
+void SetPlayerLoadout(int iClient, int iRank)
+{
+	if (iRank >= GGWeapon.SeriesTotal()) return;
+
+	TFClassType eClass = GGWeapon.GetFromSeries(iRank).Class;
+
+	if (TF2_GetPlayerClass(iClient) != eClass)
+		TF2_SetPlayerClass(iClient, eClass, _, true);
+
+	g_bRefreshGGLoadout[iClient] = true;
+	TF2_RegeneratePlayer(iClient);
+}
+
 void SetPlayerWeapon(int iClient, int iRank)
 {
-	if (!IsValidClient(iClient)) return;
 	if (iRank >= GGWeapon.SeriesTotal()) return;
 	
 	GGWeapon hWeapon = GGWeapon.GetFromSeries(iRank);
 	TFClassType eClass = hWeapon.Class;
-	
-	if (TF2_GetPlayerClass(iClient) != eClass)
-		TF2_SetPlayerClass(iClient, eClass, _, true);
-	
+
 	SetEntityHealth(iClient, g_iClassMaxHP[view_as<int>(eClass)]);
 	
 	// Remove all weapons
@@ -904,7 +920,7 @@ public any Native_ForceRankUp(Handle plugin, int numParams)
 		return false;
 	
 	RankUp(iClient);
-	SetPlayerWeapon(iClient, g_PlayerData[iClient].Rank);
+	SetPlayerLoadout(iClient, g_PlayerData[iClient].Rank);
 	return true;
 }
 
@@ -916,7 +932,7 @@ public any Native_ForceRankDown(Handle plugin, int numParams)
 		return false;
 	
 	RankUp(iClient, -1);
-	SetPlayerWeapon(iClient, g_PlayerData[iClient].Rank);
+	SetPlayerLoadout(iClient, g_PlayerData[iClient].Rank);
 	return true;
 }
 
