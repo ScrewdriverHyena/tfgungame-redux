@@ -191,11 +191,11 @@ public void OnPluginStart()
 		PrintToChatAll("\x07FFA500[GunGame]\x07FFFFFF Late-load detected! Restarting round...");
 	}
 	
-	ServerCommand("mp_respawnwavetime 0");
-	ServerCommand("tf_use_fixed_weaponspreads 1");
-	ServerCommand("tf_damage_disablespread 1");
-	ServerCommand("tf_weapon_criticals 0");
-	ServerCommand("mp_autoteambalance 1");
+	FindConVar("mp_respawnwavetime").IntValue = 0;
+	FindConVar("tf_use_fixed_weaponspreads").IntValue = 1;
+	FindConVar("tf_damage_disablespread").IntValue = 1;
+	FindConVar("tf_weapon_criticals").IntValue = 0;
+	FindConVar("mp_autoteambalance").IntValue = 1;
 	
 	RegConsoleCmd("gg_help", Command_Help, "Sends a player a help panel");
 	
@@ -206,6 +206,8 @@ public void OnPluginStart()
 	//PrecacheSound(LASTRANK_SOUND, true);
 	//PrecacheSound(WIN_SOUND, true);
 	//PrecacheSound(HUMILIATION_SOUND, true);
+
+	AutoExecConfig(_, "tfgungame");
 }
 
 public void OnMapStart()
@@ -217,7 +219,7 @@ public void OnMapStart()
 
 void CleanLogicEntities()
 {
-	for (int i = 0; i <= 2048; i++)
+	for (int i = 0; i <= GetMaxEntities(); i++)
 	{
 		if (!IsValidEntity(i)) continue;
 		
@@ -349,7 +351,7 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 {
 	if (!IsValidClient(client)) return Plugin_Continue;
 	
-	if (buttons & IN_ATTACK || buttons & IN_FORWARD || buttons & IN_BACK || buttons & IN_MOVELEFT || buttons & IN_MOVERIGHT || TF2_IsPlayerInCondition(client, TFCond_Taunting))
+	if (buttons & (IN_ATTACK | IN_FORWARD | IN_BACK | IN_MOVELEFT | IN_MOVERIGHT) || TF2_IsPlayerInCondition(client, TFCond_Taunting))
 		if (TF2_IsPlayerInCondition(client, TFCond_Ubercharged))
 			TF2_RemoveCondition(client, TFCond_Ubercharged);
 	
@@ -682,8 +684,7 @@ void WinPlayer(int iClient)
 
 stock bool IsValidClient(int iClient)
 {
-	return !(iClient <= 0
-			|| iClient > MaxClients
+	return !(!(0 < iClient <= MaxClients)
 			|| !IsClientInGame(iClient)
 			|| !IsClientConnected(iClient)
 			|| GetEntProp(iClient, Prop_Send, "m_bIsCoaching")
@@ -749,7 +750,32 @@ void GenerateRoundWeps()
 		SetFailState("[GunGame] Config file is invalid!");
 	
 	if (!hKvConfig.GotoFirstSubKey())
-		SetFailState("[GunGame] Config file has no weapons!");
+		SetFailState("[GunGame] Config file has no series!");
+
+	ArrayList hSeriesNames = new ArrayList(128);
+
+	do
+	{
+		char strName[64];
+		hKvConfig.GetSectionName(strName, sizeof(strName));
+		if (!hKvConfig.GotoFirstSubKey())
+			continue;
+
+		hKvConfig.GoBack();
+		hSeriesNames.PushString(strName);
+	}
+	while (hKvConfig.GotoNextKey());
+	
+	if (!hSeriesNames.Length)
+		SetFailState("[GunGame] Failed to find a valid series!");
+	
+	hKvConfig.GoBack();
+
+	char strSeries[64];
+	hSeriesNames.GetString(GetRandomInt(0, hSeriesNames.Length - 1), strSeries, sizeof(strSeries));
+	hKvConfig.JumpToKey(strSeries);
+	hKvConfig.GotoFirstSubKey();
+	delete hSeriesNames;
 
 	int j;
 	do
@@ -771,7 +797,7 @@ void GenerateRoundWeps()
 			}
 			
 			if (hTemp.Length == 0)
-				hWeapon = view_as<GGWeapon>(INVALID_HANDLE);
+				continue;
 			else
 				hWeapon = view_as<GGWeapon>(hTemp.Get(GetRandomInt(0, hTemp.Length - 1)));
 		}
@@ -781,8 +807,11 @@ void GenerateRoundWeps()
 			j++;
 			char strWeapon[128];
 			hWeapon.GetName(strWeapon, 128);
-			PrintToServer("[GunGame] Added Weapon %d: %d (%s)", j, hWeapon.Index, strWeapon);
 			GGWeapon.PushToSeries(hWeapon);
+
+		#if defined DEBUG
+			PrintToServer("[GunGame] Added Weapon %d: %d (%s)", j, hWeapon.Index, strWeapon);
+		#endif
 		}
 	}
 	while (hKvConfig.GotoNextKey());

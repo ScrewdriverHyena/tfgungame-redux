@@ -5,7 +5,6 @@
 static StringMap g_hIndexToWeapon;
 static ArrayList g_hWeapons;
 static ArrayList g_hWeaponSeries;
-static int g_iSeriesLength;
 
 enum eWeaponProperties
 {
@@ -100,7 +99,6 @@ public any Native_GGWeaponInit(Handle plugin, int numParams)
 	if (!hKvWeapons.GotoFirstSubKey())
 		SetFailState("[GunGame] Weapon Data file has no weapons!");
 
-
 	do
 	{
 		GGWeapon hWeapon = new GGWeapon(hKvWeapons);
@@ -117,7 +115,6 @@ public any Native_GGWeaponInitSeries(Handle plugin, int numParams)
 	g_hWeaponSeries.Clear();
 	delete g_hWeaponSeries;
 	g_hWeaponSeries = new ArrayList();
-	g_iSeriesLength = 0;
 	return 0;
 }
 
@@ -137,7 +134,6 @@ public any Native_GGWeaponPushToSeries(Handle plugin, int numParams)
 {
 	if (g_hWeaponSeries == null) g_hWeaponSeries = new ArrayList();
 	g_hWeaponSeries.Push(GetNativeCell(1));
-	g_iSeriesLength++;
 	return 0;
 }
 
