@@ -636,7 +636,7 @@
 
 	"The Disciplinary Action"
 	{
-		"index" "128"
+		"index" "447"
 		"tfclass" "3"
 		"slot" "2"
 		"classname" "tf_weapon_shovel"

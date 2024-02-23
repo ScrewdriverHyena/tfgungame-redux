@@ -15,7 +15,6 @@ enum eWeaponProperties
 	WEAPON_CLASSNAME,
 	WEAPON_DISABLED,
 	WEAPON_ATT,
-	WEAPON_FLAGS,
 	WEAPON_CLIP,
 	
 	WEAPONPROP_COUNT
@@ -52,8 +51,6 @@ public any Native_GGWeapon(Handle plugin, int numParams)
 	char strAttOverride[128];
 	hKvWeapons.GetString("att_override", strAttOverride, sizeof(strAttOverride));
 	
-	int iFlagsOverride = hKvWeapons.GetNum("flags_override", OVERRIDE_ALL|PRESERVE_ATTRIBUTES);
-	
 	int iClipOverride = hKvWeapons.GetNum("clip_override", 0);
 	
 	ArrayList hWeapon = new ArrayList(128, WEAPONPROP_COUNT);
@@ -64,7 +61,6 @@ public any Native_GGWeapon(Handle plugin, int numParams)
 	hWeapon.SetString(WEAPON_CLASSNAME, strClassname);
 	hWeapon.Set(WEAPON_DISABLED, bSelectOverride);
 	hWeapon.SetString(WEAPON_ATT, strAttOverride);
-	hWeapon.Set(WEAPON_FLAGS, iFlagsOverride);
 	hWeapon.Set(WEAPON_CLIP, iClipOverride);
 	
 	char strKey[8];
@@ -207,5 +203,4 @@ public any Native_GGWeaponIndex(Handle plugin, int numParams) { return (view_as<
 public any Native_GGWeaponClass(Handle plugin, int numParams) { return (view_as<ArrayList>(GetNativeCell(1))).Get(WEAPON_TFCLASS); }
 public any Native_GGWeaponSlot(Handle plugin, int numParams)  { return (view_as<ArrayList>(GetNativeCell(1))).Get(WEAPON_SLOT); }
 public any Native_GGWeaponDisabled(Handle plugin, int numParams) { return (view_as<ArrayList>(GetNativeCell(1))).Get(WEAPON_DISABLED); }
-public any Native_GGWeaponFlagsOverride(Handle plugin, int numParams) { return (view_as<ArrayList>(GetNativeCell(1))).Get(WEAPON_FLAGS); }
 public any Native_GGWeaponClipOverride(Handle plugin, int numParams) { return (view_as<ArrayList>(GetNativeCell(1))).Get(WEAPON_CLIP); }
