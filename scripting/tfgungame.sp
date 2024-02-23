@@ -702,7 +702,7 @@ void SetPlayerLoadout(int iClient, int iRank)
 	if (TF2_GetPlayerClass(iClient) != eClass)
 		TF2_SetPlayerClass(iClient, eClass, _, true);
 
-	TF2_RegeneratePlayer(iClient);
+	//TF2_RegeneratePlayer(iClient);
 }
 
 void SetPlayerWeapon(int iClient, int iRank)
