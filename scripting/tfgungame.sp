@@ -133,7 +133,6 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateNative("GGWeapon.Class.get", Native_GGWeaponClass);
 	CreateNative("GGWeapon.Slot.get", Native_GGWeaponSlot);
 	CreateNative("GGWeapon.Disabled.get", Native_GGWeaponDisabled);
-	CreateNative("GGWeapon.FlagsOverride.get", Native_GGWeaponFlagsOverride);
 	CreateNative("GGWeapon.ClipOverride.get", Native_GGWeaponClipOverride);
 	
 	CreateNative("GetGunGameRank", Native_GetRank);
@@ -225,6 +224,15 @@ void CleanLogicEntities()
 			}
 		}
 	}
+}
+
+public void OnEntityCreated(int iEntity, const char[] strClassname)
+{
+	if (!IsValidEdict(iEntity))
+		return;
+	
+	if (StrEqual(strClassname, "tf_dropped_weapon"))
+		AcceptEntityInput(iEntity, "Kill");
 }
 
 TFGGSpecialRoundType CheckSpecialRound()
@@ -707,13 +715,13 @@ void SetPlayerWeapon(int iClient, int iRank)
 	SetEntityHealth(iClient, g_iClassMaxHP[view_as<int>(eClass)]);
 	
 	// Remove all items
-	TF2_RemoveAllItems(iClient);
+	TF2_RemoveAllWeapons(iClient);
 	
 	char strClassname[128], strAttributes[128];
 	hWeapon.GetClassname(strClassname, sizeof(strClassname));
 	hWeapon.GetAttributeOverride(strAttributes, sizeof(strAttributes));
 	
-	int iWeapon = CreateWeapon(iClient, strClassname, hWeapon.Index, 1, 1, strAttributes, hWeapon.FlagsOverride);
+	int iWeapon = CreateWeapon(iClient, strClassname, hWeapon.Index, 1, 1, strAttributes);
 	FlagWeaponDontDrop(iWeapon);
 	
 	if (hWeapon.ClipOverride)
@@ -844,7 +852,7 @@ void GenerateRoundWeps()
 	while (hKvConfig.GotoNextKey());
 }
 
-stock int CreateWeapon(int client, char[] sName, int index, int level = 1, int qual = 1, char[] att, int flags = OVERRIDE_ALL | PRESERVE_ATTRIBUTES)
+stock int CreateWeapon(int client, char[] sName, int index, int level = 1, int qual = 1, char[] att, int flags = OVERRIDE_ALL | PRESERVE_ATTRIBUTES | FORCE_GENERATION)
 {
 	Handle hWeapon = TF2Items_CreateItem(flags);
 	if (hWeapon == INVALID_HANDLE)
@@ -870,26 +878,6 @@ stock int CreateWeapon(int client, char[] sName, int index, int level = 1, int q
 	int entity = TF2Items_GiveNamedItem(client, hWeapon);
 	delete hWeapon;
 	return entity;
-}
-
-stock void TF2_RemoveAllItems(int iClient)
-{
-	TF2_RemoveAllWeapons(iClient);
-
-	int iNextMovePeer = -1;
-	int iMoveChild = GetEntPropEnt(iClient, Prop_Data, "m_hMoveChild");
-    if (iMoveChild != -1)
-    {
-        do
-        {
-            char strChildName[12];
-            GetEdictClassname(iMoveChild, strChildName, sizeof(strChildName));
-			iNextMovePeer = GetEntPropEnt(iMoveChild, Prop_Data, "m_hMovePeer");
-			if (!strncmp(strChildName, "tf_wearable", 11))
-				AcceptEntityInput(iMoveChild, "Kill");
-        }
-        while((iMoveChild = iNextMovePeer) != -1);
-    }
 }
 
 void FlagWeaponDontDrop(int iWeapon)

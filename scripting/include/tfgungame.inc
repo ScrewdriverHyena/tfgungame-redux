@@ -38,11 +38,6 @@ methodmap GGWeapon < ArrayList
 		public native get();
 	}
 	
-	property int FlagsOverride
-	{
-		public native get();
-	}
-	
 	property int ClipOverride
 	{
 		public native get();
@@ -90,7 +85,6 @@ public __pl_tfgungame_SetNTVOptional()
 	MarkNativeAsOptional("GGWeapon.Class.get");
 	MarkNativeAsOptional("GGWeapon.Slot.get");
 	MarkNativeAsOptional("GGWeapon.Disabled.get");
-	MarkNativeAsOptional("GGWeapon.FlagsOverride.get");
 	MarkNativeAsOptional("GGWeapon.ClipOverride.get");
 	
 	MarkNativeAsOptional("GetGunGameRank");
