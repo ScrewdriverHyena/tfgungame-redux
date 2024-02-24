@@ -384,7 +384,6 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 	
 	PrintToChatAll("\x07FFA500[GunGame]\x07FFFFFF PROTIP: You can type \x07FF5555!gg_help\x07FFFFFF for some information about the gamemode!");
 	
-	
 	CreateTimer(5.0, CleanEnts);
 	return Plugin_Continue;
 }
@@ -509,7 +508,7 @@ public Action OnReloadPlayerWeapons(Event event, const char[] name, bool dontBro
 	int iClient = GetClientOfUserId(event.GetInt("userid"));
 	if (!IsValidClient(iClient)) return Plugin_Handled;
 	
-	SetPlayerWeapon(iClient, g_PlayerData[iClient].Rank);
+	SetPlayerLoadout(iClient, g_PlayerData[iClient].Rank);
 	
 	return Plugin_Continue;
 }
@@ -696,26 +695,16 @@ stock bool IsValidClient(int iClient)
 void SetPlayerLoadout(int iClient, int iRank)
 {
 	if (iRank >= GGWeapon.SeriesTotal()) return;
-
-	TFClassType eClass = GGWeapon.GetFromSeries(iRank).Class;
-
-	if (TF2_GetPlayerClass(iClient) != eClass)
-		TF2_SetPlayerClass(iClient, eClass, _, true);
-
-	//TF2_RegeneratePlayer(iClient);
-	SetPlayerWeapon(iClient, iRank);
-}
-
-void SetPlayerWeapon(int iClient, int iRank)
-{
-	if (iRank >= GGWeapon.SeriesTotal()) return;
 	
 	GGWeapon hWeapon = GGWeapon.GetFromSeries(iRank);
 	TFClassType eClass = hWeapon.Class;
 
-	SetEntityHealth(iClient, g_iClassMaxHP[view_as<int>(eClass)]);
+	TF2_RemoveCondition(iClient, TFCond_Taunting);
 	
-	// Remove all items
+	if (TF2_GetPlayerClass(iClient) != eClass)
+		TF2_SetPlayerClass(iClient, eClass, _, true);
+
+	SetEntityHealth(iClient, g_iClassMaxHP[view_as<int>(eClass)]);
 	TF2_RemoveAllWeapons(iClient);
 	
 	char strClassname[128], strAttributes[128];
@@ -901,6 +890,12 @@ void SetMaxAmmo(int iClient, int iWeapon, int iForceAmmo = -1)
 	
 	if (iAmmoType != -1 && iMaxAmmo != -1)
 		SetEntProp(iClient, Prop_Data, "m_iAmmo", (iForceAmmo == -1) ? iMaxAmmo : iForceAmmo, _, iAmmoType);
+}
+
+public Action TF2Items_OnGiveNamedItem(int iClient, char[] sClassname, int iIndex, Handle &hItem)
+{
+	// Dont generate weapons and cosmetics from client's loadout
+	return Plugin_Handled;
 }
 
 public any Native_GetRank(Handle plugin, int numParams)
