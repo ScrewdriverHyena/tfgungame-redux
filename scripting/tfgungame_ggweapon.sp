@@ -37,27 +37,21 @@ public any Native_GGWeapon(Handle plugin, int numParams)
 	if (eClass == TFClass_Unknown)
 		SetFailState("[GunGame] TFClass not found for weapon %d!", i);
 	
-	int iSlot = hKvWeapons.GetNum("slot", -1);
-	if (iSlot == -1)
-		SetFailState("[GunGame] Slot not found for weapon %d!", i);
-	
-	char strClassname[128];
-	hKvWeapons.GetString("classname", strClassname, sizeof(strClassname));
-	if (!strClassname[0])
-		SetFailState("[GunGame] Classname not found for weapon %d! %d", i, hKvWeapons.GetNum("index", -1));
-	
 	bool bSelectOverride = view_as<bool>(hKvWeapons.GetNum("select_override", 0));
 	
 	char strAttOverride[128];
 	hKvWeapons.GetString("att_override", strAttOverride, sizeof(strAttOverride));
 	
 	int iClipOverride = hKvWeapons.GetNum("clip_override", 0);
+	char strClassname[128];
+	TF2Econ_GetItemClassName(iIndex, strClassname, sizeof(strClassname));
+	TF2Econ_TranslateWeaponEntForClass(strClassname, sizeof(strClassname), eClass);
 	
 	ArrayList hWeapon = new ArrayList(128, WEAPONPROP_COUNT);
 	hWeapon.SetString(WEAPON_NAME, strSectionName);
 	hWeapon.Set(WEAPON_INDEX, iIndex);
 	hWeapon.Set(WEAPON_TFCLASS, eClass);
-	hWeapon.Set(WEAPON_SLOT, iSlot);
+	hWeapon.Set(WEAPON_SLOT, TF2Econ_GetItemLoadoutSlot(iIndex, eClass));
 	hWeapon.SetString(WEAPON_CLASSNAME, strClassname);
 	hWeapon.Set(WEAPON_DISABLED, bSelectOverride);
 	hWeapon.SetString(WEAPON_ATT, strAttOverride);

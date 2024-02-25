@@ -6,6 +6,7 @@
 #include <tf2_stocks>
 #include <tf2items>
 #include <tfgungame>
+#include <tf_econ_data>
 
 #pragma semicolon 1
 #pragma newdecls required
