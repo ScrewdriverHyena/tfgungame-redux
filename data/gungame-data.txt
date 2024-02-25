@@ -8,32 +8,24 @@
 	{
 		"index" "9"
 		"tfclass" "9"
-		"slot" "0"
-		"classname" "tf_weapon_shotgun_primary"
 	}
 	
 	"The Backburner"
 	{
 		"index" "40"
 		"tfclass" "7"
-		"slot" "0"
-		"classname" "tf_weapon_flamethrower"
 	}
 	
 	"The Phlogistinator"
 	{
 		"index" "594"
 		"tfclass" "7"
-		"slot" "0"
-		"classname" "tf_weapon_flamethrower"
 	}
 	
 	"Dragon's Fury"
 	{
 		"index" "1178"
 		"tfclass" "7"
-		"slot" "0"
-		"classname" "tf_weapon_rocketlauncher_fireball"
 		"select_override" "1"
 	}
 	
@@ -41,84 +33,64 @@
 	{
 		"index" "21"
 		"tfclass" "7"
-		"slot" "0"
-		"classname" "tf_weapon_flamethrower"
 	}
 	
 	"The Degreaser"
 	{
 		"index" "251"
 		"tfclass" "7"
-		"slot" "0"
 		"select_override" "1"
-		"classname" "tf_weapon_flamethrower"
 	}
 	
 	"The Rainblower"
 	{
 		"index" "741"
 		"tfclass" "7"
-		"slot" "0"
 		"select_override" "1"
-		"classname" "tf_weapon_flamethrower"
 	}
 	
 	"Nostromo Napalmer"
 	{
 		"index" "30474"
 		"tfclass" "7"
-		"slot" "0"
-		"classname" "tf_weapon_flamethrower"
 	}
 	
 	"The Reserve Shooter"
 	{
 		"index" "415"
 		"tfclass" "7"
-		"slot" "1"
-		"classname" "tf_weapon_shotgun"
 	}
 	
 	"The Flare Gun"
 	{
 		"index" "39"
 		"tfclass" "7"
-		"slot" "1"
-		"classname" "tf_weapon_flaregun"
 	}
 	
 	"The Scorch Shot"
 	{
 		"index" "740"
 		"tfclass" "7"
-		"slot" "1"
-		"classname" "tf_weapon_flaregun"
 	}
 	
 	"The Detonator"
 	{
 		"index" "351"
 		"tfclass" "7"
-		"slot" "1"
 		"select_override" "1"
-		"classname" "tf_weapon_flaregun"
 	}
 	
 	"The Manmelter"
 	{
 		"index" "595"
 		"tfclass" "7"
-		"slot" "1"
 		"select_override" "1"
-		"classname" "tf_weapon_flaregun_revenge"
 	}
 	
 	"Panic Attack"
 	{
 		"index" "1153"
 		"tfclass" "7"
-		"slot" "1"
-		"classname" "tf_weapon_shotgun"
 	}
 	
 	
@@ -126,187 +98,141 @@
 	{
 		"index" "298"
 		"tfclass" "6"
-		"slot" "0"
-		"classname" "tf_weapon_minigun"
 	}
 	
 	"Minigun"
 	{
 		"index" "15"
 		"tfclass" "6"
-		"slot" "0"
-		"classname" "tf_weapon_minigun"
 	}
 	
 	"Natascha"
 	{
 		"index" "41"
 		"tfclass" "6"
-		"slot" "0"
-		"classname" "tf_weapon_minigun"
 	}
 	
 	"The Brass Beast"
 	{
 		"index" "312"
 		"tfclass" "6"
-		"slot" "0"
-		"classname" "tf_weapon_minigun"
 	}
 	
 	"Tomislav"
 	{
 		"index" "424"
 		"tfclass" "6"
-		"slot" "0"
-		"classname" "tf_weapon_minigun"
 	}
 	
 	"The Huo-Long Heater"
 	{
 		"index" "811"
 		"tfclass" "6"
-		"slot" "0"
-		"classname" "tf_weapon_minigun"
 	}
 	
 	"Deflector"
 	{
 		"index" "850"
 		"tfclass" "6"
-		"slot" "0"
-		"classname" "tf_weapon_minigun"
 	}
 	
 	"The Family Business"
 	{
 		"index" "425"
 		"tfclass" "6"
-		"slot" "1"
-		"classname" "tf_weapon_shotgun_hwg"
 	}
 	
 	"Stickybomb Launcher"
 	{
 		"index" "207"
 		"tfclass" "4"
-		"slot" "1"
-		"classname" "tf_weapon_pipebomblauncher"
 	}
 	
 	"The Scottish Resistance"
 	{
 		"index" "130"
 		"tfclass" "4"
-		"slot" "1"
 		"select_override" "1"
-		"classname" "tf_weapon_pipebomblauncher"
 	}
 	
 	"Quickiebomb Launcher"
 	{
 		"index" "1150"
 		"tfclass" "4"
-		"slot" "1"
-		"classname" "tf_weapon_pipebomblauncher"
 	}
 	
 	"Grenade Launcher"
 	{
 		"index" "19"
 		"tfclass" "4"
-		"slot" "0"
-		"classname" "tf_weapon_grenadelauncher"
 	}
 	
 	"The Loch-n-Load"
 	{
 		"index" "1150"
 		"tfclass" "4"
-		"slot" "1"
 		"select_override" "1"
-		"classname" "tf_weapon_pipebomblauncher"
 	}
 	
 	"The Loose Cannon"
 	{
 		"index" "996"
 		"tfclass" "4"
-		"slot" "0"
-		"classname" "tf_weapon_cannon"
 	}
 	
 	"The Iron Bomber"
 	{
 		"index" "1151"
 		"tfclass" "4"
-		"slot" "0"
-		"classname" "tf_weapon_grenadelauncher"
 	}
 	
 	"The Liberty Launcher"
 	{
 		"index" "414"
 		"tfclass" "3"
-		"slot" "0"
-		"classname" "tf_weapon_rocketlauncher"
 	}
 	
 	"The Direct Hit"
 	{
 		"index" "127"
 		"tfclass" "3"
-		"slot" "0"
-		"classname" "tf_weapon_rocketlauncher_directhit"
 	}
 	
 	"The Beggar's Bazooka"
 	{
 		"index" "730"
 		"tfclass" "3"
-		"slot" "0"
-		"classname" "tf_weapon_rocketlauncher"
 	}
 	
 	"Rocket Launcher"
 	{
 		"index" "18"
 		"tfclass" "3"
-		"slot" "0"
 		"select_override" "1"
-		"classname" "tf_weapon_rocketlauncher"
 	}
 	
 	"The Black Box"
 	{
 		"index" "228"
 		"tfclass" "3"
-		"slot" "0"
-		"classname" "tf_weapon_rocketlauncher"
 	}
 	
 	"The Cow Mangler 5000"
 	{
 		"index" "441"
 		"tfclass" "3"
-		"slot" "0"
-		"classname" "tf_weapon_particle_cannon"
 	}
 	
 	"The Original"
 	{
 		"index" "513"
 		"tfclass" "3"
-		"slot" "0"
-		"classname" "tf_weapon_rocketlauncher"
 	}
 	
 	"The Army of One"
 	{
 		"index" "228"
 		"tfclass" "3"
-		"slot" "0"
-		"classname" "tf_weapon_rocketlauncher"
 		"select_override" "1"
 		"att_override" "2 ; 5.0 ; 99 ; 3.0 ; 521 ; 1.0 ; 3 ; 0.25 ; 104 ; 0.3 ; 77 ; 0.0 ; 16 ; 0.0"
 		"flags_override" "31"
@@ -317,232 +243,174 @@
 	{
 		"index" "294"
 		"tfclass" "1"
-		"slot" "1"
-		"classname" "tf_weapon_pistol"
 	}
 	
 	"The C.A.P.P.E.R."
 	{
 		"index" "30666"
 		"tfclass" "1"
-		"slot" "1"
-		"classname" "tf_weapon_pistol"
 	}
 	
 	"Pretty Boy's Pocket Pistol"
 	{
 		"index" "773"
 		"tfclass" "1"
-		"slot" "1"
-		"classname" "tf_weapon_handgun_scout_secondary"
 	}
 	
 	"The Winger"
 	{
 		"index" "449"
 		"tfclass" "1"
-		"slot" "1"
-		"classname" "tf_weapon_handgun_scout_secondary"
 	}
 	
 	"Pistol"
 	{
 		"index" "23"
 		"tfclass" "1"
-		"slot" "1"
-		"classname" "tf_weapon_pistol"
 	}
 	
 	"Scattergun"
 	{
 		"index" "200"
 		"tfclass" "1"
-		"slot" "0"
-		"classname" "tf_weapon_scattergun"
 	}
 	
 	"Baby Face's Blaster"
 	{
 		"index" "772"
 		"tfclass" "1"
-		"slot" "0"
-		"classname" "tf_weapon_pep_brawler_blaster"
 	}
 	
 	"Force-A-Nature"
 	{
 		"index" "45"
 		"tfclass" "1"
-		"slot" "0"
-		"classname" "tf_weapon_scattergun"
 	}
 	
 	"The Shortstop"
 	{
 		"index" "220"
 		"tfclass" "1"
-		"slot" "0"
-		"classname" "tf_weapon_handgun_scout_primary"
 	}
 	
 	"The Soda Popper"
 	{
 		"index" "448"
 		"tfclass" "1"
-		"slot" "0"
-		"classname" "tf_weapon_soda_popper"
 	}
 	
 	"SMG"
 	{
 		"index" "16"
 		"tfclass" "2"
-		"slot" "1"
-		"classname" "tf_weapon_smg"
 	}
 	
 	"The Cleaner's Carbine"
 	{
 		"index" "751"
 		"tfclass" "2"
-		"slot" "1"
-		"classname" "tf_weapon_smg"
 	}
 	
 	"The Huntsman"
 	{
 		"index" "56"
 		"tfclass" "2"
-		"slot" "0"
-		"classname" "tf_weapon_compound_bow"
 	}
 	
 	"The Bazaar Bargain"
 	{
 		"index" "402"
 		"tfclass" "2"
-		"slot" "0"
-		"classname" "tf_weapon_sniperrifle_decap"
 	}
 	
 	"The Sydney Sleeper"
 	{
 		"index" "230"
 		"tfclass" "2"
-		"slot" "0"
-		"classname" "tf_weapon_sniperrifle"
 	}
 	
 	"The Ambassador"
 	{
 		"index" "61"
 		"tfclass" "8"
-		"slot" "0"
-		"classname" "tf_weapon_revolver"
 	}
 	
 	"Big Kill"
 	{
 		"index" "161"
 		"tfclass" "8"
-		"slot" "0"
-		"classname" "tf_weapon_revolver"
 	}
 	
 	"L'Etranger"
 	{
 		"index" "224"
 		"tfclass" "8"
-		"slot" "0"
-		"classname" "tf_weapon_revolver"
 	}
 	
 	"The Enforcer"
 	{
 		"index" "460"
 		"tfclass" "8"
-		"slot" "0"
-		"classname" "tf_weapon_revolver"
 	}
 	
 	"The Diamondback"
 	{
 		"index" "525"
 		"tfclass" "8"
-		"slot" "0"
-		"classname" "tf_weapon_revolver"
 	}
 	
 	"Revolver"
 	{
 		"index" "24"
 		"tfclass" "8"
-		"slot" "0"
-		"classname" "tf_weapon_revolver"
 	}
 	
 	"The Crusader's Crossbow"
 	{
 		"index" "305"
 		"tfclass" "5"
-		"slot" "0"
-		"classname" "tf_weapon_crossbow"
 	}
 	
 	"The Blutsauger"
 	{
 		"index" "36"
 		"tfclass" "5"
-		"slot" "0"
-		"classname" "tf_weapon_syringegun_medic"
 	}
 	
 	"The Overdose"
 	{
 		"index" "412"
 		"tfclass" "5"
-		"slot" "0"
-		"classname" "tf_weapon_syringegun_medic"
 	}
 	
 	"Syringe Gun"
 	{
 		"index" "17"
 		"tfclass" "5"
-		"slot" "0"
-		"classname" "tf_weapon_syringegun_medic"
 	}
 	
 	"The Short Circuit"
 	{
 		"index" "528"
 		"tfclass" "9"
-		"slot" "1"
-		"classname" "tf_weapon_mechanical_arm"
 	}
 	
 	"Rescue Ranger"
 	{
 		"index" "997"
 		"tfclass" "9"
-		"slot" "0"
-		"classname" "tf_weapon_shotgun_building_rescue"
 	}
 	
 	"Golden Wrench"
 	{
 		"index" "169"
 		"tfclass" "9"
-		"slot" "2"
-		"classname" "tf_weapon_wrench"
 	}
 	
 	"The Fortified Compound"
 	{
 		"index" "1092"
 		"tfclass" "2"
-		"slot" "0"
-		"classname" "tf_weapon_compound_bow"
 		"select_override" "1"
 	}
 	
@@ -550,647 +418,485 @@
 	{
 		"index" "526"
 		"tfclass" "2"
-		"slot" "0"
-		"classname" "tf_weapon_sniperrifle"
 	}
 	
 	"The AWPer Hand"
 	{
 		"index" "851"
 		"tfclass" "2"
-		"slot" "0"
-		"classname" "tf_weapon_sniperrifle"
 	}
 	
 	"The Classic"
 	{
 		"index" "1098"
 		"tfclass" "2"
-		"slot" "0"
-		"classname" "tf_weapon_sniperrifle_classic"
 	}
 	
 	"The Hitman's Heatmaker"
 	{
 		"index" "752"
 		"tfclass" "2"
-		"slot" "0"
-		"classname" "tf_weapon_sniperrifle"
 	}
 	
 	"Shooting Star"
 	{
 		"index" "30665"
 		"tfclass" "2"
-		"slot" "0"
-		"classname" "tf_weapon_sniperrifle"
 	}
 
 	"The Half-Zatoichi"
 	{
 		"index" "357"
 		"tfclass" "3"
-		"slot" "2"
-		"classname" "tf_weapon_katana"
 	}
 
 	"The Equalizer"
 	{
 		"index" "128"
 		"tfclass" "3"
-		"slot" "2"
-		"classname" "tf_weapon_shovel"
 	}
 
 	"The Escape Plan"
 	{
 		"index" "775"
 		"tfclass" "3"
-		"slot" "2"
-		"classname" "tf_weapon_shovel"
 	}
 
 	"The Pain Train"
 	{
 		"index" "154"
 		"tfclass" "3"
-		"slot" "2"
-		"classname" "tf_weapon_shovel"
 	}
 
 	"Shovel"
 	{
 		"index" "196"
 		"tfclass" "3"
-		"slot" "2"
-		"classname" "tf_weapon_shovel"
 	}
 
 	"The Market Gardener"
 	{
 		"index" "416"
 		"tfclass" "3"
-		"slot" "2"
-		"classname" "tf_weapon_shovel"
 	}
 
 	"The Disciplinary Action"
 	{
 		"index" "447"
 		"tfclass" "3"
-		"slot" "2"
-		"classname" "tf_weapon_shovel"
 	}
 
 	"Bat"
 	{
 		"index" "190"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat"
 	}
 
 	"The Sandman"
 	{
 		"index" "44"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat_wood"
 	}
 
 	"The Holy Mackerel"
 	{
 		"index" "221"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat_fish"
 	}
 
 	"Frying Pan"
 	{
 		"index" "264"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat"
 	}
 
 	"The Candy Cane"
 	{
 		"index" "317"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat"
 	}
 
 	"The Boston Basher"
 	{
 		"index" "325"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat"
 	}
 
 	"Sun-on-a-Stick"
 	{
 		"index" "349"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat"
 	}
 
 	"Three-Rune Blade"
 	{
 		"index" "452"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat"
 	}
 
 	"Unarmed Combat"
 	{
 		"index" "572"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat_fish"
 	}
 
 	"The Wrap Assassin"
 	{
 		"index" "648"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat_giftwrap"
 	}
 
 	"The Bat Outta Hell"
 	{
 		"index" "939"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat"
 	}
 
 	"Batsaber"
 	{
 		"index" "30667"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat"
 	}
 
 	"The Fan O'War"
 	{
 		"index" "355"
 		"tfclass" "1"
-		"slot" "2"
-		"classname" "tf_weapon_bat"
 	}
 
 	"Bottle"
 	{
 		"index" "191"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_bottle"
 	}
 
 	"The Scottish Handshake"
 	{
 		"index" "609"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_bottle"
 	}
 
 	"The Eyelander"
 	{
 		"index" "132"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_sword"
 	}
 
 	"The Scotsman's Skullcutter"
 	{
 		"index" "172"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_sword"
 	}
 
 	"Horseless Headless Horsemann's Headtaker"
 	{
 		"index" "266"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_sword"
 	}
 
 	"The Claidheamh Mor"
 	{
 		"index" "327"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_sword"
 	}
 
 	"The Persian Persuader"
 	{
 		"index" "404"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_sword"
 	}
 
 	"Nessie's Nine Iron"
 	{
 		"index" "482"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_sword"
 	}
 
 	"Ullapool Caber"
 	{
 		"index" "307"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_stickbomb"
 	}
 
 	"The Ham Shank"
 	{
 		"index" "1013"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_bottle"
 	}
 
 	"Frying Pan"
 	{
 		"index" "264"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_bottle"
 	}
 
 	"The Conscientious Objector"
 	{
 		"index" "474"
 		"tfclass" "4"
-		"slot" "2"
-		"classname" "tf_weapon_bottle"
 	}
 
 	"Fire Axe"
 	{
 		"index" "192"
 		"tfclass" "7"
-		"slot" "2"
-		"classname" "tf_weapon_fireaxe"
 	}
 
 	"The Powerjack"
 	{
 		"index" "214"
 		"tfclass" "7"
-		"slot" "2"
-		"classname" "tf_weapon_fireaxe"
 	}
 
 	"The Back Scratcher"
 	{
 		"index" "326"
 		"tfclass" "7"
-		"slot" "2"
-		"classname" "tf_weapon_fireaxe"
 	}
 
 	"Sharpened Volcano Fragment"
 	{
 		"index" "348"
 		"tfclass" "7"
-		"slot" "2"
-		"classname" "tf_weapon_fireaxe"
 	}
 
 	"The Postal Pummeler"
 	{
 		"index" "457"
 		"tfclass" "7"
-		"slot" "2"
-		"classname" "tf_weapon_fireaxe"
 	}
 
 	"The Maul"
 	{
 		"index" "466"
 		"tfclass" "7"
-		"slot" "2"
-		"classname" "tf_weapon_fireaxe"
 	}
 
 	"The Third Degree"
 	{
 		"index" "593"
 		"tfclass" "7"
-		"slot" "2"
-		"classname" "tf_weapon_fireaxe"
 	}
 
 	"The Lollichop"
 	{
 		"index" "739"
 		"tfclass" "7"
-		"slot" "2"
-		"classname" "tf_weapon_fireaxe"
 	}
 
 	"Neon Annhilator"
 	{
 		"index" "813"
 		"tfclass" "7"
-		"slot" "2"
-		"classname" "tf_weapon_breakable_sign"
 	}
 
 	"The Freedom Staff"
 	{
 		"index" "880"
 		"tfclass" "7"
-		"slot" "2"
-		"classname" "tf_weapon_fireaxe"
 	}
 	
 	"Hot Hand"
 	{
 		"index" "1181"
 		"tfclass" "7"
-		"slot" "2"
-		"classname" "tf_weapon_slap"
 	}
 
 	"Wrench"
 	{
 		"index" "197"
 		"tfclass" "9"
-		"slot" "2"
-		"classname" "tf_weapon_wrench"
 	}
 
 	"The Gunslinger"
 	{
 		"index" "142"
 		"tfclass" "9"
-		"slot" "2"
-		"classname" "tf_weapon_robot_arm"
 	}
 
 	"The Southern Hospitality"
 	{
 		"index" "155"
 		"tfclass" "9"
-		"slot" "2"
-		"classname" "tf_weapon_wrench"
 	}
 
 	"The Jag"
 	{
 		"index" "329"
 		"tfclass" "9"
-		"slot" "2"
-		"classname" "tf_weapon_wrench"
 	}
 
 	"Fists"
 	{
 		"index" "195"
 		"tfclass" "6"
-		"slot" "2"
-		"classname" "tf_weapon_fists"
 	}
 
 	"The Killing Gloves of Boxing"
 	{
 		"index" "43"
 		"tfclass" "6"
-		"slot" "2"
-		"classname" "tf_weapon_fists"
 	}
 
 	"Gloves of Running Urgently"
 	{
 		"index" "239"
 		"tfclass" "6"
-		"slot" "2"
-		"classname" "tf_weapon_fists"
 	}
 
 	"Warrior's Spirit"
 	{
 		"index" "310"
 		"tfclass" "6"
-		"slot" "2"
-		"classname" "tf_weapon_fists"
 	}
 
 	"Fists of Steel"
 	{
 		"index" "331"
 		"tfclass" "6"
-		"slot" "2"
-		"classname" "tf_weapon_fists"
 	}
 
 	"The Eviction Notice"
 	{
 		"index" "426"
 		"tfclass" "6"
-		"slot" "2"
-		"classname" "tf_weapon_fists"
 	}
 
 	"Apoco-Fists"
 	{
 		"index" "587"
 		"tfclass" "6"
-		"slot" "2"
-		"classname" "tf_weapon_fists"
 	}
 
 	"The Holiday Punch"
 	{
 		"index" "656"
 		"tfclass" "6"
-		"slot" "2"
-		"classname" "tf_weapon_fists"
 	}
 
 	"The Bread Bite"
 	{
 		"index" "1100"
 		"tfclass" "6"
-		"slot" "2"
-		"classname" "tf_weapon_fists"
 	}
 
 	"Prinny Machete"
 	{
 		"index" "30758"
 		"tfclass" "6"
-		"slot" "2"
-		"classname" "tf_weapon_fists"
 	}
 
 	"Kukri"
 	{
 		"index" "193"
 		"tfclass" "2"
-		"slot" "2"
-		"classname" "tf_weapon_club"
 	}
 
 	"The Tribalman's Shiv"
 	{
 		"index" "171"
 		"tfclass" "2"
-		"slot" "2"
-		"classname" "tf_weapon_club"
 	}
 
 	"The Bushwacka"
 	{
 		"index" "232"
 		"tfclass" "2"
-		"slot" "2"
-		"classname" "tf_weapon_club"
 	}
 
 	"The Shahanshah"
 	{
 		"index" "401"
 		"tfclass" "2"
-		"slot" "2"
-		"classname" "tf_weapon_club"
 	}
 
 	"The Crossing Guard"
 	{
 		"index" "1127"
 		"tfclass" "2"
-		"slot" "2"
-		"classname" "tf_weapon_club"
 	}
 
 	"Bonesaw"
 	{
 		"index" "198"
 		"tfclass" "5"
-		"slot" "2"
-		"classname" "tf_weapon_bonesaw"
 	}
 
 	"Amputator"
 	{
 		"index" "304"
 		"tfclass" "5"
-		"slot" "2"
-		"classname" "tf_weapon_bonesaw"
 	}
 
 	"The Solemn Vow"
 	{
 		"index" "413"
 		"tfclass" "5"
-		"slot" "2"
-		"classname" "tf_weapon_bonesaw"
 	}
 
 	"The Vita-Saw"
 	{
 		"index" "173"
 		"tfclass" "5"
-		"slot" "2"
-		"classname" "tf_weapon_bonesaw"
 	}
 
 	"The Memory Maker"
 	{
 		"index" "954"
 		"tfclass" "5"
-		"slot" "2"
-		"classname" "tf_weapon_bonesaw"
 	}
 
 	"The Necro Smasher"
 	{
 		"index" "1123"
 		"tfclass" "5"
-		"slot" "2"
-		"classname" "tf_weapon_bonesaw"
 	}
 
 	"Knife"
 	{
 		"index" "194"
 		"tfclass" "8"
-		"slot" "2"
-		"classname" "tf_weapon_knife"
 	}
 
 	"Conniver's Kunai"
 	{
 		"index" "356"
 		"tfclass" "8"
-		"slot" "2"
-		"classname" "tf_weapon_knife"
 	}
 
 	"The Big Earner"
 	{
 		"index" "461"
 		"tfclass" "8"
-		"slot" "2"
-		"classname" "tf_weapon_knife"
 	}
 
 	"The Wanga Prick"
 	{
 		"index" "574"
 		"tfclass" "8"
-		"slot" "2"
-		"classname" "tf_weapon_knife"
 	}
 
 	"The Sharp Dresser"
 	{
 		"index" "638"
 		"tfclass" "8"
-		"slot" "2"
-		"classname" "tf_weapon_knife"
 	}
 
 	"The Spy-cicle"
 	{
 		"index" "649"
 		"tfclass" "8"
-		"slot" "2"
-		"classname" "tf_weapon_knife"
 	}
 
 	"The Black Rose"
 	{
 		"index" "727"
 		"tfclass" "8"
-		"slot" "2"
-		"classname" "tf_weapon_knife"
 	}
 
 	"Saxxy"
 	{
 		"index" "423"
 		"tfclass" "8"
-		"slot" "2"
-		"classname" "tf_weapon_knife"
 	}
 }
