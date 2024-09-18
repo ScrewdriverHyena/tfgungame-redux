@@ -349,6 +349,7 @@ stock int GetMaxClip(int iWeapon)
 public void OnClientPutInServer(int client)
 {
 	SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
+	
 #if defined DEBUG
 	if (IsFakeClient(client))
 	{
@@ -416,13 +417,16 @@ public Action TF2_CalcIsAttackCritical(int iClient, int iWeapon, char[] strWeapo
 
 Action OnTakeDamage(int iVictim, int &iAttacker, int &iInflictor, float &fDamage, int &iDamageType, int &iWeapon, float vecDamageForce[3], float vecDamagePos[3], int iDamageCustom)
 {
-	// Dragon's Fury does not care about TF2_CalcIsAttackCritical, so we apply crits from it here
-	char strClassname[64];
-	GetEntityClassname(iInflictor, strClassname, sizeof(strClassname));
-	if (StrEqual(strClassname, "tf_projectile_balloffire"))
+	if (g_eCurrentSpecial == SpecialRound_AllCrits)
 	{
-		iDamageType |= DMG_CRIT;
-		return Plugin_Changed;
+		// Dragon's Fury does not care about TF2_CalcIsAttackCritical, so we apply crits from it here
+		char strClassname[64];
+		GetEntityClassname(iInflictor, strClassname, sizeof(strClassname));
+		if (StrEqual(strClassname, "tf_projectile_balloffire"))
+		{
+			iDamageType |= DMG_CRIT;
+			return Plugin_Changed;
+		}
 	}
 	
 	return Plugin_Continue;
