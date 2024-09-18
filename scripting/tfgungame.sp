@@ -88,11 +88,17 @@ enum struct TFGGPlayer
 	int Rank;
 	int RankBuffer;
 	int Assists;
+	
+	void Clear()
+	{
+		this.Rank = 0;
+		this.RankBuffer = 0;
+		this.Assists = 0;
+	}
 }
 
 TFGGPlayer g_PlayerData[MAXPLAYERS + 1];
 
-bool g_bLate;
 bool g_bRoundActive;
 
 Handle g_hGetMaxAmmo;
@@ -116,8 +122,6 @@ TFGGSpecialRoundType g_eCurrentSpecial = SpecialRound_None;
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
-	g_bLate = late;
-	
 	CreateNative("GGWeapon.GGWeapon", Native_GGWeapon);
 	CreateNative("GGWeapon.Init", Native_GGWeaponInit);
 	CreateNative("GGWeapon.InitSeries", Native_GGWeaponInitSeries);
@@ -176,12 +180,6 @@ public void OnPluginStart()
 	HookEvent("player_death", 					OnPlayerDeath);
 	HookEvent("player_death", 					OnPlayerDeathPre, 		EventHookMode_Pre);
 	
-	if (g_bLate)
-	{
-		ServerCommand("mp_restartgame 1");
-		PrintToChatAll("\x07FFA500[GunGame]\x07FFFFFF Late-load detected! Restarting round...");
-	}
-	
 	FindConVar("mp_respawnwavetime").IntValue = 0;
 	FindConVar("tf_use_fixed_weaponspreads").IntValue = 1;
 	FindConVar("tf_damage_disablespread").IntValue = 1;
@@ -199,6 +197,18 @@ public void OnPluginStart()
 	//PrecacheSound(HUMILIATION_SOUND, true);
 
 	AutoExecConfig(_, "tfgungame");
+	
+	if (GetClientCount(true) > 0)
+	{
+		PrintToChatAll("\x07FFA500[GunGame]\x07FFFFFF Late-load detected! Restarting round...");
+		MakeTeamWin(TFTeam_Unassigned);
+	}
+	
+	for (int iClient = 1; iClient <= MaxClients; iClient++)
+	{
+		if (IsClientInGame(iClient))
+			OnClientPutInServer(iClient);
+	}
 }
 
 public void OnMapStart()
@@ -336,8 +346,9 @@ stock int GetMaxClip(int iWeapon)
 	return SDKCall(g_hGetMaxClip1, iWeapon);
 }
 
-public void OnClientPostAdminCheck(int client)
+public void OnClientPutInServer(int client)
 {
+	SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
 #if defined DEBUG
 	if (IsFakeClient(client))
 	{
@@ -370,7 +381,7 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 	
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		g_PlayerData[i].Rank = 0;
+		g_PlayerData[i].Clear();
 		
 		if (!IsValidClient(i) || TF2_GetClientTeam(i) == TFTeam_Unassigned || TF2_GetClientTeam(i) == TFTeam_Spectator)
 			continue;
@@ -401,6 +412,20 @@ public Action TF2_CalcIsAttackCritical(int iClient, int iWeapon, char[] strWeapo
 		result = true; 
 		return Plugin_Handled;
 	}
+}
+
+Action OnTakeDamage(int iVictim, int &iAttacker, int &iInflictor, float &fDamage, int &iDamageType, int &iWeapon, float vecDamageForce[3], float vecDamagePos[3], int iDamageCustom)
+{
+	// Dragon's Fury does not care about TF2_CalcIsAttackCritical, so we apply crits from it here
+	char strClassname[64];
+	GetEntityClassname(iInflictor, strClassname, sizeof(strClassname));
+	if (StrEqual(strClassname, "tf_projectile_balloffire"))
+	{
+		iDamageType |= DMG_CRIT;
+		return Plugin_Changed;
+	}
+	
+	return Plugin_Continue;
 }
 
 public Action CleanEnts(Handle hTimer)
@@ -568,7 +593,7 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 			g_PlayerData[iAssister].Assists++;
 	}
 	
-	if (StrEqual(strWeapon, "sledgehammer") || (iCustomKill == TF_CUSTOM_SUICIDE || iAttacker == iVictim) && !g_hCvarAllowSuicide.IntValue)
+	if (StrEqual(strWeapon, "necro_smasher") || (iCustomKill == TF_CUSTOM_SUICIDE || iAttacker == iVictim) && !g_hCvarAllowSuicide.IntValue)
 	{
 		if (g_PlayerData[iVictim].Rank > 0)
 			PrintToChat(iVictim, "\x07FFA500[GunGame] HUMILIATION! %t", "Humiliation");
@@ -662,8 +687,17 @@ void WinPlayer(int iClient)
 	g_hCvarWinSound.GetString(strSound, sizeof(strSound));
 	EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
 	
-	int iEnt = FindEntityByClassname(-1, "game_round_win");
+	MakeTeamWin(TF2_GetClientTeam(iClient));
+	g_bRoundActive = false;
 	
+	Call_StartForward(hFwdOnWin);
+	Call_PushCell(iClient);
+	Call_Finish();
+}
+
+void MakeTeamWin(TFTeam nTeam)
+{
+	int iEnt = FindEntityByClassname(-1, "game_round_win");
 	if (iEnt < 1)
 	{
 		iEnt = CreateEntityByName("game_round_win");
@@ -673,14 +707,9 @@ void WinPlayer(int iClient)
 			ThrowError("[GunGame] Could not spawn round win entity!");
 	}
 	
-	SetVariantInt(view_as<int>(TF2_GetClientTeam(iClient)));
+	SetVariantInt(view_as<int>(nTeam));
 	AcceptEntityInput(iEnt, "SetTeam");
 	AcceptEntityInput(iEnt, "RoundWin");
-	g_bRoundActive = false;
-	
-	Call_StartForward(hFwdOnWin);
-	Call_PushCell(iClient);
-	Call_Finish();
 }
 
 stock bool IsValidClient(int iClient)
@@ -723,9 +752,9 @@ void SetPlayerLoadout(int iClient, int iRank)
 	SetMaxAmmo(iClient, iWeapon);
 	EquipPlayerWeapon(iClient, iWeapon);
 	
-	// Create and equip homewrecker if melee not given, and not a bot
+	// Create and equip a necro smasher if melee not given, and not a bot
 	if (hWeapon.Slot != 2 && !IsFakeClient(iClient))
-		EquipPlayerWeapon(iClient, CreateWeapon(iClient, "tf_weapon_fireaxe", 153, 50, 6, ""));
+		EquipPlayerWeapon(iClient, CreateWeapon(iClient, "tf_weapon_fireaxe", 1123, 50, 6, "1 ; 0.75"));
 	
 	RefreshScores();
 }
@@ -803,6 +832,7 @@ void GenerateRoundWeps()
 	delete hSeriesNames;
 	
 	int j;
+	int iLastIndex = -1;
 	do
 	{
 		// Iterate through the randomly selected sequence and store each loadout
@@ -818,14 +848,23 @@ void GenerateRoundWeps()
 			for (int i = 0; i < GGWeapon.Total(); i++)
 			{
 				hWeapon = GGWeapon.GetFromAll(i);
-				if (hWeapon.Class == view_as<TFClassType>(hKvConfig.GetNum("class")) && hWeapon.Slot == hKvConfig.GetNum("slot") && !hWeapon.Disabled)
+				if (!hWeapon.Disabled && hWeapon.Index != iLastIndex && hWeapon.Class == view_as<TFClassType>(hKvConfig.GetNum("class")) && hWeapon.Slot == hKvConfig.GetNum("slot"))
+				{
 					hTemp.Push(hWeapon);
+				}
 			}
 			
 			if (hTemp.Length == 0)
+			{
 				continue;
+			}
 			else
+			{
 				hWeapon = view_as<GGWeapon>(hTemp.Get(GetRandomInt(0, hTemp.Length - 1)));
+				iLastIndex = hWeapon.Index;
+			}
+			
+			delete hTemp;
 		}
 		
 		if (hWeapon != null)

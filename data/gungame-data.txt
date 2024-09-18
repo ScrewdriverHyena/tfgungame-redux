@@ -642,6 +642,12 @@
 		"tfclass" "7"
 	}
 
+	"Homewrecker"
+	{
+		"index" "153"
+		"tfclass" "7"
+	}
+	
 	"The Powerjack"
 	{
 		"index" "214"
@@ -843,12 +849,6 @@
 	"The Memory Maker"
 	{
 		"index" "954"
-		"tfclass" "5"
-	}
-
-	"The Necro Smasher"
-	{
-		"index" "1123"
 		"tfclass" "5"
 	}
 
