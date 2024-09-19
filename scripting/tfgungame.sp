@@ -842,7 +842,8 @@ void GenerateRoundWeps()
 	delete hSeriesNames;
 	
 	int j;
-	int iLastIndex = -1;
+	ArrayList hUsedIndexes = new ArrayList();
+	
 	do
 	{
 		// Iterate through the randomly selected sequence and store each loadout
@@ -858,10 +859,11 @@ void GenerateRoundWeps()
 			for (int i = 0; i < GGWeapon.Total(); i++)
 			{
 				hWeapon = GGWeapon.GetFromAll(i);
-				if (!hWeapon.Disabled && hWeapon.Index != iLastIndex && hWeapon.Class == view_as<TFClassType>(hKvConfig.GetNum("class")) && hWeapon.Slot == hKvConfig.GetNum("slot"))
-				{
+				if (hUsedIndexes.FindValue(hWeapon.Index) > -1)
+					continue;
+				
+				if (!hWeapon.Disabled && hWeapon.Class == view_as<TFClassType>(hKvConfig.GetNum("class")) && hWeapon.Slot == hKvConfig.GetNum("slot"))
 					hTemp.Push(hWeapon);
-				}
 			}
 			
 			if (hTemp.Length == 0)
@@ -871,7 +873,7 @@ void GenerateRoundWeps()
 			else
 			{
 				hWeapon = view_as<GGWeapon>(hTemp.Get(GetRandomInt(0, hTemp.Length - 1)));
-				iLastIndex = hWeapon.Index;
+				hUsedIndexes.Push(hWeapon.Index);
 			}
 			
 			delete hTemp;
@@ -890,6 +892,8 @@ void GenerateRoundWeps()
 		}
 	}
 	while (hKvConfig.GotoNextKey());
+	
+	delete hUsedIndexes;
 }
 
 stock int CreateWeapon(int client, char[] sName, int index, int level = 1, int qual = 1, char[] att, int flags = OVERRIDE_ALL | PRESERVE_ATTRIBUTES | FORCE_GENERATION)
