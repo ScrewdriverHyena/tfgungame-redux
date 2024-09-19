@@ -841,8 +841,8 @@ void GenerateRoundWeps()
 	{
 		// Iterate through the randomly selected sequence and store each loadout
 		GGWeapon hWeapon;
-		int iIndex = hKvConfig.GetNum("index_override", 0);
-		if (iIndex)
+		int iIndex = hKvConfig.GetNum("index_override", -1);
+		if (iIndex > -1)
 		{
 			hWeapon = GGWeapon.GetFromIndex(iIndex);
 		}

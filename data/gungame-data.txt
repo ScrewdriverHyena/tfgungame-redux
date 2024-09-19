@@ -4,34 +4,118 @@
 
 "WeaponData"
 {
-	"Shotgun"
+	"Golden Wrench"
 	{
-		"index" "9"
+		"index" "169"
 		"tfclass" "9"
 	}
 	
-	"The Backburner"
+	// PRIMARIES
+	
+	"Scattergun"
 	{
-		"index" "40"
-		"tfclass" "7"
+		"index" "13"
+		"tfclass" "1"
 	}
 	
-	"The Phlogistinator"
+	"The Force-A-Nature"
 	{
-		"index" "594"
-		"tfclass" "7"
+		"index" "45"
+		"tfclass" "1"
 	}
 	
-	"Dragon's Fury"
+	"The Shortstop"
 	{
-		"index" "1178"
-		"tfclass" "7"
+		"index" "220"
+		"tfclass" "1"
+	}
+	
+	"The Soda Popper"
+	{
+		"index" "448"
+		"tfclass" "1"
+	}
+	
+	"Baby Face's Blaster"
+	{
+		"index" "772"
+		"tfclass" "1"
+	}
+	
+	"The Back Scatter"
+	{
+		"index" "1103"
+		"tfclass" "1"
+	}
+	
+	"Rocket Launcher"
+	{
+		"index" "18"
+		"tfclass" "3"
 		"select_override" "1"
+	}
+	
+	"The Direct Hit"
+	{
+		"index" "127"
+		"tfclass" "3"
+	}
+	
+	"The Black Box"
+	{
+		"index" "228"
+		"tfclass" "3"
+	}
+	
+	"The Liberty Launcher"
+	{
+		"index" "414"
+		"tfclass" "3"
+	}
+	
+	"The Cow Mangler 5000"
+	{
+		"index" "441"
+		"tfclass" "3"
+	}
+	
+	"The Original"
+	{
+		"index" "513"
+		"tfclass" "3"
+	}
+	
+	"The Beggar's Bazooka"
+	{
+		"index" "730"
+		"tfclass" "3"
+	}
+	
+	"The Air Strike"
+	{
+		"index" "1104"
+		"tfclass" "3"
+	}
+	
+	"The Army of One"
+	{
+		"index" "228"
+		"tfclass" "3"
+		"select_override" "1"
+		"att_override" "2 ; 5.0 ; 99 ; 3.0 ; 521 ; 1.0 ; 3 ; 0.25 ; 104 ; 0.3 ; 77 ; 0.0 ; 16 ; 0.0"
+		"flags_override" "31"
+		"clip_override" "1"
 	}
 	
 	"Flame Thrower"
 	{
 		"index" "21"
+		"tfclass" "7"
+	}
+	
+	"The Backburner"
+	{
+		"index" "40"
 		"tfclass" "7"
 	}
 	
@@ -42,9 +126,22 @@
 		"select_override" "1"
 	}
 	
+	"The Phlogistinator"
+	{
+		"index" "594"
+		"tfclass" "7"
+	}
+	
 	"The Rainblower"
 	{
 		"index" "741"
+		"tfclass" "7"
+		"select_override" "1"
+	}
+	
+	"Dragon's Fury"
+	{
+		"index" "1178"
 		"tfclass" "7"
 		"select_override" "1"
 	}
@@ -55,49 +152,29 @@
 		"tfclass" "7"
 	}
 	
-	"The Reserve Shooter"
+	"Grenade Launcher"
 	{
-		"index" "415"
-		"tfclass" "7"
+		"index" "19"
+		"tfclass" "4"
 	}
 	
-	"The Flare Gun"
+	"The Loch-n-Load"
 	{
-		"index" "39"
-		"tfclass" "7"
-	}
-	
-	"The Scorch Shot"
-	{
-		"index" "740"
-		"tfclass" "7"
-	}
-	
-	"The Detonator"
-	{
-		"index" "351"
-		"tfclass" "7"
+		"index" "308"
+		"tfclass" "4"
 		"select_override" "1"
 	}
 	
-	"The Manmelter"
+	"The Loose Cannon"
 	{
-		"index" "595"
-		"tfclass" "7"
-		"select_override" "1"
+		"index" "996"
+		"tfclass" "4"
 	}
 	
-	"Panic Attack"
+	"The Iron Bomber"
 	{
-		"index" "1153"
-		"tfclass" "7"
-	}
-	
-	
-	"Iron Curtain"
-	{
-		"index" "298"
-		"tfclass" "6"
+		"index" "1151"
+		"tfclass" "4"
 	}
 	
 	"Minigun"
@@ -109,6 +186,12 @@
 	"Natascha"
 	{
 		"index" "41"
+		"tfclass" "6"
+	}
+	
+	"Iron Curtain"
+	{
+		"index" "298"
 		"tfclass" "6"
 	}
 	
@@ -136,15 +219,202 @@
 		"tfclass" "6"
 	}
 	
-	"The Family Business"
+	"Shotgun"
 	{
-		"index" "425"
-		"tfclass" "6"
+		"index" "9"
+		"tfclass" "9"
+	}
+	
+	"Frontier Justice"
+	{
+		"index" "141"
+		"tfclass" "9"
+	}
+	
+	"The Widowmaker"
+	{
+		"index" "527"
+		"tfclass" "9"
+		"select_override" "1"
+	}
+	
+	"The Pomson 6000"
+	{
+		"index" "588"
+		"tfclass" "9"
+	}
+	
+	"Rescue Ranger"
+	{
+		"index" "997"
+		"tfclass" "9"
+	}
+	
+	"Syringe Gun"
+	{
+		"index" "17"
+		"tfclass" "5"
+	}
+	
+	"The Blutsauger"
+	{
+		"index" "36"
+		"tfclass" "5"
+	}
+	
+	"Crusader's Crossbow"
+	{
+		"index" "305"
+		"tfclass" "5"
+	}
+	
+	"The Overdose"
+	{
+		"index" "412"
+		"tfclass" "5"
+	}
+	
+	"Sniper Rifle"
+	{
+		"index" "14"
+		"tfclass" "2"
+	}
+	
+	"The Huntsman"
+	{
+		"index" "56"
+		"tfclass" "2"
+	}
+	
+	"The Sydney Sleeper"
+	{
+		"index" "230"
+		"tfclass" "2"
+	}
+	
+	"The Bazaar Bargain"
+	{
+		"index" "402"
+		"tfclass" "2"
+	}
+	
+	"The Machina"
+	{
+		"index" "526"
+		"tfclass" "2"
+	}
+	
+	"The AWPer Hand"
+	{
+		"index" "851"
+		"tfclass" "2"
+	}
+	
+	"The Fortified Compound"
+	{
+		"index" "1092"
+		"tfclass" "2"
+		"select_override" "1"
+	}
+	
+	"The Classic"
+	{
+		"index" "1098"
+		"tfclass" "2"
+	}
+	
+	"The Hitman's Heatmaker"
+	{
+		"index" "752"
+		"tfclass" "2"
+	}
+	
+	"Shooting Star"
+	{
+		"index" "30665"
+		"tfclass" "2"
+	}
+	
+	// SECONDARIES
+	
+	"Pistol"
+	{
+		"index" "23"
+		"tfclass" "1"
+	}
+	
+	"The Winger"
+	{
+		"index" "449"
+		"tfclass" "1"
+	}
+	
+	"Pretty Boy's Pocket Pistol"
+	{
+		"index" "773"
+		"tfclass" "1"
+	}
+	
+	"The Flying Guillotine"
+	{
+		"index" "812"
+		"tfclass" "1"
+		"select_override" "1"
+	}
+	
+	"The C.A.P.P.E.R."
+	{
+		"index" "30666"
+		"tfclass" "1"
+	}
+	
+	"The Reserve Shooter"
+	{
+		"index" "415"
+		"tfclass" "3"
+	}
+	
+	"The Righteous Bison"
+	{
+		"index" "442"
+		"tfclass" "3"
+	}
+	
+	"The Flare Gun"
+	{
+		"index" "39"
+		"tfclass" "7"
+	}
+	
+	"Detonator"
+	{
+		"index" "351"
+		"tfclass" "7"
+		"select_override" "1"
+	}
+	
+	"The Manmelter"
+	{
+		"index" "595"
+		"tfclass" "7"
+		"select_override" "1"
+	}
+	
+	"The Scorch Shot"
+	{
+		"index" "740"
+		"tfclass" "7"
+	}
+	
+	"The Panic Attack"
+	{
+		"index" "1153"
+		"tfclass" "7"
 	}
 	
 	"Stickybomb Launcher"
 	{
-		"index" "207"
+		"index" "20"
 		"tfclass" "4"
 	}
 	
@@ -155,148 +425,52 @@
 		"select_override" "1"
 	}
 	
-	"Quickiebomb Launcher"
+	"The Quickiebomb Launcher"
 	{
 		"index" "1150"
 		"tfclass" "4"
 	}
 	
-	"Grenade Launcher"
+	"The Family Business"
 	{
-		"index" "19"
-		"tfclass" "4"
-	}
-	
-	"The Loch-n-Load"
-	{
-		"index" "1150"
-		"tfclass" "4"
-		"select_override" "1"
-	}
-	
-	"The Loose Cannon"
-	{
-		"index" "996"
-		"tfclass" "4"
-	}
-	
-	"The Iron Bomber"
-	{
-		"index" "1151"
-		"tfclass" "4"
-	}
-	
-	"The Liberty Launcher"
-	{
-		"index" "414"
-		"tfclass" "3"
-	}
-	
-	"The Direct Hit"
-	{
-		"index" "127"
-		"tfclass" "3"
-	}
-	
-	"The Beggar's Bazooka"
-	{
-		"index" "730"
-		"tfclass" "3"
-	}
-	
-	"Rocket Launcher"
-	{
-		"index" "18"
-		"tfclass" "3"
-		"select_override" "1"
-	}
-	
-	"The Black Box"
-	{
-		"index" "228"
-		"tfclass" "3"
-	}
-	
-	"The Cow Mangler 5000"
-	{
-		"index" "441"
-		"tfclass" "3"
-	}
-	
-	"The Original"
-	{
-		"index" "513"
-		"tfclass" "3"
-	}
-	
-	"The Army of One"
-	{
-		"index" "228"
-		"tfclass" "3"
-		"select_override" "1"
-		"att_override" "2 ; 5.0 ; 99 ; 3.0 ; 521 ; 1.0 ; 3 ; 0.25 ; 104 ; 0.3 ; 77 ; 0.0 ; 16 ; 0.0"
-		"flags_override" "31"
-		"clip_override" "1"
+		"index" "425"
+		"tfclass" "6"
 	}
 	
 	"Lugermorph"
 	{
 		"index" "294"
-		"tfclass" "1"
+		"tfclass" "9"
 	}
 	
-	"The C.A.P.P.E.R."
+	"The Short Circuit"
 	{
-		"index" "30666"
-		"tfclass" "1"
+		"index" "528"
+		"tfclass" "9"
 	}
 	
-	"Pretty Boy's Pocket Pistol"
+	"Medi Gun"
 	{
-		"index" "773"
-		"tfclass" "1"
+		"index" "29"
+		"tfclass" "5"
 	}
 	
-	"The Winger"
+	"The Kritzkrieg"
 	{
-		"index" "449"
-		"tfclass" "1"
+		"index" "35"
+		"tfclass" "5"
 	}
 	
-	"Pistol"
+	"The Quick-Fix"
 	{
-		"index" "23"
-		"tfclass" "1"
+		"index" "411"
+		"tfclass" "5"
 	}
 	
-	"Scattergun"
+	"The Vaccinator"
 	{
-		"index" "200"
-		"tfclass" "1"
-	}
-	
-	"Baby Face's Blaster"
-	{
-		"index" "772"
-		"tfclass" "1"
-	}
-	
-	"Force-A-Nature"
-	{
-		"index" "45"
-		"tfclass" "1"
-	}
-	
-	"The Shortstop"
-	{
-		"index" "220"
-		"tfclass" "1"
-	}
-	
-	"The Soda Popper"
-	{
-		"index" "448"
-		"tfclass" "1"
+		"index" "998"
+		"tfclass" "5"
 	}
 	
 	"SMG"
@@ -311,22 +485,10 @@
 		"tfclass" "2"
 	}
 	
-	"The Huntsman"
+	"Revolver"
 	{
-		"index" "56"
-		"tfclass" "2"
-	}
-	
-	"The Bazaar Bargain"
-	{
-		"index" "402"
-		"tfclass" "2"
-	}
-	
-	"The Sydney Sleeper"
-	{
-		"index" "230"
-		"tfclass" "2"
+		"index" "24"
+		"tfclass" "8"
 	}
 	
 	"The Ambassador"
@@ -359,136 +521,11 @@
 		"tfclass" "8"
 	}
 	
-	"Revolver"
-	{
-		"index" "24"
-		"tfclass" "8"
-	}
+	// MELEE
 	
-	"The Crusader's Crossbow"
-	{
-		"index" "305"
-		"tfclass" "5"
-	}
-	
-	"The Blutsauger"
-	{
-		"index" "36"
-		"tfclass" "5"
-	}
-	
-	"The Overdose"
-	{
-		"index" "412"
-		"tfclass" "5"
-	}
-	
-	"Syringe Gun"
-	{
-		"index" "17"
-		"tfclass" "5"
-	}
-	
-	"The Short Circuit"
-	{
-		"index" "528"
-		"tfclass" "9"
-	}
-	
-	"Rescue Ranger"
-	{
-		"index" "997"
-		"tfclass" "9"
-	}
-	
-	"Golden Wrench"
-	{
-		"index" "169"
-		"tfclass" "9"
-	}
-	
-	"The Fortified Compound"
-	{
-		"index" "1092"
-		"tfclass" "2"
-		"select_override" "1"
-	}
-	
-	"The Machina"
-	{
-		"index" "526"
-		"tfclass" "2"
-	}
-	
-	"The AWPer Hand"
-	{
-		"index" "851"
-		"tfclass" "2"
-	}
-	
-	"The Classic"
-	{
-		"index" "1098"
-		"tfclass" "2"
-	}
-	
-	"The Hitman's Heatmaker"
-	{
-		"index" "752"
-		"tfclass" "2"
-	}
-	
-	"Shooting Star"
-	{
-		"index" "30665"
-		"tfclass" "2"
-	}
-
-	"The Half-Zatoichi"
-	{
-		"index" "357"
-		"tfclass" "3"
-	}
-
-	"The Equalizer"
-	{
-		"index" "128"
-		"tfclass" "3"
-	}
-
-	"The Escape Plan"
-	{
-		"index" "775"
-		"tfclass" "3"
-	}
-
-	"The Pain Train"
-	{
-		"index" "154"
-		"tfclass" "3"
-	}
-
-	"Shovel"
-	{
-		"index" "196"
-		"tfclass" "3"
-	}
-
-	"The Market Gardener"
-	{
-		"index" "416"
-		"tfclass" "3"
-	}
-
-	"The Disciplinary Action"
-	{
-		"index" "447"
-		"tfclass" "3"
-	}
-
 	"Bat"
 	{
-		"index" "190"
+		"index" "0"
 		"tfclass" "1"
 	}
 
@@ -527,6 +564,12 @@
 		"index" "349"
 		"tfclass" "1"
 	}
+	
+	"The Fan O'War"
+	{
+		"index" "355"
+		"tfclass" "1"
+	}
 
 	"Three-Rune Blade"
 	{
@@ -557,88 +600,52 @@
 		"index" "30667"
 		"tfclass" "1"
 	}
-
-	"The Fan O'War"
+	
+	"Shovel"
 	{
-		"index" "355"
-		"tfclass" "1"
+		"index" "6"
+		"tfclass" "3"
+	}
+	
+	"The Equalizer"
+	{
+		"index" "128"
+		"tfclass" "3"
 	}
 
-	"Bottle"
+	"The Half-Zatoichi"
 	{
-		"index" "191"
-		"tfclass" "4"
+		"index" "357"
+		"tfclass" "3"
+	}
+	
+	"The Pain Train"
+	{
+		"index" "154"
+		"tfclass" "3"
+	}
+	
+	"The Market Gardener"
+	{
+		"index" "416"
+		"tfclass" "3"
 	}
 
-	"The Scottish Handshake"
+	"The Disciplinary Action"
 	{
-		"index" "609"
-		"tfclass" "4"
+		"index" "447"
+		"tfclass" "3"
 	}
-
-	"The Eyelander"
+	
+	"The Escape Plan"
 	{
-		"index" "132"
-		"tfclass" "4"
+		"index" "775"
+		"tfclass" "3"
 	}
-
-	"The Scotsman's Skullcutter"
-	{
-		"index" "172"
-		"tfclass" "4"
-	}
-
-	"Horseless Headless Horsemann's Headtaker"
-	{
-		"index" "266"
-		"tfclass" "4"
-	}
-
-	"The Claidheamh Mor"
-	{
-		"index" "327"
-		"tfclass" "4"
-	}
-
-	"The Persian Persuader"
-	{
-		"index" "404"
-		"tfclass" "4"
-	}
-
-	"Nessie's Nine Iron"
-	{
-		"index" "482"
-		"tfclass" "4"
-	}
-
-	"Ullapool Caber"
-	{
-		"index" "307"
-		"tfclass" "4"
-	}
-
-	"The Ham Shank"
-	{
-		"index" "1013"
-		"tfclass" "4"
-	}
-
-	"Frying Pan"
-	{
-		"index" "264"
-		"tfclass" "4"
-	}
-
-	"The Conscientious Objector"
-	{
-		"index" "474"
-		"tfclass" "4"
-	}
-
+	
 	"Fire Axe"
 	{
-		"index" "192"
+		"index" "2"
 		"tfclass" "7"
 	}
 
@@ -708,33 +715,81 @@
 		"tfclass" "7"
 	}
 
-	"Wrench"
+	"Bottle"
 	{
-		"index" "197"
-		"tfclass" "9"
+		"index" "1"
+		"tfclass" "4"
 	}
 
-	"The Gunslinger"
+	"The Eyelander"
 	{
-		"index" "142"
-		"tfclass" "9"
+		"index" "132"
+		"tfclass" "4"
 	}
 
-	"The Southern Hospitality"
+	"The Scotsman's Skullcutter"
 	{
-		"index" "155"
-		"tfclass" "9"
+		"index" "172"
+		"tfclass" "4"
+	}
+	
+	"Frying Pan"
+	{
+		"index" "264"
+		"tfclass" "4"
+	}
+	
+	"Horseless Headless Horsemann's Headtaker"
+	{
+		"index" "266"
+		"tfclass" "4"
+	}
+	
+	"Ullapool Caber"
+	{
+		"index" "307"
+		"tfclass" "4"
 	}
 
-	"The Jag"
+	"The Claidheamh Mòr"
 	{
-		"index" "329"
-		"tfclass" "9"
+		"index" "327"
+		"tfclass" "4"
 	}
 
+	"The Persian Persuader"
+	{
+		"index" "404"
+		"tfclass" "4"
+	}
+	
+	"The Conscientious Objector"
+	{
+		"index" "474"
+		"tfclass" "4"
+	}
+
+	"Nessie's Nine Iron"
+	{
+		"index" "482"
+		"tfclass" "4"
+	}
+	
+	"The Scottish Handshake"
+	{
+		"index" "609"
+		"tfclass" "4"
+	}
+
+	"The Ham Shank"
+	{
+		"index" "1013"
+		"tfclass" "4"
+	}
+	
 	"Fists"
 	{
-		"index" "195"
+		"index" "5"
 		"tfclass" "6"
 	}
 
@@ -791,10 +846,64 @@
 		"index" "30758"
 		"tfclass" "6"
 	}
+	
+	"Wrench"
+	{
+		"index" "7"
+		"tfclass" "9"
+	}
+
+	"The Gunslinger"
+	{
+		"index" "142"
+		"tfclass" "9"
+	}
+
+	"The Southern Hospitality"
+	{
+		"index" "155"
+		"tfclass" "9"
+	}
+
+	"The Jag"
+	{
+		"index" "329"
+		"tfclass" "9"
+	}
+	
+	"Bonesaw"
+	{
+		"index" "8"
+		"tfclass" "5"
+	}
+	
+	"The Vita-Saw"
+	{
+		"index" "173"
+		"tfclass" "5"
+	}
+	
+	"Amputator"
+	{
+		"index" "304"
+		"tfclass" "5"
+	}
+
+	"The Solemn Vow"
+	{
+		"index" "413"
+		"tfclass" "5"
+	}
+
+	"The Memory Maker"
+	{
+		"index" "954"
+		"tfclass" "5"
+	}
 
 	"Kukri"
 	{
-		"index" "193"
+		"index" "3"
 		"tfclass" "2"
 	}
 
@@ -822,45 +931,21 @@
 		"tfclass" "2"
 	}
 
-	"Bonesaw"
-	{
-		"index" "198"
-		"tfclass" "5"
-	}
-
-	"Amputator"
-	{
-		"index" "304"
-		"tfclass" "5"
-	}
-
-	"The Solemn Vow"
-	{
-		"index" "413"
-		"tfclass" "5"
-	}
-
-	"The Vita-Saw"
-	{
-		"index" "173"
-		"tfclass" "5"
-	}
-
-	"The Memory Maker"
-	{
-		"index" "954"
-		"tfclass" "5"
-	}
-
 	"Knife"
 	{
-		"index" "194"
+		"index" "4"
 		"tfclass" "8"
 	}
 
 	"Conniver's Kunai"
 	{
 		"index" "356"
+		"tfclass" "8"
+	}
+	
+	"Saxxy"
+	{
+		"index" "423"
 		"tfclass" "8"
 	}
 
@@ -891,12 +976,6 @@
 	"The Black Rose"
 	{
 		"index" "727"
-		"tfclass" "8"
-	}
-
-	"Saxxy"
-	{
-		"index" "423"
 		"tfclass" "8"
 	}
 }
