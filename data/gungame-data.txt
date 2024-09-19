@@ -52,7 +52,6 @@
 	{
 		"index" "18"
 		"tfclass" "3"
-		"select_override" "1"
 	}
 	
 	"The Direct Hit"
