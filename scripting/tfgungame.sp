@@ -608,7 +608,9 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 		
 		char strSound[255];
 		g_hCvarHumiliationSound.GetString(strSound, sizeof(strSound));
-		EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
+		
+		if (strSound[0])
+			EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
 		
 		if (g_PlayerData[iVictim].Rank > 0)
 		{
@@ -661,7 +663,9 @@ public void RankUpBuffered(int iAttacker)
 			
 			char strSound[255];
 			g_hCvarLastRankSound.GetString(strSound, sizeof(strSound));
-			EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
+			
+			if (strSound[0])
+				EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
 		}
 	}
 	else
@@ -689,7 +693,9 @@ void WinPlayer(int iClient)
 	
 	char strSound[255];
 	g_hCvarWinSound.GetString(strSound, sizeof(strSound));
-	EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
+	
+	if (strSound[0])
+		EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
 	
 	MakeTeamWin(TF2_GetClientTeam(iClient));
 	g_bRoundActive = false;
