@@ -417,7 +417,7 @@ public Action TF2_CalcIsAttackCritical(int iClient, int iWeapon, char[] strWeapo
 
 Action OnTakeDamage(int iVictim, int &iAttacker, int &iInflictor, float &fDamage, int &iDamageType, int &iWeapon, float vecDamageForce[3], float vecDamagePos[3], int iDamageCustom)
 {
-	if (g_eCurrentSpecial == SpecialRound_AllCrits)
+	if (g_eCurrentSpecial == SpecialRound_AllCrits && iInflictor > MaxClients)
 	{
 		// Dragon's Fury does not care about TF2_CalcIsAttackCritical, so we apply crits from it here
 		char strClassname[64];
