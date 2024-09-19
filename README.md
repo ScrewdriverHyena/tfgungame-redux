@@ -8,6 +8,7 @@
 ## Credits
 **Screwdriver (FKA Frosty Scales)** - Programmer    
 **wo** - Programmer
+
 **Benoist3012** - French Translation & Lots of programming help, overall mentoring me in SourcePawn coding    
 **42** - gg_burgstadt and major fixes for lag-related issues    
 **Alex Turtle** - French Translation    
