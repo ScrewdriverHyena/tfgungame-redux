@@ -1,8 +1,13 @@
 "Phrases"
 {
-	"HelpString"
+	"HelpString1"
 	{
-		"nl"        "In GunGame is het doel om andere spelers te doden,wat je wapen naar een andere verandert. Het doel is om elk wapen te verkrijgen tot je wint! Maar als je wordt vermoord door een slagwapen of je zelf vermoordt, dan word je een rang teruggezet."
+		"nl"        "In GunGame is het doel om andere spelers te doden, wat je wapen naar een andere verandert. Het doel is om elk wapen te verkrijgen tot je wint!"
+	}
+
+	"HelpString2"
+	{
+		"nl"        "Maar als je wordt vermoord door een slagwapen of je zelf vermoordt, dan word je een rang teruggezet."
 	}
 
 	"Humiliation"

@@ -1,8 +1,13 @@
 "Phrases"
 {
-    "HelpString"
+    "HelpString1"
     {
-        "it"        "In GunGame l' obiettivo è quello di uccidere gli altri giocatori,cambiando tua arma con un'altra. Per vincere devi passare tutte le armi finchè non vinci! Tuttavia, se vieni ucciso da un'arma da mischia o ti suicidi, perderai un grado."
+        "it"        "In GunGame l' obiettivo è quello di uccidere gli altri giocatori, cambiando tua arma con un'altra. Per vincere devi passare tutte le armi finchè non vinci!"
+    }
+
+    "HelpString2"
+    {
+        "it"        "Tuttavia, se vieni ucciso da un'arma da mischia o ti suicidi, perderai un grado."
     }
 
     "Humiliation"

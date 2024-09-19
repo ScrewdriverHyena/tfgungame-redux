@@ -1,8 +1,13 @@
 ﻿"Phrases"
 {
-    "HelpString"
+    "HelpString1"
     {
-        "fi"        "GunGame objektiivina on tappaa muita pelaajia,joka vaihtaa aseesi toisenlaiseen. Tavoitteena on päästä jokaisen aseen läpi kunnes voitat! Mutta, jos sinut tapetaan melee aseella tai tapat itsesi, sinun tasoasi lasketaan yhdellä."
+        "fi"        "GunGame objektiivina on tappaa muita pelaajia,joka vaihtaa aseesi toisenlaiseen. Tavoitteena on päästä jokaisen aseen läpi kunnes voitat!"
+    }
+
+    "HelpString2"
+    {
+        "fi"        "Mutta, jos sinut tapetaan melee aseella tai tapat itsesi, sinun tasoasi lasketaan yhdellä."
     }
 
     "Humiliation"
