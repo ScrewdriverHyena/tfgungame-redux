@@ -995,7 +995,9 @@ public Action Command_Help(int iClient, int iArgs)
 	// which changes your weapon to another one. The goal is to get through every 
 	// weapon until you win! However, if you get hit by a melee weapon or kill yourself,
 	// you get set back one rank.
-	ReplyToCommand(iClient, "\x07FFA500[GunGame]\x07FFFFFF %t", "HelpString");
+	
+	ReplyToCommand(iClient, "\x07FFA500[GunGame]\x07FFFFFF %t", "HelpString1");
+	ReplyToCommand(iClient, "\x07FFFFFF%t", "HelpString2");
 	return Plugin_Handled;
 }
 

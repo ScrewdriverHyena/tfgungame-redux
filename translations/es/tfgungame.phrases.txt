@@ -1,8 +1,13 @@
 "Phrases"
 {
-    "HelpString"
+    "HelpString1"
     {
-        "es"        "En GunGame el objetivo es matar a otros jugadores, hacer esto cambia tu arma a otra. El objetivo es pasar por cada arma hasta que ganes! Sin embargo, si te matan con un arma cuerpo a cuerpo o te suicidas, regresaras al arma anterior. "
+        "es"        "En GunGame el objetivo es matar a otros jugadores, hacer esto cambia tu arma a otra. El objetivo es pasar por cada arma hasta que ganes!"
+    }
+
+    "HelpString2"
+    {
+        "es"        "Sin embargo, si te matan con un arma cuerpo a cuerpo o te suicidas, regresaras al arma anterior."
     }
 
     "Humiliation"
@@ -12,11 +17,11 @@
 
     "WonMatch"
     {
-        "es"        "Has ganado la partida!"
+        "es"        "has ganado la partida!"
     }
 
     "GoldenWrench"
     {
-        "es"        "Has alcanzado el rango de la Llave Inglesa Dorada!"
+        "es"        "has alcanzado el rango de la Llave Inglesa Dorada!"
     }
 }

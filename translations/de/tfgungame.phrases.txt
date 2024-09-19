@@ -1,8 +1,13 @@
 "Phrases"
 {
-    "HelpString"
+    "HelpString1"
     {
-        "de"        "Das Ziel von GunGame ist es, pro Waffe einen Spieler zu erledigen. Dabei wird bei jeder Tötung die Waffe gewechselt. Stirbt man durch Nahkampf oder Selbstmord, so wird man einen Rang zurückgeworfen."
+        "de"        "Das Ziel von GunGame ist es, pro Waffe einen Spieler zu erledigen. Dabei wird bei jeder Tötung die Waffe gewechselt."
+    }
+
+    "HelpString2"
+    {
+        "de"        "Stirbt man durch Nahkampf oder Selbstmord, so wird man einen Rang zurückgeworfen."
     }
 
     "Humiliation"
