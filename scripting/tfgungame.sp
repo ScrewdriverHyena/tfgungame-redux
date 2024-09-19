@@ -417,7 +417,7 @@ public Action TF2_CalcIsAttackCritical(int iClient, int iWeapon, char[] strWeapo
 
 Action OnTakeDamage(int iVictim, int &iAttacker, int &iInflictor, float &fDamage, int &iDamageType, int &iWeapon, float vecDamageForce[3], float vecDamagePos[3], int iDamageCustom)
 {
-	if (g_eCurrentSpecial == SpecialRound_AllCrits)
+	if (g_eCurrentSpecial == SpecialRound_AllCrits && iInflictor > MaxClients)
 	{
 		// Dragon's Fury does not care about TF2_CalcIsAttackCritical, so we apply crits from it here
 		char strClassname[64];
@@ -608,7 +608,9 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 		
 		char strSound[255];
 		g_hCvarHumiliationSound.GetString(strSound, sizeof(strSound));
-		EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
+		
+		if (strSound[0])
+			EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
 		
 		if (g_PlayerData[iVictim].Rank > 0)
 		{
@@ -661,7 +663,9 @@ public void RankUpBuffered(int iAttacker)
 			
 			char strSound[255];
 			g_hCvarLastRankSound.GetString(strSound, sizeof(strSound));
-			EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
+			
+			if (strSound[0])
+				EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
 		}
 	}
 	else
@@ -689,7 +693,9 @@ void WinPlayer(int iClient)
 	
 	char strSound[255];
 	g_hCvarWinSound.GetString(strSound, sizeof(strSound));
-	EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
+	
+	if (strSound[0])
+		EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
 	
 	MakeTeamWin(TF2_GetClientTeam(iClient));
 	g_bRoundActive = false;
@@ -836,13 +842,14 @@ void GenerateRoundWeps()
 	delete hSeriesNames;
 	
 	int j;
-	int iLastIndex = -1;
+	ArrayList hUsedIndexes = new ArrayList();
+	
 	do
 	{
 		// Iterate through the randomly selected sequence and store each loadout
 		GGWeapon hWeapon;
-		int iIndex = hKvConfig.GetNum("index_override", 0);
-		if (iIndex)
+		int iIndex = hKvConfig.GetNum("index_override", -1);
+		if (iIndex > -1)
 		{
 			hWeapon = GGWeapon.GetFromIndex(iIndex);
 		}
@@ -852,10 +859,11 @@ void GenerateRoundWeps()
 			for (int i = 0; i < GGWeapon.Total(); i++)
 			{
 				hWeapon = GGWeapon.GetFromAll(i);
-				if (!hWeapon.Disabled && hWeapon.Index != iLastIndex && hWeapon.Class == view_as<TFClassType>(hKvConfig.GetNum("class")) && hWeapon.Slot == hKvConfig.GetNum("slot"))
-				{
+				if (hUsedIndexes.FindValue(hWeapon.Index) > -1)
+					continue;
+				
+				if (!hWeapon.Disabled && hWeapon.Class == view_as<TFClassType>(hKvConfig.GetNum("class")) && hWeapon.Slot == hKvConfig.GetNum("slot"))
 					hTemp.Push(hWeapon);
-				}
 			}
 			
 			if (hTemp.Length == 0)
@@ -865,7 +873,7 @@ void GenerateRoundWeps()
 			else
 			{
 				hWeapon = view_as<GGWeapon>(hTemp.Get(GetRandomInt(0, hTemp.Length - 1)));
-				iLastIndex = hWeapon.Index;
+				hUsedIndexes.Push(hWeapon.Index);
 			}
 			
 			delete hTemp;
@@ -884,6 +892,8 @@ void GenerateRoundWeps()
 		}
 	}
 	while (hKvConfig.GotoNextKey());
+	
+	delete hUsedIndexes;
 }
 
 stock int CreateWeapon(int client, char[] sName, int index, int level = 1, int qual = 1, char[] att, int flags = OVERRIDE_ALL | PRESERVE_ATTRIBUTES | FORCE_GENERATION)
