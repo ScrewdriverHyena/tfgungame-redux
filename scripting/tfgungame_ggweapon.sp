@@ -58,7 +58,7 @@ public any Native_GGWeapon(Handle plugin, int numParams)
 	hWeapon.Set(WEAPON_CLIP, iClipOverride);
 	
 	char strKey[32];
-	FormatEx(strKey, sizeof(strKey), "%d_%s", iIndex, g_strClassNames[eClass]);
+	FormatEx(strKey, sizeof(strKey), "%d_%d", iIndex, eClass);
 	g_hIndexToWeapon.SetValue(strKey, hWeapon);
 	return view_as<GGWeapon>(hWeapon);
 }
@@ -123,14 +123,14 @@ public any Native_GGWeaponGetFromIndex(Handle plugin, int numParams)
 	{
 		for (TFClassType nSearchClass = TFClass_Scout; nSearchClass <= TFClass_Engineer; nSearchClass++)
 		{
-			FormatEx(strKey, sizeof(strKey), "%d_%s", idx, g_strClassNames[nSearchClass]);
+			FormatEx(strKey, sizeof(strKey), "%d_%d", idx, nSearchClass);
 			if (g_hIndexToWeapon.GetValue(strKey, hWeapon))
 				return hWeapon;
 		}
 	}
 	else
 	{
-		FormatEx(strKey, sizeof(strKey), "%d_%s", idx, g_strClassNames[nClass]);
+		FormatEx(strKey, sizeof(strKey), "%d_%d", idx, nClass);
 		if (g_hIndexToWeapon.GetValue(strKey, hWeapon))
 			return hWeapon;
 	}

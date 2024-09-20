@@ -11,20 +11,6 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-stock const char g_strClassNames[][] =
-{
-	"",
-	"scout",
-	"sniper",
-	"soldier",
-	"demoman",
-	"medic",
-	"heavy",
-	"pyro",
-	"spy",
-	"engineer"
-};
-
 #include "tfgungame_ggweapon.sp"
 
 //#define DEBUG
