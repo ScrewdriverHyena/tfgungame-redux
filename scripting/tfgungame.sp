@@ -624,14 +624,6 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 		else
 			PrintToChat(iVictim, "\x07FFA500[GunGame] HUMILIATION!");
 		
-		RequestFrame(RankDownBuffered, iVictim);
-		
-		char strSound[255];
-		g_hCvarHumiliationSound.GetString(strSound, sizeof(strSound));
-		
-		if (strSound[0])
-			EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
-		
 		if (g_PlayerData[iVictim].Rank > 0)
 		{
 			Call_StartForward(hFwdRankDown);
@@ -642,6 +634,14 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 			Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iVictim].Rank - 1));
 			Call_Finish();
 		}
+		
+		RequestFrame(RankDownBuffered, iVictim);
+		
+		char strSound[255];
+		g_hCvarHumiliationSound.GetString(strSound, sizeof(strSound));
+		
+		if (strSound[0])
+			EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
 	}
 
 	return Plugin_Continue;
@@ -711,6 +711,10 @@ void WinPlayer(int iClient)
 {
 	PrintToChatAll("\x07FFA500[GunGame] %N %t", iClient, "WonMatch");
 	
+	Call_StartForward(hFwdOnWin);
+	Call_PushCell(iClient);
+	Call_Finish();
+	
 	char strSound[255];
 	g_hCvarWinSound.GetString(strSound, sizeof(strSound));
 	
@@ -719,10 +723,6 @@ void WinPlayer(int iClient)
 	
 	MakeTeamWin(TF2_GetClientTeam(iClient));
 	g_bRoundActive = false;
-	
-	Call_StartForward(hFwdOnWin);
-	Call_PushCell(iClient);
-	Call_Finish();
 }
 
 void MakeTeamWin(TFTeam nTeam)
