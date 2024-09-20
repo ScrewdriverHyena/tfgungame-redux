@@ -10,6 +10,104 @@
 		"tfclass" "9"
 	}
 	
+	// MULTI CLASS WEAPONS
+	
+	"Shotgun"
+	{
+		"index" "199"
+		"tfclass" "3"
+	}
+	
+	"Shotgun"
+	{
+		"index" "199"
+		"tfclass" "6"
+	}
+	
+	"Shotgun"
+	{
+		"index" "199"
+		"tfclass" "7"
+	}
+	
+	"Shotgun"
+	{
+		"index" "199"
+		"tfclass" "9"
+	}
+	
+	"Pistol"
+	{
+		"index" "209"
+		"tfclass" "1"
+	}
+	
+	"Pistol"
+	{
+		"index" "209"
+		"tfclass" "9"
+	}
+	
+	"Lugermorph"
+	{
+		"index" "294"
+		"tfclass" "1"
+	}
+	
+	"Lugermorph"
+	{
+		"index" "294"
+		"tfclass" "9"
+	}
+	
+	"The Reserve Shooter"
+	{
+		"index" "415"
+		"tfclass" "3"
+	}
+	
+	"The Reserve Shooter"
+	{
+		"index" "415"
+		"tfclass" "7"
+	}
+	
+	"The Panic Attack"
+	{
+		"index" "1153"
+		"tfclass" "3"
+	}
+	
+	"The Panic Attack"
+	{
+		"index" "1153"
+		"tfclass" "6"
+	}
+	
+	"The Panic Attack"
+	{
+		"index" "1153"
+		"tfclass" "7"
+	}
+	
+	"The Panic Attack"
+	{
+		"index" "1153"
+		"tfclass" "9"
+	}
+	
+	"The C.A.P.P.E.R."
+	{
+		"index" "30666"
+		"tfclass" "1"
+	}
+	
+	"The C.A.P.P.E.R."
+	{
+		"index" "30666"
+		"tfclass" "9"
+	}
+	
 	// PRIMARIES
 	
 	"Scattergun"
@@ -218,12 +316,6 @@
 		"tfclass" "6"
 	}
 	
-	"Shotgun"
-	{
-		"index" "9"
-		"tfclass" "9"
-	}
-	
 	"Frontier Justice"
 	{
 		"index" "141"
@@ -336,12 +428,6 @@
 	
 	// SECONDARIES
 	
-	"Pistol"
-	{
-		"index" "23"
-		"tfclass" "1"
-	}
-	
 	"The Winger"
 	{
 		"index" "449"
@@ -359,18 +445,6 @@
 		"index" "812"
 		"tfclass" "1"
 		"select_override" "1"
-	}
-	
-	"The C.A.P.P.E.R."
-	{
-		"index" "30666"
-		"tfclass" "1"
-	}
-	
-	"The Reserve Shooter"
-	{
-		"index" "415"
-		"tfclass" "3"
 	}
 	
 	"The Righteous Bison"
@@ -405,12 +479,6 @@
 		"tfclass" "7"
 	}
 	
-	"The Panic Attack"
-	{
-		"index" "1153"
-		"tfclass" "7"
-	}
-	
 	"Stickybomb Launcher"
 	{
 		"index" "20"
@@ -434,12 +502,6 @@
 	{
 		"index" "425"
 		"tfclass" "6"
-	}
-	
-	"Lugermorph"
-	{
-		"index" "294"
-		"tfclass" "9"
 	}
 	
 	"The Short Circuit"
