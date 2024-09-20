@@ -57,8 +57,8 @@ public any Native_GGWeapon(Handle plugin, int numParams)
 	hWeapon.SetString(WEAPON_ATT, strAttOverride);
 	hWeapon.Set(WEAPON_CLIP, iClipOverride);
 	
-	char strKey[8];
-	IntToString(iIndex, strKey, sizeof(strKey));
+	char strKey[32];
+	FormatEx(strKey, sizeof(strKey), "%d_%s", iIndex, g_strClassNames[eClass]);
 	g_hIndexToWeapon.SetValue(strKey, hWeapon);
 	return view_as<GGWeapon>(hWeapon);
 }
@@ -113,10 +113,34 @@ public any Native_GGWeaponSeriesTotal(Handle plugin, int numParams) { return g_h
 
 public any Native_GGWeaponGetFromIndex(Handle plugin, int numParams)
 {
-	char strKey[8];
+	int idx = GetNativeCell(1);
+	TFClassType nClass = GetNativeCell(2);
+	char strKey[32];
 	GGWeapon hWeapon;
-	IntToString(GetNativeCell(1), strKey, sizeof(strKey));
-	g_hIndexToWeapon.GetValue(strKey, hWeapon);
+	
+	// Class not specified
+	if (nClass == TFClass_Unknown)
+	{
+		for (TFClassType nSearchClass = TFClass_Scout; nSearchClass <= TFClass_Engineer; nSearchClass++)
+		{
+			FormatEx(strKey, sizeof(strKey), "%d_%s", idx, g_strClassNames[nSearchClass]);
+			if (g_hIndexToWeapon.GetValue(strKey, hWeapon))
+				return hWeapon;
+		}
+	}
+	else
+	{
+		FormatEx(strKey, sizeof(strKey), "%d_%s", idx, g_strClassNames[nClass]);
+		if (g_hIndexToWeapon.GetValue(strKey, hWeapon))
+			return hWeapon;
+	}
+	
+	char strErrorBuffer[128];
+	if (nClass != TFClass_Unknown)
+		FormatEx(strErrorBuffer, sizeof(strErrorBuffer), " or index-class combination (class %d)", nClass);
+	
+	Format(strErrorBuffer, sizeof(strErrorBuffer), "[GunGame] Invalid index %d%s passed to GetFromIndex! This weapon will be skipped.", idx, strErrorBuffer);
+	LogError(strErrorBuffer);
 	return hWeapon;
 }
 

@@ -11,6 +11,20 @@
 #pragma semicolon 1
 #pragma newdecls required
 
+stock const char g_strClassNames[][] =
+{
+	"",
+	"scout",
+	"sniper",
+	"soldier",
+	"demoman",
+	"medic",
+	"heavy",
+	"pyro",
+	"spy",
+	"engineer"
+};
+
 #include "tfgungame_ggweapon.sp"
 
 //#define DEBUG
@@ -851,7 +865,8 @@ void GenerateRoundWeps()
 		int iIndex = hKvConfig.GetNum("index_override", -1);
 		if (iIndex > -1)
 		{
-			hWeapon = GGWeapon.GetFromIndex(iIndex);
+			TFClassType nClass = view_as<TFClassType>(hKvConfig.GetNum("class", view_as<int>(TFClass_Unknown)));
+			hWeapon = GGWeapon.GetFromIndex(iIndex, nClass);
 		}
 		else
 		{

@@ -10,7 +10,7 @@ methodmap GGWeapon < ArrayList
 	public static native void InitSeries();
 	public static native int Total();
 	public static native int SeriesTotal();
-	public static native GGWeapon GetFromIndex(int idx);
+	public static native GGWeapon GetFromIndex(int idx, TFClassType class = TFClass_Unknown);
 	public static native void PushToSeries(GGWeapon hWeapon);
 	public static native GGWeapon GetFromSeries(int idx);
 	public static native GGWeapon GetFromAll(int idx);
