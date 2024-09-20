@@ -18,7 +18,7 @@
 **RatX** - Spanish Translation    
 
 ## Dependencies
-[TF Econ Data](https://github.com/nosoop/SM-TFEconData)
+- [TF Econ Data](https://github.com/nosoop/SM-TFEconData)
 
 ## ConVars
 | ConVar | Default Value | Description |
@@ -40,8 +40,8 @@
 		"tfclass" "3"
 	}
 ```
-
   It's fairly self-explanatory. Weapon definition indexes can be found [here](https://wiki.alliedmods.net/Team_Fortress_2_Item_Definition_Indexes), and numeric class values [here](https://sm.alliedmods.net/new-api/tf2/TFClassType) (unknown = 0, scout = 1, sniper = 2, etc.)
+
 Another example, this time of a weapon that can't be selected unless it's forced by the series config:
 ```
 	"Rocket Launcher"
@@ -95,8 +95,10 @@ It uses `att_override` as an attributes string, with attributes to be applied fo
 	}
 ```
   This example is not in the file, but it's worth mentioning that you may optionally specify a class if the weapon you want to use is available for multiple classes, as long as the index-class combo is in the weapon pool.
-  In this case, we want to use the weapon index 199 (Upgradeable Shotgun) on class 9 (Engineer).
-  If a multi-class weapon is forced and a class is not specified, it'll pick the first class it's available for.
+  
+In this case, we want to use the weapon index 199 (Upgradeable Shotgun) on class 9 (Engineer).
+  
+If a multi-class weapon is forced and a class is not specified, it'll pick the first class it's available for.
 
 ## API
   An include file comes with the mod, if you know what you're doing feel free to tinker with it. Here's some documentation:
