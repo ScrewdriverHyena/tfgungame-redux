@@ -888,14 +888,9 @@ void GenerateRoundWeps()
 			}
 			
 			if (hTemp.Length == 0)
-			{
 				continue;
-			}
 			else
-			{
 				hWeapon = view_as<GGWeapon>(hTemp.Get(GetRandomInt(0, hTemp.Length - 1)));
-				hUsedIndexes.Push(hWeapon.Index);
-			}
 			
 			delete hTemp;
 		}
@@ -906,6 +901,7 @@ void GenerateRoundWeps()
 			char strWeapon[128];
 			hWeapon.GetName(strWeapon, 128);
 			GGWeapon.PushToSeries(hWeapon);
+			hUsedIndexes.Push(hWeapon.Index);
 
 		#if defined DEBUG
 			PrintToServer("[GunGame] Added Weapon %d: %d (%s)", j, hWeapon.Index, strWeapon);
