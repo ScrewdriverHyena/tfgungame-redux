@@ -212,6 +212,8 @@ public void OnPluginStart()
 
 	AutoExecConfig(_, "tfgungame");
 	
+	CreateTimer(HINT_REFRESH_INTERVAL, RefreshCheapHintText, _, TIMER_REPEAT);
+	
 	if (GetClientCount(true) > 0)
 	{
 		PrintToChatAll("\x07FFA500[GunGame]\x07FFFFFF Late-load detected! Restarting round...");
@@ -406,8 +408,9 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 	
 	g_bRoundActive = true;
 	
-	Handle hTimer = CreateTimer(HINT_REFRESH_INTERVAL, RefreshCheapHintText, _, TIMER_REPEAT);
-	RefreshCheapHintText(hTimer);
+	// Don't refresh straight away because it risks players disconnecting
+	// from net message buffer overflow
+	CreateTimer(1.0, RefreshCheapHintText);
 	
 	PrintToChatAll("\x07FFA500[GunGame]\x07FFFFFF PROTIP: You can type \x07FF5555!gg_help\x07FFFFFF for some information about the gamemode!");
 	
@@ -460,6 +463,9 @@ public Action RefreshCheapHintText(Handle hTimer)
 
 void RefreshScores()
 {
+	if (!g_bRoundActive)
+		return;
+	
 	char strText[1024];
 	for (int i = 1; i <= MaxClients; i++)
 	{
