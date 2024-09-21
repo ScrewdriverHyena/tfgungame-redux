@@ -198,6 +198,8 @@ public void OnPluginStart()
 
 	AutoExecConfig(_, "tfgungame");
 	
+	CreateTimer(HINT_REFRESH_INTERVAL, RefreshCheapHintText, _, TIMER_REPEAT);
+	
 	if (GetClientCount(true) > 0)
 	{
 		PrintToChatAll("\x07FFA500[GunGame]\x07FFFFFF Late-load detected! Restarting round...");
@@ -392,8 +394,9 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 	
 	g_bRoundActive = true;
 	
-	Handle hTimer = CreateTimer(HINT_REFRESH_INTERVAL, RefreshCheapHintText, _, TIMER_REPEAT);
-	RefreshCheapHintText(hTimer);
+	// Don't refresh straight away because it risks players disconnecting
+	// from net message buffer overflow
+	CreateTimer(1.0, RefreshCheapHintText);
 	
 	PrintToChatAll("\x07FFA500[GunGame]\x07FFFFFF PROTIP: You can type \x07FF5555!gg_help\x07FFFFFF for some information about the gamemode!");
 	
@@ -446,6 +449,9 @@ public Action RefreshCheapHintText(Handle hTimer)
 
 void RefreshScores()
 {
+	if (!g_bRoundActive)
+		return;
+	
 	char strText[1024];
 	for (int i = 1; i <= MaxClients; i++)
 	{
@@ -604,14 +610,6 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 		else
 			PrintToChat(iVictim, "\x07FFA500[GunGame] HUMILIATION!");
 		
-		RequestFrame(RankDownBuffered, iVictim);
-		
-		char strSound[255];
-		g_hCvarHumiliationSound.GetString(strSound, sizeof(strSound));
-		
-		if (strSound[0])
-			EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
-		
 		if (g_PlayerData[iVictim].Rank > 0)
 		{
 			Call_StartForward(hFwdRankDown);
@@ -622,6 +620,14 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 			Call_PushCell(GGWeapon.GetFromSeries(g_PlayerData[iVictim].Rank - 1));
 			Call_Finish();
 		}
+		
+		RequestFrame(RankDownBuffered, iVictim);
+		
+		char strSound[255];
+		g_hCvarHumiliationSound.GetString(strSound, sizeof(strSound));
+		
+		if (strSound[0])
+			EmitSoundToAll(strSound, .level = SNDLEVEL_ROCKET);
 	}
 
 	return Plugin_Continue;
@@ -691,6 +697,10 @@ void WinPlayer(int iClient)
 {
 	PrintToChatAll("\x07FFA500[GunGame] %N %t", iClient, "WonMatch");
 	
+	Call_StartForward(hFwdOnWin);
+	Call_PushCell(iClient);
+	Call_Finish();
+	
 	char strSound[255];
 	g_hCvarWinSound.GetString(strSound, sizeof(strSound));
 	
@@ -699,10 +709,6 @@ void WinPlayer(int iClient)
 	
 	MakeTeamWin(TF2_GetClientTeam(iClient));
 	g_bRoundActive = false;
-	
-	Call_StartForward(hFwdOnWin);
-	Call_PushCell(iClient);
-	Call_Finish();
 }
 
 void MakeTeamWin(TFTeam nTeam)
@@ -851,7 +857,8 @@ void GenerateRoundWeps()
 		int iIndex = hKvConfig.GetNum("index_override", -1);
 		if (iIndex > -1)
 		{
-			hWeapon = GGWeapon.GetFromIndex(iIndex);
+			TFClassType nClass = view_as<TFClassType>(hKvConfig.GetNum("class", view_as<int>(TFClass_Unknown)));
+			hWeapon = GGWeapon.GetFromIndex(iIndex, nClass);
 		}
 		else
 		{
@@ -867,14 +874,9 @@ void GenerateRoundWeps()
 			}
 			
 			if (hTemp.Length == 0)
-			{
 				continue;
-			}
 			else
-			{
 				hWeapon = view_as<GGWeapon>(hTemp.Get(GetRandomInt(0, hTemp.Length - 1)));
-				hUsedIndexes.Push(hWeapon.Index);
-			}
 			
 			delete hTemp;
 		}
@@ -885,6 +887,7 @@ void GenerateRoundWeps()
 			char strWeapon[128];
 			hWeapon.GetName(strWeapon, 128);
 			GGWeapon.PushToSeries(hWeapon);
+			hUsedIndexes.Push(hWeapon.Index);
 
 		#if defined DEBUG
 			PrintToServer("[GunGame] Added Weapon %d: %d (%s)", j, hWeapon.Index, strWeapon);

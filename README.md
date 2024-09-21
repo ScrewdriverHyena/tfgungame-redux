@@ -17,7 +17,9 @@
 **NotPaddy** - German Translation    
 **RatX** - Spanish Translation    
 
- 
+## Dependencies
+- [TF Econ Data](https://github.com/nosoop/SM-TFEconData)
+
 ## ConVars
 | ConVar | Default Value | Description |
 |---|---|---|
@@ -30,27 +32,23 @@
 
 ## Configs
 ### Weapon Data
-  This plugin does **not** depend on TF2II or TF2IDB, rather, it gets its weapon information and weapon pool from a data file I've included with the plugin. Here's an example:
+  This plugin gets its weapon information and weapon pool from `data/gungame-data.txt`. Here's an example:
 ```
 	"The Cow Mangler 5000"
 	{
 		"index" "441"
 		"tfclass" "3"
-		"slot" "0"
-		"classname" "tf_weapon_particle_cannon"
 	}
 ```
+  It's fairly self-explanatory. Weapon definition indexes can be found [here](https://wiki.alliedmods.net/Team_Fortress_2_Item_Definition_Indexes), and numeric class values [here](https://sm.alliedmods.net/new-api/tf2/TFClassType) (unknown = 0, scout = 1, sniper = 2, etc.)
 
-  It's fairly self-explanatory, and most, if not all, the information needed can be found on the AlliedModders wiki.
 Another example, this time of a weapon that can't be selected unless it's forced by the series config:
 ```
 	"Rocket Launcher"
 	{
 		"index" "18"
 		"tfclass" "3"
-		"slot" "0"
 		"select_override" "1"
-		"classname" "tf_weapon_rocketlauncher"
 	}
 ```
 
@@ -60,8 +58,6 @@ Another example, this time of a weapon that can't be selected unless it's forced
 	{
 		"index" "228"
 		"tfclass" "3"
-		"slot" "0"
-		"classname" "tf_weapon_rocketlauncher"
 		"select_override" "1"
 		"att_override" "2 ; 5.0 ; 99 ; 3.0 ; 521 ; 1.0 ; 3 ; 0.25 ; 104 ; 0.3 ; 77 ; 0.0 ; 16 ; 0.0"
 		"flags_override" "31"
@@ -81,6 +77,7 @@ It uses `att_override` as an attributes string, with attributes to be applied fo
 	}
 ```
   This is the first weapon in the config. The `"1"` label however, is purely descriptive, and will still work regardless of what it's set to. The `index_override` forces the first weapon in the series to index 18 (Rocket Launcher). Another example:
+  
 ```
 	"2"
 	{
@@ -89,6 +86,19 @@ It uses `att_override` as an attributes string, with attributes to be applied fo
 	}
 ```
   This example will pick a random weapon from class 4 (DemoMan), and slot 0 (Primary).
+  
+```
+	"3"
+	{
+		"index_override" "199"
+		"class" "9"
+	}
+```
+  This example is not in the file, but it's worth mentioning that you may optionally specify a class if the weapon you want to use is available for multiple classes, as long as the index-class combo is in the weapon pool.
+  
+In this case, we want to use the weapon index 199 (Upgradeable Shotgun) on class 9 (Engineer).
+  
+If a multi-class weapon is forced and a class is not specified, it'll pick the first class it's available for.
 
 ## API
   An include file comes with the mod, if you know what you're doing feel free to tinker with it. Here's some documentation:
@@ -111,4 +121,3 @@ It uses `att_override` as an attributes string, with attributes to be applied fo
 | `bool ForceGunGameRank(int client, int rank)` | Force a player to a certain rank, returns `false` if the rank is invalid |
 | `bool ForceGunGameRankUp(int client)` | Force a player to rank up, returns `false` if the rank is invalid |
 | `bool ForceGunGameRankDown(int client)` | Force a player to rank down, returns `false` if the rank is invalid |
-  
