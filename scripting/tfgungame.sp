@@ -558,10 +558,9 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 	
 	if (!IsValidClient(iAttacker)) return Plugin_Handled;
 	
-	if (iCustomKill == TF_CUSTOM_TRIGGER_HURT || !g_bRoundActive || 
-		(iCustomKill == TF_CUSTOM_SUICIDE || iAttacker == iVictim) && g_hCvarAllowSuicide.IntValue)
-			return Plugin_Continue;
-
+	if (!g_bRoundActive)
+		return Plugin_Continue;
+	
 	char strWeapon[128];
 	event.GetString("weapon_logclassname", strWeapon, sizeof(strWeapon));
 
@@ -569,7 +568,7 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 	PrintToChatAll(strWeapon);
 #endif
 	
-	if (!(iCustomKill == TF_CUSTOM_SUICIDE || iAttacker == iVictim))
+	if (iAttacker != iVictim)
 	{
 		g_PlayerData[iAttacker].RankBuffer++;
 		RequestFrame(RankUpBuffered, iAttacker);
@@ -583,7 +582,7 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 		Call_Finish();
 	}
 	
-	if (iAssister && IsValidClient(iAssister) && iAssister != iAttacker && iAssister != iVictim && !(iCustomKill == TF_CUSTOM_SUICIDE || iAttacker == iVictim))
+	if (iAssister && IsValidClient(iAssister) && iAssister != iAttacker && iAssister != iVictim && iAttacker != iVictim)
 	{
 		if (g_PlayerData[iAssister].Assists == 1)
 		{
@@ -603,7 +602,7 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 			g_PlayerData[iAssister].Assists++;
 	}
 	
-	if (StrEqual(strWeapon, "necro_smasher") || (iCustomKill == TF_CUSTOM_SUICIDE || iAttacker == iVictim) && !g_hCvarAllowSuicide.IntValue)
+	if (StrEqual(strWeapon, "necro_smasher") || (iCustomKill == TF_CUSTOM_SUICIDE && !g_hCvarAllowSuicide.IntValue))
 	{
 		if (g_PlayerData[iVictim].Rank > 0)
 			PrintToChat(iVictim, "\x07FFA500[GunGame] HUMILIATION! %t", "Humiliation");
