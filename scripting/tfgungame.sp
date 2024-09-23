@@ -100,6 +100,7 @@ enum struct TFGGPlayer
 TFGGPlayer g_PlayerData[MAXPLAYERS + 1];
 
 bool g_bRoundActive;
+float g_flRoundUnfreezeTime;
 
 Handle g_hGetMaxAmmo;
 Handle g_hGetMaxClip1;
@@ -218,6 +219,8 @@ public void OnMapStart()
 	LoadTranslations("tfgungame.phrases");
 	
 	CleanLogicEntities();
+	
+	g_flRoundUnfreezeTime = 0.0;
 }
 
 void CleanLogicEntities()
@@ -374,11 +377,22 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 
 public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 {
-	g_eCurrentSpecial = CheckSpecialRound();
-	if (g_eCurrentSpecial && g_eCurrentSpecial < TFGGSRT_COUNT)
-		PrintToChatAll("\x07FFA500[GunGame]\x07FFFFFF SPECIAL ROUND ACTIVATED: %s", g_strSpecialRoundName[view_as<int>(g_eCurrentSpecial)]);
+	if (!GameRules_GetProp("m_bInWaitingForPlayers"))
+	{
+		g_eCurrentSpecial = CheckSpecialRound();
+		if (g_eCurrentSpecial && g_eCurrentSpecial < TFGGSRT_COUNT)
+			PrintToChatAll("\x07FFA500[GunGame]\x07FFFFFF SPECIAL ROUND ACTIVATED: %s", g_strSpecialRoundName[view_as<int>(g_eCurrentSpecial)]);
+		
+		g_eForceNextSpecial = SpecialRound_None;
+	}
+	else
+	{
+		g_eCurrentSpecial = SpecialRound_None;
+	}
 	
-	g_eForceNextSpecial = SpecialRound_None;
+	const float flFreezeTime = 5.0;
+	g_flRoundUnfreezeTime = GetGameTime() + flFreezeTime;
+	g_bRoundActive = true;
 	
 	GenerateRoundWeps();
 	
@@ -391,8 +405,6 @@ public Action OnTFRoundStart(Event event, const char[] name, bool dontBroadcast)
 		
 		SetPlayerLoadout(i, 0);
 	}
-	
-	g_bRoundActive = true;
 	
 	// Don't refresh straight away because it risks players disconnecting
 	// from net message buffer overflow
@@ -771,6 +783,9 @@ void SetPlayerLoadout(int iClient, int iRank)
 	if (hWeapon.Slot != 2 && !IsFakeClient(iClient))
 		EquipPlayerWeapon(iClient, CreateWeapon(iClient, "tf_weapon_fireaxe", 1123, 50, 6, "1 ; 0.75"));
 	
+	if (GetGameTime() < g_flRoundUnfreezeTime)
+		SetNextAttack(iClient, g_flRoundUnfreezeTime);
+	
 	RefreshScores();
 }
 
@@ -946,6 +961,20 @@ void SetMaxAmmo(int iClient, int iWeapon, int iForceAmmo = -1)
 	
 	if (iAmmoType != -1 && iMaxAmmo != -1)
 		SetEntProp(iClient, Prop_Data, "m_iAmmo", (iForceAmmo == -1) ? iMaxAmmo : iForceAmmo, _, iAmmoType);
+}
+
+void SetNextAttack(int iClient, float flNextAttack)
+{
+	int iWeapon;
+	for (int iSlot = TFWeaponSlot_Primary; iSlot <= TFWeaponSlot_Melee; iSlot++)
+	{
+		iWeapon = GetPlayerWeaponSlot(iClient, iSlot);
+		if (iWeapon > MaxClients && IsValidEntity(iWeapon))
+		{
+			SetEntPropFloat(iWeapon, Prop_Send, "m_flNextPrimaryAttack", flNextAttack);
+			SetEntPropFloat(iWeapon, Prop_Send, "m_flNextSecondaryAttack", flNextAttack);
+		}
+	}
 }
 
 public Action TF2Items_OnGiveNamedItem(int iClient, char[] sClassname, int iIndex, Handle &hItem)
