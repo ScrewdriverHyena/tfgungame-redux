@@ -464,62 +464,55 @@ void RefreshScores()
 	if (!g_bRoundActive)
 		return;
 	
-	char strText[1024];
-	for (int i = 1; i <= MaxClients; i++)
-	{
-		if (!IsValidClient(i)) continue;
-		
-		TFTeam eTeam = TF2_GetClientTeam(i);
-		if (eTeam == TFTeam_Unassigned || eTeam == TFTeam_Spectator) continue;
+	for (int iClient = 1; iClient <= MaxClients; iClient++)
+		RefreshClientScore(iClient);
+}
 
-		char strWeps[3][48];
-		char strNextWeps[216], strAssist[128];
-		GGWeapon hWeapon;
-		
-		int iTotal = GGWeapon.SeriesTotal();
-		
-		if (g_PlayerData[i].Rank >= iTotal)
-			break;
-		
-		if (g_PlayerData[i].Rank < iTotal - 3)
+void RefreshClientScore(int iClient)
+{
+	if (!g_bRoundActive)
+		return;
+	
+	if (!IsValidClient(iClient))
+		return;
+	
+	TFTeam nTeam = TF2_GetClientTeam(iClient);
+	if (nTeam == TFTeam_Unassigned || nTeam == TFTeam_Spectator)
+		return;
+	
+	char strText[256], strWeaponBuffer[64];
+	GGWeapon hWeapon;
+	
+	int iTotal = GGWeapon.SeriesTotal();
+	int iPlayerRank = g_PlayerData[iClient].Rank;
+	if (iPlayerRank >= iTotal)
+		return;
+	
+	hWeapon = GGWeapon.GetFromSeries(iPlayerRank);
+	hWeapon.GetName(strWeaponBuffer, sizeof(strWeaponBuffer));
+	FormatEx(strText, sizeof(strText), "Current Weapon:\n%s", strWeaponBuffer);
+	
+	if (g_PlayerData[iClient].Assists == 1)
+		StrCat(strText, sizeof(strText), "\n\nYou're one assist away from ranking up!");
+	
+	const int iMaxWeapons = 3;
+	int iCount = (iTotal - 1) - iPlayerRank;
+	if (iCount > iMaxWeapons)
+		iCount = iMaxWeapons;
+	
+	if (iCount > 0)
+	{
+		Format(strText, sizeof(strText), "%s\n\nNext Weapon%s:", strText, iCount == 1 ? "" : "s");
+		for (int i = 0; i < iCount; i++)
 		{
-			for (int j = 0; j < 3; j++)
-			{
-				hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + (j + 1));
-				hWeapon.GetName(strWeps[j], sizeof(strWeps[]));
-			}
+			hWeapon = GGWeapon.GetFromSeries(iPlayerRank + (i + 1));
+			hWeapon.GetName(strWeaponBuffer, sizeof(strWeaponBuffer));
 			
-			Format(strNextWeps, sizeof(strNextWeps), "\n\nNext Weapons:\n%s\n%s\n%s", strWeps[0], strWeps[1], strWeps[2]);
+			Format(strText, sizeof(strText), "%s\n%s", strText, strWeaponBuffer);
 		}
-		else if (g_PlayerData[i].Rank == iTotal - 3)
-		{
-			hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + 1);
-			hWeapon.GetName(strWeps[0], sizeof(strWeps[]));
-			hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + 2);
-			hWeapon.GetName(strWeps[1], sizeof(strWeps[]));
-			Format(strNextWeps, sizeof(strNextWeps), "\n\nNext Weapons:\n%s\n%s", strWeps[0], strWeps[1]);
-		}
-		else if (g_PlayerData[i].Rank == iTotal - 2)
-		{
-			hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + 1);
-			hWeapon.GetName(strWeps[0], sizeof(strWeps[]));
-			Format(strNextWeps, sizeof(strNextWeps), "\n\nNext Weapon:\n%s", strWeps[0]);
-		}
-		else
-			Format(strNextWeps, sizeof(strNextWeps), "");
-		
-		char strWep[128];
-		hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank);
-		hWeapon.GetName(strWep, sizeof(strWep));
-		Format(strAssist, sizeof(strAssist), "%s", (g_PlayerData[i].Assists == 1) ? "\n\nYou're one assist away from ranking up!" : "");
-		Format(strText, sizeof(strText), "Current Weapon:\n%s%s%s", strWep, strNextWeps, strAssist);
-		
-		//for (int j = 1; j <= MaxClients; j++)
-		//	if (j != i && TF2_GetClientTeam(j) == TFTeam_Spectator && GetEntPropEnt(j, Prop_Send, "m_hObserverTarget") == i)
-		//		PrintKeyHintText(j, strText);
-		
-		PrintKeyHintText(i, strText);
 	}
+	
+	PrintKeyHintText(iClient, strText);
 }
 
 void PrintKeyHintText(int client, char[] buffer)
@@ -611,7 +604,10 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 			Call_Finish();
 		}
 		else
+		{
 			g_PlayerData[iAssister].Assists++;
+			RefreshClientScore(iAssister);
+		}
 	}
 	
 	if (StrEqual(strWeapon, "necro_smasher") || (iCustomKill == TF_CUSTOM_SUICIDE && !g_hCvarAllowSuicide.IntValue))
@@ -786,7 +782,7 @@ void SetPlayerLoadout(int iClient, int iRank)
 	if (GetGameTime() < g_flRoundUnfreezeTime)
 		SetNextAttack(iClient, g_flRoundUnfreezeTime);
 	
-	RefreshScores();
+	RefreshClientScore(iClient);
 }
 
 void GenerateRoundWeps()
