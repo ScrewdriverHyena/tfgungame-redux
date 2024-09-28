@@ -29,6 +29,9 @@
 | tfgg_last_rank_sound |  | Sound played when someone has hit the last rank |
 | tfgg_win_sound |  | Sound played when someone wins the game |
 | tfgg_humiliation_sound |  | Sound played to a player when they've been humiliated |
+| tfgg_enable_special_rounds |  | Enable Special Rounds |
+| tfgg_special_round_chance |  | Special round chance; Should be a percent value out of 100 |
+| tfgg_use_scoreboard |  | Shows ranks as score in the scoreboard |
 
 ## Configs
 ### Weapon Data
@@ -117,6 +120,7 @@ If a multi-class weapon is forced and a class is not specified, it'll pick the f
 | Native | Description |
 |---|---|
 | `native int GetGunGameRank(int client)` | Returns the current rank of the player |
+| `native ArrayList GetGunGamePlacements()` | Returns an arraylist of `TFGGPlacementInfo`s, containing players' current ranks in descending order, and positions (in case of ties) |
 | `void ForceGunGameWin(int client)` | Force a player to win, will call `OnGunGameWin()` |
 | `bool ForceGunGameRank(int client, int rank)` | Force a player to a certain rank, returns `false` if the rank is invalid |
 | `bool ForceGunGameRankUp(int client)` | Force a player to rank up, returns `false` if the rank is invalid |

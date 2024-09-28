@@ -88,12 +88,14 @@ enum struct TFGGPlayer
 	int Rank;
 	int RankBuffer;
 	int Assists;
+	bool Winner;
 	
 	void Clear()
 	{
 		this.Rank = 0;
 		this.RankBuffer = 0;
 		this.Assists = 0;
+		this.Winner = false;
 	}
 }
 
@@ -117,6 +119,7 @@ ConVar g_hCvarWinSound;
 ConVar g_hCvarHumiliationSound;
 ConVar g_hCvarSpecialRounds;
 ConVar g_hCvarSpecialRoundChance;
+ConVar g_hCvarUseScoreboard;
 
 TFGGSpecialRoundType g_eForceNextSpecial = SpecialRound_None;
 TFGGSpecialRoundType g_eCurrentSpecial = SpecialRound_None;
@@ -142,6 +145,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateNative("GGWeapon.ClipOverride.get", Native_GGWeaponClipOverride);
 	
 	CreateNative("GetGunGameRank", Native_GetRank);
+	CreateNative("GetGunGamePlacements", Native_GetPlacements);
 	CreateNative("ForceGunGameWin", Native_ForceWin);
 	CreateNative("ForceGunGameRank", Native_ForceRank);
 	CreateNative("ForceGunGameRankUp", Native_ForceRankUp);
@@ -159,14 +163,15 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 public void OnPluginStart()
 {
 	CreateConVar("tfggr_version", PLUGIN_VERSION, "Plugin Version", FCVAR_ARCHIVE);
-	g_hCvarSpawnProtect = 		CreateConVar("tfgg_spawnprotect_length", "-1.0", "Length of the spawn protection for players, set to 0.0 to disable and -1.0 for infinite length", true);
-	g_hCvarAllowSuicide = 		CreateConVar("tfgg_allow_suicide", "0", "Set to 1 to not humiliate players when they suicide", _, true, 0.0, true, 1.0);
-	g_hCvarMaxKillsPerRankUp = 	CreateConVar("tfgg_max_kills_per_rankup", "3", "Maximum amount of kills registered toward the next rank. -1 for no limit.");
-	g_hCvarLastRankSound = 		CreateConVar("tfgg_last_rank_sound", LASTRANK_SOUND, "Sound played when someone has hit the last rank");
-	g_hCvarWinSound = 			CreateConVar("tfgg_win_sound", WIN_SOUND, "Sound played when someone wins the game");
-	g_hCvarHumiliationSound = 	CreateConVar("tfgg_humiliation_sound", HUMILIATION_SOUND, "Sound played on humiliation");
-	g_hCvarSpecialRounds = 		CreateConVar("tfgg_enable_special_rounds", "1", "Enable Special Rounds", _, true, 0.0, true, 1.0);
-	g_hCvarSpecialRoundChance = CreateConVar("tfgg_special_round_chance", "25", "Special round chance; Should be a percent value out of 100", _, true, 0.0, true, 100.0);
+	g_hCvarSpawnProtect =		CreateConVar("tfgg_spawnprotect_length", "-1.0", "Length of the spawn protection for players, set to 0.0 to disable and -1.0 for infinite length", true);
+	g_hCvarAllowSuicide =		CreateConVar("tfgg_allow_suicide", "0", "Set to 1 to not humiliate players when they suicide", _, true, 0.0, true, 1.0);
+	g_hCvarMaxKillsPerRankUp =	CreateConVar("tfgg_max_kills_per_rankup", "3", "Maximum amount of kills registered toward the next rank. -1 for no limit.");
+	g_hCvarLastRankSound =		CreateConVar("tfgg_last_rank_sound", LASTRANK_SOUND, "Sound played when someone has hit the last rank");
+	g_hCvarWinSound =			CreateConVar("tfgg_win_sound", WIN_SOUND, "Sound played when someone wins the game");
+	g_hCvarHumiliationSound =	CreateConVar("tfgg_humiliation_sound", HUMILIATION_SOUND, "Sound played on humiliation");
+	g_hCvarSpecialRounds =		CreateConVar("tfgg_enable_special_rounds", "1", "Enable Special Rounds", _, true, 0.0, true, 1.0);
+	g_hCvarSpecialRoundChance =	CreateConVar("tfgg_special_round_chance", "25", "Special round chance; Should be a percent value out of 100", _, true, 0.0, true, 100.0);
+	g_hCvarUseScoreboard =		CreateConVar("tfgg_use_scoreboard", "1", "Shows ranks as score in the scoreboard", _, true, 0.0, true, 1.0);
 	
 	g_hCvarLastRankSound.AddChangeHook(OnChangeSound);
 	g_hCvarWinSound.AddChangeHook(OnChangeSound);
@@ -188,6 +193,9 @@ public void OnPluginStart()
 	FindConVar("mp_autoteambalance").IntValue = 1;
 	
 	RegConsoleCmd("gg_help", Command_Help, "Sends a player a help panel");
+	
+	AddCommandListener(OnJoinClass, "join_class");
+	AddCommandListener(OnJoinClass, "joinclass");
 	
 	PrepSDK();
 	
@@ -211,6 +219,16 @@ public void OnPluginStart()
 	{
 		if (IsClientInGame(iClient))
 			OnClientPutInServer(iClient);
+	}
+	
+	int iEntity = -1;
+	while ((iEntity = FindEntityByClassname(iEntity, "*")) != -1)
+	{
+		char strClassname[64];
+		if (!GetEntityClassname(iEntity, strClassname, sizeof(strClassname)))
+			continue;
+		
+		OnEntityCreated(iEntity, strClassname);
 	}
 }
 
@@ -248,7 +266,28 @@ public void OnEntityCreated(int iEntity, const char[] strClassname)
 		return;
 	
 	if (StrEqual(strClassname, "tf_dropped_weapon"))
-		AcceptEntityInput(iEntity, "Kill");
+		RemoveEntity(iEntity);
+	else if (StrEqual(strClassname, "tf_player_manager"))
+		SDKHook(iEntity, SDKHook_ThinkPost, OnTFPlayerManagerThinkPost);	
+}
+
+void OnTFPlayerManagerThinkPost(int iEntity)
+{
+	if (!g_hCvarUseScoreboard.BoolValue)
+		return;
+	
+	static int iScoreOffset = -1;
+	if (iScoreOffset == -1)
+		iScoreOffset = FindSendPropInfo("CTFPlayerResource", "m_iTotalScore");
+	
+	int iPlayerScores[MAXPLAYERS + 1];
+	for (int iClient = 1; iClient <= MaxClients; iClient++)
+	{
+		if (IsValidClient(iClient))
+			iPlayerScores[iClient] = g_PlayerData[iClient].Rank;
+	}
+	
+	SetEntDataArray(iEntity, iScoreOffset, iPlayerScores, MaxClients + 1);
 }
 
 TFGGSpecialRoundType CheckSpecialRound()
@@ -430,6 +469,14 @@ public Action TF2_CalcIsAttackCritical(int iClient, int iWeapon, char[] strWeapo
 	}
 }
 
+Action OnJoinClass(int iClient, const char[] strCommand, int iArgc)
+{
+	if (!IsValidClient(iClient) || !IsPlayerAlive(iClient))
+		return Plugin_Continue;
+	
+	return Plugin_Handled;
+}
+
 Action OnTakeDamage(int iVictim, int &iAttacker, int &iInflictor, float &fDamage, int &iDamageType, int &iWeapon, float vecDamageForce[3], float vecDamagePos[3], int iDamageCustom)
 {
 	if (g_eCurrentSpecial == SpecialRound_AllCrits && iInflictor > MaxClients)
@@ -464,62 +511,55 @@ void RefreshScores()
 	if (!g_bRoundActive)
 		return;
 	
-	char strText[1024];
-	for (int i = 1; i <= MaxClients; i++)
-	{
-		if (!IsValidClient(i)) continue;
-		
-		TFTeam eTeam = TF2_GetClientTeam(i);
-		if (eTeam == TFTeam_Unassigned || eTeam == TFTeam_Spectator) continue;
+	for (int iClient = 1; iClient <= MaxClients; iClient++)
+		RefreshClientScore(iClient);
+}
 
-		char strWeps[3][48];
-		char strNextWeps[216], strAssist[128];
-		GGWeapon hWeapon;
-		
-		int iTotal = GGWeapon.SeriesTotal();
-		
-		if (g_PlayerData[i].Rank >= iTotal)
-			break;
-		
-		if (g_PlayerData[i].Rank < iTotal - 3)
+void RefreshClientScore(int iClient)
+{
+	if (!g_bRoundActive)
+		return;
+	
+	if (!IsValidClient(iClient))
+		return;
+	
+	TFTeam nTeam = TF2_GetClientTeam(iClient);
+	if (nTeam == TFTeam_Unassigned || nTeam == TFTeam_Spectator)
+		return;
+	
+	char strText[256], strWeaponBuffer[64];
+	GGWeapon hWeapon;
+	
+	int iTotal = GGWeapon.SeriesTotal();
+	int iPlayerRank = g_PlayerData[iClient].Rank;
+	if (iPlayerRank >= iTotal)
+		return;
+	
+	hWeapon = GGWeapon.GetFromSeries(iPlayerRank);
+	hWeapon.GetName(strWeaponBuffer, sizeof(strWeaponBuffer));
+	FormatEx(strText, sizeof(strText), "Current Weapon:\n- %s", strWeaponBuffer);
+	
+	const int iMaxWeapons = 3;
+	int iCount = (iTotal - 1) - iPlayerRank;
+	if (iCount > iMaxWeapons)
+		iCount = iMaxWeapons;
+	
+	if (iCount > 0)
+	{
+		Format(strText, sizeof(strText), "%s\n\nNext Weapon%s:", strText, iCount == 1 ? "" : "s");
+		for (int i = 0; i < iCount; i++)
 		{
-			for (int j = 0; j < 3; j++)
-			{
-				hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + (j + 1));
-				hWeapon.GetName(strWeps[j], sizeof(strWeps[]));
-			}
+			hWeapon = GGWeapon.GetFromSeries(iPlayerRank + (i + 1));
+			hWeapon.GetName(strWeaponBuffer, sizeof(strWeaponBuffer));
 			
-			Format(strNextWeps, sizeof(strNextWeps), "\n\nNext Weapons:\n%s\n%s\n%s", strWeps[0], strWeps[1], strWeps[2]);
+			Format(strText, sizeof(strText), "%s\n- %s", strText, strWeaponBuffer);
 		}
-		else if (g_PlayerData[i].Rank == iTotal - 3)
-		{
-			hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + 1);
-			hWeapon.GetName(strWeps[0], sizeof(strWeps[]));
-			hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + 2);
-			hWeapon.GetName(strWeps[1], sizeof(strWeps[]));
-			Format(strNextWeps, sizeof(strNextWeps), "\n\nNext Weapons:\n%s\n%s", strWeps[0], strWeps[1]);
-		}
-		else if (g_PlayerData[i].Rank == iTotal - 2)
-		{
-			hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank + 1);
-			hWeapon.GetName(strWeps[0], sizeof(strWeps[]));
-			Format(strNextWeps, sizeof(strNextWeps), "\n\nNext Weapon:\n%s", strWeps[0]);
-		}
-		else
-			Format(strNextWeps, sizeof(strNextWeps), "");
-		
-		char strWep[128];
-		hWeapon = GGWeapon.GetFromSeries(g_PlayerData[i].Rank);
-		hWeapon.GetName(strWep, sizeof(strWep));
-		Format(strAssist, sizeof(strAssist), "%s", (g_PlayerData[i].Assists == 1) ? "\n\nYou're one assist away from ranking up!" : "");
-		Format(strText, sizeof(strText), "Current Weapon:\n%s%s%s", strWep, strNextWeps, strAssist);
-		
-		//for (int j = 1; j <= MaxClients; j++)
-		//	if (j != i && TF2_GetClientTeam(j) == TFTeam_Spectator && GetEntPropEnt(j, Prop_Send, "m_hObserverTarget") == i)
-		//		PrintKeyHintText(j, strText);
-		
-		PrintKeyHintText(i, strText);
 	}
+	
+	if (g_PlayerData[iClient].Assists == 1)
+		StrCat(strText, sizeof(strText), "\n\nYou're one assist away from ranking up!");
+	
+	PrintKeyHintText(iClient, strText);
 }
 
 void PrintKeyHintText(int client, char[] buffer)
@@ -529,6 +569,54 @@ void PrintKeyHintText(int client, char[] buffer)
 	hBuffer.WriteString(buffer); 
 	EndMessage();
 	return;
+}
+
+ArrayList GetPlacementsArray()
+{
+	ArrayList hPlacements = new ArrayList(sizeof(TFGGPlacementInfo));
+	TFGGPlacementInfo info;
+	
+	for (int iClient = 1; iClient <= MaxClients; iClient++)
+	{
+		if (!IsValidClient(iClient) || TF2_GetClientTeam(iClient) <= TFTeam_Spectator)
+			continue;
+		
+		info.Client = iClient;
+		info.Rank = g_PlayerData[iClient].Rank;
+		info.Winner = g_PlayerData[iClient].Winner;
+		
+		hPlacements.PushArray(info);
+	}
+	
+	int iLength = hPlacements.Length;
+	if (iLength > 0)
+	{
+		hPlacements.Sort(Sort_Descending, Sort_Integer);
+		
+		int iLastRank = -1;
+		int iPosition;
+		
+		for (int i = 0; i < iLength; i++)
+		{
+			int iRank = hPlacements.Get(i, TFGGPlacementInfo::Rank);
+			if (iLastRank != iRank)
+			{
+				iPosition = i + 1;
+				iLastRank = iRank;
+			}
+			
+			hPlacements.Set(i, iPosition, TFGGPlacementInfo::Position);
+			
+			if (iPosition <= 1)
+			{
+				bool bWinner = hPlacements.Get(i, TFGGPlacementInfo::Winner);
+				if (bWinner)
+					hPlacements.SwapAt(0, i);
+			}
+		}
+	}
+	
+	return hPlacements;
 }
 
 public Action OnPlayerSpawn(Event event, const char[] name, bool dontBroadcast)
@@ -611,7 +699,10 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 			Call_Finish();
 		}
 		else
+		{
 			g_PlayerData[iAssister].Assists++;
+			RefreshClientScore(iAssister);
+		}
 	}
 	
 	if (StrEqual(strWeapon, "necro_smasher") || (iCustomKill == TF_CUSTOM_SUICIDE && !g_hCvarAllowSuicide.IntValue))
@@ -706,6 +797,8 @@ int RankUp(int iClient, int iAmount = 1)
 
 void WinPlayer(int iClient)
 {
+	g_PlayerData[iClient].Winner = true;
+	
 	PrintToChatAll("\x07FFA500[GunGame] %N %t", iClient, "WonMatch");
 	
 	Call_StartForward(hFwdOnWin);
@@ -786,7 +879,7 @@ void SetPlayerLoadout(int iClient, int iRank)
 	if (GetGameTime() < g_flRoundUnfreezeTime)
 		SetNextAttack(iClient, g_flRoundUnfreezeTime);
 	
-	RefreshScores();
+	RefreshClientScore(iClient);
 }
 
 void GenerateRoundWeps()
@@ -988,15 +1081,25 @@ public any Native_GetRank(Handle plugin, int numParams)
 	return g_PlayerData[GetNativeCell(1)].Rank;
 }
 
+public any Native_GetPlacements(Handle plugin, int numParams)
+{
+	ArrayList hPlacements = GetPlacementsArray();
+	ArrayList hClone = view_as<ArrayList>(CloneHandle(hPlacements, plugin));
+	
+	delete hPlacements;
+	return hClone;
+}
+
 public any Native_ForceRank(Handle plugin, int numParams)
 {
 	int iRank = GetNativeCell(2);
 	int iClient = GetNativeCell(1);
 	
-	if (iRank >= 0 && iRank < GGWeapon.SeriesTotal())
+	if (iRank < 0 || iRank >= GGWeapon.SeriesTotal())
 		return false;
 	
 	g_PlayerData[iClient].Rank = iRank;
+	SetPlayerLoadout(iClient, g_PlayerData[iClient].Rank);
 	return true;
 }
 
