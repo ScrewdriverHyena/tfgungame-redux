@@ -120,6 +120,7 @@ If a multi-class weapon is forced and a class is not specified, it'll pick the f
 | Native | Description |
 |---|---|
 | `native int GetGunGameRank(int client)` | Returns the current rank of the player |
+| `native ArrayList GetGunGamePlacements()` | Returns an arraylist of `TFGGPlacementInfo`s, containing players' current ranks in descending order, and positions (in case of ties) |
 | `void ForceGunGameWin(int client)` | Force a player to win, will call `OnGunGameWin()` |
 | `bool ForceGunGameRank(int client, int rank)` | Force a player to a certain rank, returns `false` if the rank is invalid |
 | `bool ForceGunGameRankUp(int client)` | Force a player to rank up, returns `false` if the rank is invalid |
