@@ -3,6 +3,14 @@
 #endif
 #define _tfgungame_included
 
+enum struct TFGGPlacementInfo
+{
+	int Rank;
+	int Client;
+	int Position;
+	bool Winner;
+}
+
 methodmap GGWeapon < ArrayList
 {
 	public native GGWeapon(KeyValues hKvWeapons);
@@ -49,6 +57,7 @@ forward void OnGunGameRankUp(int attacker, int victim, int rank, GGWeapon oldwea
 forward void OnGunGameRankDown(int attacker, int victim, int rank, GGWeapon oldweapon, GGWeapon weapon);
 
 native int GetGunGameRank(int client);
+native ArrayList GetGunGamePlacements();
 native void ForceGunGameWin(int client);
 native bool ForceGunGameRank(int client, int rank);
 native bool ForceGunGameRankUp(int client);

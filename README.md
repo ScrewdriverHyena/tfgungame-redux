@@ -29,6 +29,9 @@
 | tfgg_last_rank_sound |  | Sound played when someone has hit the last rank |
 | tfgg_win_sound |  | Sound played when someone wins the game |
 | tfgg_humiliation_sound |  | Sound played to a player when they've been humiliated |
+| tfgg_enable_special_rounds |  | Enable Special Rounds |
+| tfgg_special_round_chance |  | Special round chance; Should be a percent value out of 100 |
+| tfgg_use_scoreboard |  | Shows ranks as score in the scoreboard |
 
 ## Configs
 ### Weapon Data
