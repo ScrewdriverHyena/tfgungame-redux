@@ -194,6 +194,9 @@ public void OnPluginStart()
 	
 	RegConsoleCmd("gg_help", Command_Help, "Sends a player a help panel");
 	
+	AddCommandListener(OnJoinClass, "join_class");
+	AddCommandListener(OnJoinClass, "joinclass");
+	
 	PrepSDK();
 	
 	LoadTranslations("tfgungame.phrases");
@@ -464,6 +467,14 @@ public Action TF2_CalcIsAttackCritical(int iClient, int iWeapon, char[] strWeapo
 		result = true; 
 		return Plugin_Handled;
 	}
+}
+
+Action OnJoinClass(int iClient, const char[] strCommand, int iArgc)
+{
+	if (!IsValidClient(iClient) || !IsPlayerAlive(iClient))
+		return Plugin_Continue;
+	
+	return Plugin_Handled;
 }
 
 Action OnTakeDamage(int iVictim, int &iAttacker, int &iInflictor, float &fDamage, int &iDamageType, int &iWeapon, float vecDamageForce[3], float vecDamagePos[3], int iDamageCustom)
