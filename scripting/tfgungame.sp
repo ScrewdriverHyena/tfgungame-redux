@@ -556,7 +556,7 @@ void RefreshClientScore(int iClient)
 		}
 	}
 	
-	if (g_PlayerData[iClient].Assists == 1)
+	if (CanClientGetAssistCredit(iClient) && g_PlayerData[iClient].Assists == 1)
 		StrCat(strText, sizeof(strText), "\n\nYou're one assist away from ranking up!");
 	
 	PrintKeyHintText(iClient, strText);
@@ -682,7 +682,7 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 		Call_Finish();
 	}
 	
-	if (iAssister && IsValidClient(iAssister) && iAssister != iAttacker && iAssister != iVictim && iAttacker != iVictim)
+	if (iAssister && IsValidClient(iAssister) && iAssister != iAttacker && iAssister != iVictim && iAttacker != iVictim && CanClientGetAssistCredit(iAssister))
 	{
 		if (g_PlayerData[iAssister].Assists == 1)
 		{
@@ -1068,6 +1068,14 @@ void SetNextAttack(int iClient, float flNextAttack)
 			SetEntPropFloat(iWeapon, Prop_Send, "m_flNextSecondaryAttack", flNextAttack);
 		}
 	}
+}
+
+bool CanClientGetAssistCredit(int iClient)
+{
+	int iTotal = GGWeapon.SeriesTotal();
+	int iRank = g_PlayerData[iClient].Rank;
+	
+	return (iRank < iTotal - 1);
 }
 
 public Action TF2Items_OnGiveNamedItem(int iClient, char[] sClassname, int iIndex, Handle &hItem)
