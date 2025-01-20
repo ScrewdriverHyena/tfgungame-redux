@@ -96,6 +96,7 @@ public __pl_tfgungame_SetNTVOptional()
 	MarkNativeAsOptional("GGWeapon.Disabled.get");
 	MarkNativeAsOptional("GGWeapon.ClipOverride.get");
 	
+	MarkNativeAsOptional("GetGunGamePlacements");
 	MarkNativeAsOptional("GetGunGameRank");
 	MarkNativeAsOptional("ForceGunGameWin");
 	MarkNativeAsOptional("ForceGunGameRank");
