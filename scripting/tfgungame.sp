@@ -187,8 +187,6 @@ public void OnPluginStart()
 	HookEvent("player_death", 					OnPlayerDeathPre, 		EventHookMode_Pre);
 	
 	FindConVar("mp_respawnwavetime").IntValue = 0;
-	FindConVar("tf_use_fixed_weaponspreads").IntValue = 1;
-	FindConVar("tf_damage_disablespread").IntValue = 1;
 	FindConVar("tf_weapon_criticals").IntValue = 0;
 	FindConVar("mp_autoteambalance").IntValue = 1;
 	
